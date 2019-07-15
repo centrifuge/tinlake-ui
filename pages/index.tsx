@@ -23,6 +23,7 @@ function Home() {
         <Link href="/admin/whitelist-nft"><Anchor>Admin: Whitelist NFT</Anchor></Link>
         <Link href="/borrower"><Anchor>Borrower: Loan List</Anchor></Link>
         <Link href="/admin"><Anchor>Admin: Loan List</Anchor></Link>
+        <Link href="/test"><Anchor>Test link</Anchor></Link>
       </Box>
     </Box>
   </Box>
