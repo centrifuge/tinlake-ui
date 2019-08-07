@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormField, TextInput } from 'grommet';
-import { NumberInput } from '@centrifuge/axis-number-input';
-import { baseToDisplay } from '../../utils/baseToDisplay';
+import NumberInput from '../NumberInput';
+import { baseToDisplay } from 'tinlake';
 
 interface FieldDefinitionBase {
   key: string;
