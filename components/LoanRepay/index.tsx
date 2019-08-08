@@ -34,6 +34,8 @@ interface State {
 }
 
 class LoanRepay extends React.Component<Props, State> {
+  updatingRepayAmount = false;
+
   state: State = {
     repayAmount: '',
     is: null,
@@ -62,7 +64,13 @@ class LoanRepay extends React.Component<Props, State> {
 
     if (repayAmount === this.state.repayAmount) { return; }
 
-    this.setState({ repayAmount });
+    // Workasound for infinite setState issue. Reason for the issue is that
+    // react-number-format fires the onValueChange handler after every prop change,
+    // but apparently, it might use an old value when firing. That leads to a chain of
+    // onValueChange and renders. Since react introduced fibres, setState is async, implying
+    // that old local values might lead to issues.
+    this.updatingRepayAmount = true;
+    this.setState({ repayAmount }, () => this.updatingRepayAmount = false);
   }
 
   repay = async () => {
@@ -105,6 +113,17 @@ class LoanRepay extends React.Component<Props, State> {
       console.log(e);
       this.setState({ is: 'error', errorMsg: e.message });
     }
+  }
+
+  repayAmountChange = (_: React.KeyboardEvent<HTMLInputElement>) => {
+    this.setState({ touchedRepaymentAmount: true });
+  }
+
+  repayAmountValueChange = (v: any) => {
+    if (this.updatingRepayAmount) { return; }
+    const repayAmount = displayToBase(v.value, 18);
+    if (repayAmount === this.state.repayAmount) { return; }
+    this.setState({ repayAmount });
   }
 
   render() {
@@ -166,8 +185,7 @@ class LoanRepay extends React.Component<Props, State> {
             <Box basis={'1/4'} gap="medium"><FormField label="Repay Amount">
               <NumberInput
                 value={baseToDisplay(repayAmount, 18)} suffix=" DAI" precision={18}
-                onValueChange={({ value }) => this.setState({
-                  repayAmount: displayToBase(value, 18), touchedRepaymentAmount: true })}
+                onValueChange={this.repayAmountValueChange} onChange={this.repayAmountChange}
                 autoFocus disabled={true || is === 'loading' || is === 'success'}
               />
             </FormField></Box>

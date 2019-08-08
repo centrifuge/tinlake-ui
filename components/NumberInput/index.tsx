@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, memo } from 'react';
 import NumberFormat, { NumberFormatValues } from 'react-number-format';
 import { TextInput } from 'grommet';
 
@@ -27,4 +27,11 @@ NumberInput.defaultProps = {
   suffix: '',
 };
 
-export default NumberInput;
+function arePropsEqual(prev: Props, next: Props) {
+  return prev.value === next.value &&
+    prev.precision === next.precision &&
+    prev.prefix === next.prefix &&
+    prev.suffix === next.suffix;
+}
+
+export default memo(NumberInput, arePropsEqual);
