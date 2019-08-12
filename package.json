@@ -36,7 +36,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "styled-components": "^4.3.2",
-    "tinlake": "github:ilinzweilin/tinlake.js#fix/wait-for-transaction",
+    "tinlake": "github:centrifuge/tinlake.js#develop",
     "web3connect": "^1.0.0-beta.13"
   },
   "devDependencies": {
