@@ -86,7 +86,7 @@ class LoanBorrow extends React.Component<Props, State> {
 
       this.setState({ is: 'success' });
     } catch (e) {
-      console.log(e)
+      console.log(e);
       this.setState({ is: 'error', errorMsg: e.message });
     }
   }

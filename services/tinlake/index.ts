@@ -1,10 +1,10 @@
 import Tinlake from 'tinlake';
-import config from '../../config'
+import config from '../../config';
 import Eth from 'ethjs';
 
 declare var web3: any;
 
-const { contractAddresses, nftDataDefinition, transactionTimeout } = config
+const { contractAddresses, nftDataDefinition, transactionTimeout } = config;
 const portisConfig = {
   id: '2ea2735d-4963-40f5-823f-48cab29f7319', // required
   // network: 'mainnet', // optional
