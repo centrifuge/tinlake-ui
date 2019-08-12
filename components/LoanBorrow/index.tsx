@@ -70,14 +70,14 @@ class LoanBorrow extends React.Component<Props, State> {
 
       const res1 = await tinlake.approveNFT(bnToHex(loan.tokenId), addresses['SHELF']);
 
-      if (!res1 || res1.status !== SUCCESS_STATUS || res1.events[0].event.name !== 'Approval') {
+      if (res1.status !== SUCCESS_STATUS || res1.events[0].event.name !== 'Approval') {
         this.setState({ is: 'error', errorMsg: JSON.stringify(res1) });
         return;
       }
 
       const res2 = await tinlake.borrow(loanId, ethFrom);
 
-      if (!res2 || res2.status !== SUCCESS_STATUS) {
+      if (res2.status !== SUCCESS_STATUS) {
         this.setState({ is: 'error', errorMsg: JSON.stringify(res2) });
         return;
       }
