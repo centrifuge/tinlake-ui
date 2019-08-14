@@ -67,7 +67,6 @@ class NftDataField extends React.Component<Props> {
       const bigIntToHex = bnToHex(value);
       const paddedHex = bigIntToHex.slice(2).padStart(24, '0');
       const unixTimestamp = convertToTimestamp(paddedHex);
-      console.log("debug date", new Date(unixTimestamp))
 
       return <FormField label={label}>
         <TextInput value={(new Date(unixTimestamp)).toString()} disabled />
