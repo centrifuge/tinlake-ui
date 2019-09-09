@@ -59,11 +59,15 @@ class WhitelistNFT extends React.Component<Props, State> {
     const { tinlake } = this.props;
     const { tokenId, principal, appraisal, interestRate } = this.state;
     const addresses = tinlake.contractAddresses;
+    // replace below with form validation
+    if (appraisal === '0') {
+      this.setState({ is: 'error', errorMsg: 'Appraisal cannot be 0' });
+    }
     if (principal === '0') {
       this.setState({ is: 'error', errorMsg: 'Principal cannot be 0' });
       //needs to be implemented on the contract level first
     } /*else if (principal > appraisal) {
-      this.setState({ is: 'error', errorMsg: 'Principal can not be heigher then appraisal'  });
+      this.setState({ is: 'error', errorMsg: 'Principal can not be higher then appraisal'  });
     }*/
     else{
       this.setState({ is: 'loading' });
