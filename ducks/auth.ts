@@ -131,7 +131,6 @@ export function observeAuthChanges(tinlake: Tinlake):
     dispatch({ type: OBSERVING_AUTH_CHANGES });
 
     tinlake.provider.publicConfigStore.on('update',  (state: any) => {
-      console.log("update state", state)
       tinlake.ethConfig = { from: state.selectedAddress };
       dispatch(loadNetwork(state.networkVersion));
       dispatch(loadUser(tinlake, state.selectedAddress));
