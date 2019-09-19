@@ -25,11 +25,26 @@ let authed = false;
 
 export async function getTinlake() {
   if (tinlake) { return tinlake; }
+  const chosenProvider = sessionStorage.getItem('chosenProvider');
+  let provider;
+  let account;
+  if (chosenProvider === 'injected') {
+    authing = true;
+    const Web3Connect = require('web3connect').default;
+    provider = await Web3Connect.ConnectToInjected();
+    const accounts = await provider.enable();
+    account = accounts[0];
 
-  const provider = new Eth.HttpProvider(rpcUrl);
-
+    authed = true;
+    authing = false;
+  }
+  else {
+    provider = new Eth.HttpProvider(rpcUrl);
+  }
+  /// web3ConnectToLast()
+  // set global network
   tinlake = new Tinlake(provider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
-
+  account && tinlake!.setEthConfig({ from: account });
   return tinlake;
 }
 
@@ -40,9 +55,9 @@ export async function authTinlake() {
   authing = true;
 
   const provider = await web3ConnectToLast();
-
   const accounts = await provider.enable();
   const account = accounts[0];
+
   tinlake!.setProvider(provider);
   tinlake!.setEthConfig({ from: account });
 
@@ -54,7 +69,6 @@ async function web3Connect(): Promise<any> {
   return new Promise((resolve, reject) => {
     // require here since we only want it to be loaded in browser, not on server side rendering
     const Web3Connect = require('web3connect').default;
-
     const web3Connect = new Web3Connect.Core({
       providerOptions: {
         portis: portisConfig,
@@ -63,13 +77,10 @@ async function web3Connect(): Promise<any> {
         // },
       },
     });
-
     // subscibe to connect
     web3Connect.on('connect', (provider: any) => {
       const info = Web3Connect.getProviderInfo(provider);
-
       sessionStorage.setItem('chosenProvider', info.type === 'injected' ? 'injected' : info.name);
-
       resolve(provider);
     });
 
@@ -77,7 +88,6 @@ async function web3Connect(): Promise<any> {
     web3Connect.on('close', () => {
       reject('Web3Connect Modal Closed');
     });
-
     // open modal
     web3Connect.toggleModal();
   });
@@ -85,6 +95,7 @@ async function web3Connect(): Promise<any> {
 
 async function web3ConnectToLast(): Promise<any> {
   const chosenProvider = sessionStorage.getItem('chosenProvider');
+  // if injected do not call rpc
 
   if (!chosenProvider) { return web3Connect(); }
 
@@ -103,4 +114,5 @@ async function web3ConnectToLast(): Promise<any> {
     default:
       return web3Connect();
   }
+
 }

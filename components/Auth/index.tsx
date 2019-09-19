@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tinlake, { Address } from 'tinlake';
-import { AuthState, loadUser, observeAuthChanges } from '../../ducks/auth';
+import { AuthState, loadUser, loadNetwork, observeAuthChanges } from '../../ducks/auth';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../services/tinlake';
 
@@ -17,6 +17,7 @@ interface Props {
   render: (auth: ExtendedAuthState) => React.ReactElement | null | false;
   auth?: AuthState;
   loadUser?: (tinlake: Tinlake, address: Address) => Promise<void>;
+  loadNetwork?: (network: string) => Promise<void>;
   observeAuthChanges?: (tinlake: Tinlake) => Promise<void>;
 }
 
@@ -43,7 +44,7 @@ class Auth extends React.Component<Props, State> {
   }
 
   init = async () => {
-    const { tinlake, waitForAuthentication, auth, loadUser, observeAuthChanges } = this.props;
+    const { tinlake, waitForAuthentication, auth, loadUser, loadNetwork, observeAuthChanges } = this.props;
 
     if (waitForAuthentication) {
       try {
@@ -56,7 +57,13 @@ class Auth extends React.Component<Props, State> {
     }
 
     if (auth!.state === null) {
-      await loadUser!(tinlake, tinlake.ethConfig.from);
+      const providerConfig = tinlake.provider && tinlake.provider.publicConfigStore && tinlake.provider.publicConfigStore.getState();
+      if (providerConfig) {
+        await loadUser!(tinlake, providerConfig.selectedAddress);
+        await loadNetwork!(providerConfig.networkVersion);
+      } else {
+        await loadUser!(tinlake, tinlake.ethConfig.from);
+      }
     }
 
     observeAuthChanges!(tinlake);
@@ -70,7 +77,6 @@ class Auth extends React.Component<Props, State> {
 
     if (waitForAuthentication && isAuthenticating) { return null; }
     if (waitForAuthorization && isAuthorizing) { return null; }
-
     const extendedAuthState: ExtendedAuthState = {
       ...auth!,
       isAuthenticated: !isAuthenticating,
@@ -82,4 +88,4 @@ class Auth extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadUser, observeAuthChanges })(Auth);
+export default connect(state => state, { loadUser, loadNetwork, observeAuthChanges })(Auth);

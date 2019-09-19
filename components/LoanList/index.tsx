@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { InternalListLoan, LoansState, getLoans } from '../../ducks/loans';
 import Address from '../Address';
 import NumberDisplay from '../NumberDisplay';
-import MeBadge from '../MeBadge';
+import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 
 interface Props {
@@ -34,14 +34,14 @@ class LoanList extends React.Component<Props> {
         { header: 'Loan ID', property: 'loanId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
-          render: (l: InternalListLoan) => <Address address={bnToHex(l.tokenId
+          render: (l: InternalListLoan) => <Address address={bnToHex(l.tokenId,
           ).toString()} />,
         },
         {
           header: 'NFT Owner', property: 'nftOwner', align: 'end',
           render: (l: InternalListLoan) => <div>
             <Address address={l.nftOwner} />
-            {l.nftOwner === ethFrom && <MeBadge style={{ marginLeft: 5 }} />}
+            {l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} />}
           </div>,
         },
         { header: 'NFT Status', property: 'status' },

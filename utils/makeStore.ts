@@ -17,7 +17,7 @@ const makeStore = (initialState: any) => {
       {
         loans: loansReducer,
         dashboard: dashboardReducer,
-        auth: authReducer
+        auth: authReducer,
       },
     ),
     initialState,

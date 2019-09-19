@@ -26,8 +26,8 @@ interface Props {
 interface State {
   collateralTimeSeriesPeriod: string;
   collateralValueTimeSeriesData: TimeSeriesData;
-  showCollateralGraph: boolean
-  collateralTimeSeriesFetching: boolean
+  showCollateralGraph: boolean;
+  collateralTimeSeriesFetching: boolean;
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -46,12 +46,12 @@ class Dashboard extends React.Component<Props, State> {
   updateCollateralTimeSeriesData = async (period: string) => {
 
     await this.setState({
-      collateralTimeSeriesFetching : true
-    })
+      collateralTimeSeriesFetching : true,
+    });
     const timeSeriesData = await this.props.apolloClient.getCollateralTimeSeriesData(period);
     await this.setState({
-      collateralTimeSeriesFetching : false
-    })
+      collateralTimeSeriesFetching : false,
+    });
     const collateralValueTimeSeriesData = {
       labels: [],
       xValues: [
@@ -84,7 +84,7 @@ class Dashboard extends React.Component<Props, State> {
           { data: [], backgroundColor: 'rgba(9,41,190,1)', label: 'Collateral Value' },
         ],
       },
-      showCollateralGraph: !!config.tinlakeDataBackendUrl
+      showCollateralGraph: !!config.tinlakeDataBackendUrl,
     });
     this.updateCollateralTimeSeriesData(defaultPeriodSelection);
   }
@@ -97,10 +97,10 @@ class Dashboard extends React.Component<Props, State> {
     const { dashboard, tinlake } = this.props;
     const { state, data } = dashboard!;
     const { showCollateralGraph,
-            collateralTimeSeriesPeriod, 
+            collateralTimeSeriesPeriod,
             collateralValueTimeSeriesData,
-            collateralTimeSeriesFetching
-           } = this.state
+            collateralTimeSeriesFetching,
+           } = this.state;
 
     if (data === null || state === 'loading') { return null; }
 
@@ -147,7 +147,7 @@ class Dashboard extends React.Component<Props, State> {
                 options={periodSelectionOptions}
               />
             </FormField>
-          </Box> 
+          </Box>
           <Box pad={{ horizontal: 'right', top: 'medium' }}>
           {collateralTimeSeriesFetching ?
             <Spinner height={'calc(30vh)'} message={'loading graph data.'} />
