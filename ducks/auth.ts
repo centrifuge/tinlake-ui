@@ -1,6 +1,7 @@
 import { AnyAction, Action } from 'redux';
 import Tinlake, { Address } from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
+import config from '../config'
 
 declare var web3: any;
 
@@ -9,6 +10,8 @@ const LOAD = 'tinlake-ui/auth/LOAD';
 const RECEIVE = 'tinlake-ui/auth/RECEIVE';
 const CLEAR = 'tinlake-ui/auth/CLEAR';
 const OBSERVING_AUTH_CHANGES = 'tinlake-ui/auth/OBSERVING_AUTH_CHANGES';
+
+const { isDemo } = config;
 
 export interface User {
   isAdmin: boolean;
@@ -68,7 +71,7 @@ export function loadUser(tinlake: Tinlake, address: Address):
 
     const user = {
       address,
-      isAdmin: await isAdminPromise,
+      isAdmin: isDemo || await isAdminPromise,
     };
 
     dispatch({ user, type: RECEIVE });

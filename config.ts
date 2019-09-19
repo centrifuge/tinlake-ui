@@ -7,6 +7,7 @@ const config = {
   nftDataDefinition: publicRuntimeConfig.NFT_DATA_DEFINITION && JSON.parse(publicRuntimeConfig.NFT_DATA_DEFINITION),
   transactionTimeout: publicRuntimeConfig.TRANSACTION_TIMEOUT,
   tinlakeDataBackendUrl: publicRuntimeConfig.TINLAKE_DATA_BACKEND_URL,
+  isDemo: publicRuntimeConfig.ENV && (publicRuntimeConfig.ENV === "demo")
 };
 
 if (!config.nftDataDefinition) {
