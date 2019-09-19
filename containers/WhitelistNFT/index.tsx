@@ -8,7 +8,7 @@ import { LinkPrevious } from 'grommet-icons';
 import { connect } from 'react-redux';
 import NftData from '../../components/NftData';
 import { authTinlake } from '../../services/tinlake';
-import { getNFT, NFT } from '../../services/nft';
+import { getNFT, NFT } from '../../services/nft'
 import { Spinner } from '@centrifuge/axis-spinner';
 import NumberInput from '../../components/NumberInput';
 
@@ -19,7 +19,7 @@ interface Props {
 }
 
 interface State {
-  nft: NFT | null;
+  nft: NFT | null; 
   nftError: string;
   tokenId: string;
   principal: string;
@@ -44,15 +44,15 @@ class WhitelistNFT extends React.Component<Props, State> {
   componentWillMount() {
   }
 
-  // handlers
+  //handlers
   onTokenIdValueChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const currentTokenId = event.currentTarget.value;
-    await this.setState({
-      tokenId: currentTokenId,
-      nft: null,
-      nftError: '',
-    });
-    await this.getNFT(currentTokenId);
+    const currentTokenId = event.currentTarget.value
+    await this.setState({ 
+      tokenId: currentTokenId, 
+      nft: null, 
+      nftError: ''
+    })
+    await this.getNFT(currentTokenId)
   }
 
   whitelist = async () => {
@@ -61,32 +61,27 @@ class WhitelistNFT extends React.Component<Props, State> {
     const addresses = tinlake.contractAddresses;
     if (principal === '0') {
       this.setState({ is: 'error', errorMsg: 'Principal cannot be 0' });
-      // needs to be implemented on the contract level first
+      //needs to be implemented on the contract level first
     } /*else if (principal > appraisal) {
       this.setState({ is: 'error', errorMsg: 'Principal can not be heigher then appraisal'  });
     }*/
-    else {
+    else{
       this.setState({ is: 'loading' });
       try {
         await authTinlake();
         // init fee
         const fee = interestRateToFee(interestRate);
         const feeExists = await tinlake.existsFee(fee);
-        console.log('FEE CHECKED');
         if (!feeExists) {
           const res = await tinlake.initFee(fee);
           if (res.status !== SUCCESS_STATUS) {
-            console.log('INIT FEE FAILED');
             this.setState({ is: 'error', errorMsg: JSON.stringify(res) });
             return;
           }
         }
         // admit
-        console.log('admit owner');
         const nftOwner = await tinlake.ownerOfNFT(tokenId);
-        console.log('admitted owner', nftOwner);
         const res2 = await tinlake.whitelist(addresses['NFT_COLLATERAL'], tokenId, principal, appraisal, fee, nftOwner);
-        console.log('whitelisted', tokenId);
         if (res2.status !== SUCCESS_STATUS || res2.events[0].event.name !== 'Transfer') {
           this.setState({ is: 'error', errorMsg: JSON.stringify(res2) });
           return;
@@ -103,10 +98,10 @@ class WhitelistNFT extends React.Component<Props, State> {
   }
 
   getNFT = async (currentTokenId: string) => {
-    const { tinlake } = this.props;
+    const { tinlake} = this.props;
     if (currentTokenId && currentTokenId.length > 0) {
       const result = await getNFT(tinlake, currentTokenId);
-      const { tokenId, nft, errorMessage } = result as Partial< {tokenId:string, nft:NFT, errorMessage:string} >;
+      const {tokenId, nft, errorMessage } = result as Partial< {tokenId:string, nft:NFT, errorMessage:string} >
       if (tokenId !== this.state.tokenId) {
         return;
       }
@@ -114,7 +109,7 @@ class WhitelistNFT extends React.Component<Props, State> {
         this.setState({ nftError: errorMessage });
         return;
       }
-      nft && this.setState({ nft });
+      nft && this.setState({ nft })
     }
   }
 
@@ -200,4 +195,4 @@ class WhitelistNFT extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state)(WhitelistNFT);
+export default connect(state => state )(WhitelistNFT);

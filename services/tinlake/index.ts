@@ -24,27 +24,26 @@ let authing = false;
 let authed = false;
 
 export async function getTinlake() {
+
   if (tinlake) { return tinlake; }
-  const chosenProvider = sessionStorage.getItem('chosenProvider');
-  let provider;
-  let account;
+  const chosenProvider = sessionStorage && sessionStorage.getItem('chosenProvider');
   if (chosenProvider === 'injected') {
     authing = true;
+
     const Web3Connect = require('web3connect').default;
-    provider = await Web3Connect.ConnectToInjected();
-    const accounts = await provider.enable();
-    account = accounts[0];
+    const injectedProvider = await Web3Connect.ConnectToInjected();
+    const accounts = await injectedProvider.enable();
+    const account = accounts[0];
+    tinlake = new Tinlake(injectedProvider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
+    tinlake!.setEthConfig({ from: account });
 
     authed = true;
     authing = false;
   }
   else {
-    provider = new Eth.HttpProvider(rpcUrl);
-  }
-  /// web3ConnectToLast()
-  // set global network
-  tinlake = new Tinlake(provider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
-  account && tinlake!.setEthConfig({ from: account });
+    const httpProvider = new Eth.HttpProvider(rpcUrl);
+    tinlake = new Tinlake(httpProvider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
+  }    
   return tinlake;
 }
 
@@ -57,7 +56,6 @@ export async function authTinlake() {
   const provider = await web3ConnectToLast();
   const accounts = await provider.enable();
   const account = accounts[0];
-
   tinlake!.setProvider(provider);
   tinlake!.setEthConfig({ from: account });
 
@@ -95,7 +93,6 @@ async function web3Connect(): Promise<any> {
 
 async function web3ConnectToLast(): Promise<any> {
   const chosenProvider = sessionStorage.getItem('chosenProvider');
-  // if injected do not call rpc
 
   if (!chosenProvider) { return web3Connect(); }
 
@@ -114,5 +111,4 @@ async function web3ConnectToLast(): Promise<any> {
     default:
       return web3Connect();
   }
-
 }

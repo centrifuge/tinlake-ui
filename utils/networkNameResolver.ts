@@ -20,6 +20,6 @@ export function networkUrlToName(url: string) {
   if (url.indexOf('goerli') > -1) return 'goerli';
   if (url.indexOf('kovan') > -1) return 'kovan';
   if (url.indexOf('xDai') > -1) return 'xDai';
-  if (url.indexOf('local') > -1) return 'local';
+  if (url.indexOf('localhost') > -1) return 'local';
   return 'unknown';
 }
