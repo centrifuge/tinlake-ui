@@ -118,6 +118,7 @@ export function observeAuthChanges(tinlake: Tinlake):
     }
 
     if (providerChecks) {
+      // 'Provider changed, clear checking'
       clearInterval(providerChecks);
       const providerConfig = tinlake.provider && tinlake.provider.publicConfigStore && tinlake.provider.publicConfigStore.getState();
       if (providerConfig) {
