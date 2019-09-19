@@ -34,7 +34,7 @@ class LoanList extends React.Component<Props> {
         { header: 'Loan ID', property: 'loanId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
-          render: (l: InternalListLoan) => <Address address={bnToHex(l.tokenId,
+          render: (l: InternalListLoan) => <Address address={bnToHex(l.tokenId
           ).toString()} />,
         },
         {

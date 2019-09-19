@@ -38,7 +38,7 @@ class Dashboard extends React.Component<Props, State> {
   onCollateralTimeSeriesPeriodSelected = async (event: {value: typeof periodSelectionOptions[number]}) => {
     const period = event.value;
     this.setState({
-      collateralTimeSeriesPeriod: period,
+      collateralTimeSeriesPeriod: period
     });
     await this.updateCollateralTimeSeriesData(period);
   }
@@ -46,11 +46,11 @@ class Dashboard extends React.Component<Props, State> {
   updateCollateralTimeSeriesData = async (period: string) => {
 
     await this.setState({
-      collateralTimeSeriesFetching : true,
+      collateralTimeSeriesFetching : true
     });
     const timeSeriesData = await this.props.apolloClient.getCollateralTimeSeriesData(period);
     await this.setState({
-      collateralTimeSeriesFetching : false,
+      collateralTimeSeriesFetching : false
     });
     const collateralValueTimeSeriesData = {
       labels: [],
@@ -84,7 +84,7 @@ class Dashboard extends React.Component<Props, State> {
           { data: [], backgroundColor: 'rgba(9,41,190,1)', label: 'Collateral Value' },
         ],
       },
-      showCollateralGraph: !!config.tinlakeDataBackendUrl,
+      showCollateralGraph: !!config.tinlakeDataBackendUrl
     });
     this.updateCollateralTimeSeriesData(defaultPeriodSelection);
   }

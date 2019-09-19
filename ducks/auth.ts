@@ -108,25 +108,30 @@ export function observeAuthChanges(tinlake: Tinlake):
     if (state.auth.observingAuthChanges) {
       return;
     }
-
-    // if HTTPProvider is present, regularly check fox provider changes
+    // if HTTPProvider is present, regularly check for provider changes
     if (tinlake.provider.host) {
       if (!providerChecks) {
-        // console.log('Found HTTPProvider - check for provider changes every 100 ms');
+        // Found HTTPProvider - check for provider changes every 100 ms'
         providerChecks = setInterval(() => dispatch(observeAuthChanges(tinlake)), 100);
       }
       return;
     }
 
     if (providerChecks) {
-      // console.log('Provider changed, clear checking');
       clearInterval(providerChecks);
-      dispatch(loadUser(tinlake, tinlake.ethConfig.from));
+      const providerConfig = tinlake.provider && tinlake.provider.publicConfigStore && tinlake.provider.publicConfigStore.getState();
+      if (providerConfig) {
+        dispatch(loadUser(tinlake, providerConfig.selectedAddress));
+        dispatch(loadNetwork(providerConfig.networkVersion));
+      } else {
+        dispatch(loadUser(tinlake, tinlake.ethConfig.from));
+      }
     }
 
     dispatch({ type: OBSERVING_AUTH_CHANGES });
 
     tinlake.provider.publicConfigStore.on('update',  (state: any) => {
+      console.log("update state", state)
       tinlake.ethConfig = { from: state.selectedAddress };
       dispatch(loadNetwork(state.networkVersion));
       dispatch(loadUser(tinlake, state.selectedAddress));
@@ -140,11 +145,3 @@ export function clearUser():
     dispatch({ type: CLEAR });
   };
 }
-
-/*
-window.onbeforeunload = function(e) {
-  var dialogText = 'Screw the MetaMask';
-  e.returnValue = dialogText;
-  return dialogText;
-};
-*/

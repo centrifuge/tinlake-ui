@@ -26,6 +26,7 @@ let authed = false;
 export async function getTinlake() {
 
   if (tinlake) { return tinlake; }
+
   const chosenProvider = sessionStorage && sessionStorage.getItem('chosenProvider');
   if (chosenProvider === 'injected') {
     authing = true;
@@ -43,7 +44,8 @@ export async function getTinlake() {
   else {
     const httpProvider = new Eth.HttpProvider(rpcUrl);
     tinlake = new Tinlake(httpProvider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
-  }    
+  }   
+  
   return tinlake;
 }
 
@@ -65,6 +67,7 @@ export async function authTinlake() {
 
 async function web3Connect(): Promise<any> {
   return new Promise((resolve, reject) => {
+    console.log("web3 connect started")
     // require here since we only want it to be loaded in browser, not on server side rendering
     const Web3Connect = require('web3connect').default;
     const web3Connect = new Web3Connect.Core({

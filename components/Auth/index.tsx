@@ -50,7 +50,6 @@ class Auth extends React.Component<Props, State> {
       try {
         await authTinlake();
       } catch (e) {}
-
       if (this.isMounted) {
         this.setState({ isAuthenticating: false });
       }
@@ -65,8 +64,11 @@ class Auth extends React.Component<Props, State> {
         await loadUser!(tinlake, tinlake.ethConfig.from);
       }
     }
-
     observeAuthChanges!(tinlake);
+  }
+
+  loadCurrentState() {
+    
   }
 
   render() {

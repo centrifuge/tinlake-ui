@@ -31,7 +31,6 @@
     "chai": "^4.2.0",
     "chart.js": "^2.8.0",
     "decimal.js-light": "^2.5.0",
-    "ethjs-provider-http": "^0.1.6",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "grommet": "^2.7.3",
