@@ -5,11 +5,11 @@ const { isDemo } = config
 
 const menuItems: MenuItem[] = [
   { label: 'Dashboard', route: '/' },
-  { label: 'Borrower', route: '/borrower' },
-  { label: 'Admin', route: '/admin' }
+  { label: 'My Loans', route: '/borrower' },
+  { label: 'Whitelist NFT', route: '/admin' },
 ];
 
-isDemo &&  menuItems.push({ label: 'Mint NFT', route: '/temp/mint-nft'})
+isDemo &&  menuItems.push({ label: 'Mint NFT', route: '/demo/mint-nft'})
 
 export {
   menuItems
