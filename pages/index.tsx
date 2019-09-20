@@ -1,5 +1,6 @@
-import { Box } from 'grommet';
+import { Box, Anchor, Grommet } from 'grommet';
 import Header from '../components/Header';
+import Link from 'next/link';
 import Dashboard from '../containers/Dashboard';
 import WithTinlake from '../components/WithTinlake';
 import WithApollo from '../components/WithApollo';
@@ -10,6 +11,7 @@ function Home() {
   <Header
     selectedRoute={'/'}
     menuItems={menuItems}
+    section=""
   />
   <Box
     justify="center"

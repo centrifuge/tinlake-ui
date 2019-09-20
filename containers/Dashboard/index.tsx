@@ -162,7 +162,7 @@ class Dashboard extends React.Component<Props, State> {
         <Heading level="4">Recent Loans</Heading>
       </Box>
 
-      <LoanList tinlake={tinlake} mode="admin" />
+      <LoanList tinlake={tinlake} mode="" />
     </Box>;
   }
 }
