@@ -5,15 +5,14 @@ import Link from 'next/link';
 import { AuthState } from '../../ducks/auth';
 import Badge from '../Badge';
 import { formatAddress } from '../../utils/formatAddress';
-import config from '../../config';
+import config from '../../config'
 
-const { isDemo } = config;
-
+const { isDemo } = config
 export interface MenuItem {
   label: string;
   route: string;
   secondary?: boolean;
-  permission: 'admin' | 'demo' | '';
+  permission?: "admin" | "demo" 
 }
 
 interface HeaderProps {
@@ -34,59 +33,60 @@ class Header extends React.Component<HeaderProps> {
     const itemGap = 'small';
 
     return <Box
-      justify="center"
+    justify="center"
+    align="center"
+    height="xsmall"
+    fill="horizontal"
+    style={{ position: 'sticky', top: 0, height: '90px', zIndex: 1 }}
+    background="white"
+    border={{ side: 'bottom', color: 'light-4' }}
+  >
+    <Box
+      direction="row"
+      fill="vertical"
       align="center"
-      height="xsmall"
-      fill="horizontal"
-      style={{ position: 'sticky', top: 0, height: '90px', zIndex: 1 }}
-      background="white"
-      border={{ side: 'bottom', color: 'light-4' }}
+      justify="between"
+      pad={{ horizontal: 'medium' }}
+      gap={sectionGap}
+      width="xlarge"
     >
-      <Box
-        direction="row"
-        fill="vertical"
-        align="center"
-        justify="between"
-        pad={{ horizontal: 'medium' }}
-        gap={sectionGap}
-        width="xlarge"
-      >
-        <Link href="/">
-          <a title="Tinlake"><Image src="/static/logo.svg" style={{ width: 130 }} /></a>
-        </Link>
-        <Box direction="row" gap={itemGap} margin={{ right: 'auto' }}>
+      <Link href="/">
+        <a title="Tinlake"><Image src="/static/logo.svg" style={{ width: 130 }} /></a>
+      </Link>
+      <Box direction="row" gap={itemGap} margin={{ right: 'auto' }}>
 
-          {menuItems.filter(item => {
-            return (isAdmin && item.permission === 'admin' ||
-              isDemo && item.permission === 'demo' || item.permission === '') && !item.secondary;
-
-          }
-          ).map((item) => {
-            const anchorProps = {
-              ...(item.route === selectedRoute ?
-                { className: 'selected', color: '#0828BE' } : {})
-            };
-            return <Link href={item.route} key={item.label}><Button
-              plain
-              label={item.label}
-              {...anchorProps}
-            /></Link>;
-          }
-          )}
+        {menuItems.filter(item => 
+        {
+          return (isAdmin && item.permission === "admin" ||
+            isDemo && item.permission === "demo" || !item.permission) && !item.secondary
+        }
+        )
+        .map((item) => {
+          const anchorProps = {
+            ...(item.route === selectedRoute ?
+              { className: 'selected', color: '#0828BE' } : {}),
+          };
+          return <Link href={item.route} key={item.label}><Button
+            plain
+            label={item.label}
+            {...anchorProps}
+          /></Link>;
+        },
+        )}
+      </Box>
+      <Box direction="row" gap={itemGap} align="center" justify="end">
+       { isAdmin &&  <Badge text={'Admin'} style={{  }} /> }
+       </Box>
+      <Box direction="column">
+        <Box direction="row" gap={itemGap} align="center" justify="start">
+          <Text> { formatAddress(address || '') } </Text>
         </Box>
-        <Box direction="row" gap={itemGap} align="center" justify="end">
-          {isAdmin && <Badge text={'Admin'} style={{}} />}
-        </Box>
-        <Box direction="column">
-          <Box direction="row" gap={itemGap} align="center" justify="start">
-            <Text> {formatAddress(address || '')} </Text>
-          </Box>
-          <Box direction="row" justify="start" >
-            {network && <Text style={{ color: '#808080', lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text>}
-          </Box>
+        <Box direction="row" justify="start" >
+          { network && <Text  style={{ color: '#808080' , lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text> }
         </Box>
       </Box>
-    </Box>;
+    </Box>
+  </Box>;
   }
 }
 
