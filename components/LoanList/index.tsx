@@ -29,7 +29,7 @@ class LoanList extends React.Component<Props> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-    return <Box pad={{ horizontal: 'medium' }}>
+    return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
       <DataTable data={filteredLoans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {
