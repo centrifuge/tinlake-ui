@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { AuthState } from '../../ducks/auth';
 import Badge from '../Badge';
 import { formatAddress } from '../../utils/formatAddress';
-import config from '../../config'
+import config from '../../config';
 
-const { isDemo } = config
+const { isDemo } = config;
 
 export interface MenuItem {
   label: string;
@@ -57,21 +57,21 @@ class Header extends React.Component<HeaderProps> {
         <Box direction="row" gap={itemGap} margin={{ right: 'auto' }}>
 
           {menuItems.filter(item => {
-            return (isAdmin && item.permission === "admin" ||
-              isDemo && item.permission === "demo" || item.permission === '') && !item.secondary
+            return (isAdmin && item.permission === 'admin' ||
+              isDemo && item.permission === 'demo' || item.permission === '') && !item.secondary;
 
           }
           ).map((item) => {
             const anchorProps = {
               ...(item.route === selectedRoute ?
-                { className: 'selected', color: '#0828BE' } : {}),
+                { className: 'selected', color: '#0828BE' } : {})
             };
             return <Link href={item.route} key={item.label}><Button
               plain
               label={item.label}
               {...anchorProps}
             /></Link>;
-          },
+          }
           )}
         </Box>
         <Box direction="row" gap={itemGap} align="center" justify="end">
@@ -89,6 +89,5 @@ class Header extends React.Component<HeaderProps> {
     </Box>;
   }
 }
-
 
 export default connect(state => state)(Header);

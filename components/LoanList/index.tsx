@@ -31,93 +31,93 @@ class LoanList extends React.Component<Props> {
 
     return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
       <DataTable data={filteredLoans} sortable columns={[
-        { 
-          header: <HeaderCell text={"Loan ID"}></HeaderCell>,
+        {
+          header: <HeaderCell text={'Loan ID'}></HeaderCell>,
           property: 'loanId',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}>
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               <Text>{l.loanId}</Text>
             </Box>
         },
         {
-          header: <HeaderCell text={"NFT ID"}></HeaderCell>,
+          header: <HeaderCell text={'NFT ID'}></HeaderCell>,
           property: 'tokenId',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}>
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               <Address address={bnToHex(l.tokenId).toString()} />
             </Box>
         },
         {
-          header: <HeaderCell text={"NFT Owner"}></HeaderCell>,
+          header: <HeaderCell text={'NFT Owner'}></HeaderCell>,
           property: 'nftOwner',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box direction="row" pad={{ left: 'small'}}>
+          render: (l: InternalListLoan) =>
+            <Box direction="row" pad={{ left: 'small' }}>
               <Address address={l.nftOwner} />
               { l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} /> }
-            </Box>,
+            </Box>
         },
-        { 
-          header: <HeaderCell text={"NFT Status"}></HeaderCell>,
+        {
+          header: <HeaderCell text={'NFT Status'}></HeaderCell>,
           property: 'status',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}>
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               <Text>{l.status}</Text>
             </Box>
         },
         {
-          header: <HeaderCell text={"Principal"}></HeaderCell>,
+          header: <HeaderCell text={'Principal'}></HeaderCell>,
           property: 'principal',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}> 
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               { l.status === 'Whitelisted' ?
                 <NumberDisplay suffix=" DAI" precision={18}
-                value={baseToDisplay(l.principal, 18)} /> 
-              : '-'} 
-            </Box>,
+                value={baseToDisplay(l.principal, 18)} />
+              : '-'}
+            </Box>
         },
         {
-          header: <HeaderCell text={"Interest rate"}></HeaderCell>,
+          header: <HeaderCell text={'Interest rate'}></HeaderCell>,
           property: 'fee',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}> 
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               { l.status === 'Repaid' ? '-' :
               <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />
               }
             </Box>
         },
         {
-          header: <HeaderCell text={"Debt"}></HeaderCell>,
+          header: <HeaderCell text={'Debt'}></HeaderCell>,
           property: 'debt',
           align: 'end',
-          render: (l: InternalListLoan) => 
-            <Box pad={{ left: 'small'}}> 
+          render: (l: InternalListLoan) =>
+            <Box pad={{ left: 'small' }}>
               { l.status === 'Whitelisted' ? '-' :
               <NumberDisplay suffix=" DAI" precision={18} value={baseToDisplay(l.debt, 18)} />
               }
             </Box>
         },
         {
-          header: <HeaderCell text={"Actions"}></HeaderCell>,
+          header: <HeaderCell text={'Actions'}></HeaderCell>,
           property: 'id',
           align: 'end',
           sortable: false,
           render: (l: InternalListLoan) =>
-            <Box pad={{ left: 'small'}}> 
+            <Box pad={{ left: 'small' }}>
               <Link href={`${mode}/loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>
             </Box>
-        },
+        }
       ]} />
     </Box>;
   }
 }
 
 const HeaderCell = (props : {text: string}) => (
-  <Box pad={{ left: 'small'}}><Text>{props.text}</Text></Box>
+  <Box pad={{ left: 'small' }}><Text>{ props.text }</Text></Box>
 );
 
 export default connect(state => state, { getLoans })(LoanList);
