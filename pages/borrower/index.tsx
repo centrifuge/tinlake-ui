@@ -1,7 +1,7 @@
 import * as React from 'react';
 import LoanList from '../../components/LoanList';
 import WithTinlake from '../../components/WithTinlake';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Button } from 'grommet';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';

@@ -23,7 +23,9 @@ class LoanList extends React.Component<Props> {
 
   render() {
     const { loans, mode, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => l.loanOwner === ethFrom) :
+    const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => {
+      return (l.loanOwner === ethFrom)
+    }) :
       loans!.loans;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
@@ -40,7 +42,7 @@ class LoanList extends React.Component<Props> {
         {
           header: 'NFT Owner', property: 'nftOwner', align: 'end',
           render: (l: InternalListLoan) => <div>
-            <Address address={l.nftOwner} />
+            <Address address={l.loanOwner} />
             {l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} />}
           </div>,
         },
@@ -65,8 +67,10 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
           render: (l: InternalListLoan) =>
-            <Link href={`/${mode}/loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>,
-        },
+          { const loanUrlPrefix = (mode !== '') ? `/${mode}/` : ``
+           return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>
+          }
+      },
       ]} />
     </Box>;
   }
