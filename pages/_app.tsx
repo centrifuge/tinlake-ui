@@ -7,7 +7,6 @@ import { AxisTheme } from '@centrifuge/axis-theme';
 import Auth from '../components/Auth';
 import WithTinlake from '../components/WithTinlake';
 import { StyledApp } from '../components/StyledApp';
-import { Box, FormField, TextInput, Button, Heading } from 'grommet';
 
 class MyApp extends App<{ store: any }> {
   static async getInitialProps({ Component, ctx }: { Component: any, ctx: any }) {

@@ -23,9 +23,7 @@ class LoanList extends React.Component<Props> {
 
   render() {
     const { loans, mode, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => {
-      return (l.loanOwner === ethFrom)
-    }) :
+    const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => l.loanOwner === ethFrom) :
       loans!.loans;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
