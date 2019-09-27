@@ -28,12 +28,15 @@ class BorrowerLoanListPage extends React.Component {
               </SecondaryHeader>
 
               <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>
-                auth.user === null &&
+                auth.user === null && 
                   <Alert margin="medium" type="error">
                     Please authenticate to view your loans.
+                  </Alert> ||
+                auth.user && auth.isAdmin &&
+                  <Alert margin="medium" type="error">
+                    Please use an borrower account to access this page.
                   </Alert>
               } />
-
               <LoanList tinlake={tinlake} mode="borrower" />
             </Box>
           } />
