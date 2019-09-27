@@ -7,6 +7,9 @@ import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import Auth from '../../components/Auth';
 import Alert from '../../components/Alert';
+import config from '../../config'
+
+const { isDemo } = config
 
 class BorrowerLoanListPage extends React.Component {
 
@@ -32,7 +35,7 @@ class BorrowerLoanListPage extends React.Component {
                   <Alert margin="medium" type="error">
                     Please authenticate to view your loans.
                   </Alert> ||
-                auth.user && auth.isAdmin &&
+                auth.user && auth.isAdmin && !isDemo &&
                   <Alert margin="medium" type="error">
                     Please use an borrower account to access this page.
                   </Alert>
