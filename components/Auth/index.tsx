@@ -45,7 +45,6 @@ class Auth extends React.Component<Props, State> {
 
   init = async () => {
     const { tinlake, waitForAuthentication, auth, loadUser, loadNetwork, observeAuthChanges } = this.props;
-
     if (waitForAuthentication) {
       try {
         await authTinlake();
@@ -68,9 +67,7 @@ class Auth extends React.Component<Props, State> {
     }
     observeAuthChanges!(tinlake);
   }
-
   loadCurrentState() {
-
   }
 
   render() {

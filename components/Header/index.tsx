@@ -67,7 +67,7 @@ class Header extends React.Component<HeaderProps> {
         {menuItems.filter(item => 
         {
           return (
-            isDemo ||
+            (user && isDemo ) ||
             (user && isAdmin) && item.permission === "admin" ||
             (user && !isAdmin) && item.permission === 'borrower' ||
             !item.permission
