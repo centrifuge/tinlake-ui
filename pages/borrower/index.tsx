@@ -37,7 +37,7 @@ class BorrowerLoanListPage extends React.Component {
                   </Alert> ||
                 auth.user && auth.isAdmin && !isDemo &&
                   <Alert margin="medium" type="error">
-                    Please use an borrower account to access this page.
+                    Please use a borrower account to access this page.
                   </Alert>
               } />
               <LoanList tinlake={tinlake} mode="borrower" />
