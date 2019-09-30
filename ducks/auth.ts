@@ -4,8 +4,6 @@ import { ThunkAction } from 'redux-thunk';
 import config from '../config';
 import { networkIdToName } from '../utils/networkNameResolver';
 
-declare var web3: any;
-
 // Actions
 const LOAD = 'tinlake-ui/auth/LOAD';
 const RECEIVE = 'tinlake-ui/auth/RECEIVE';
@@ -73,11 +71,9 @@ export function loadUser(tinlake: Tinlake, address: Address):
 
     dispatch({ type: LOAD });
 
-    const isAdminPromise = tinlake.isAdmin(address);
-
     const user = {
       address,
-      isAdmin: isDemo || await isAdminPromise
+      isAdmin: isDemo || (await tinlake.isAdmin(address))
     };
     dispatch({ user, type: RECEIVE });
   };
