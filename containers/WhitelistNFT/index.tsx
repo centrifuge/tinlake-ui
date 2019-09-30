@@ -187,8 +187,8 @@ class WhitelistNFT extends React.Component<Props, State> {
 
           {nftError && <Alert type="error" margin={{ vertical: 'large' }}>
           { nftError } </Alert>}
-          {/*{nft &&*/}
-            {/*<NftData data={nft} authedAddr={tinlake.ethConfig.from} />}*/}
+          {nft &&
+            <NftData data={nft} authedAddr={tinlake.ethConfig.from} />}
         </Box>
       }
     </Box>;
