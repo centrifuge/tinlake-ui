@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tinlake, { displayToBase, baseToDisplay } from 'tinlake';
+import Tinlake from 'tinlake';
 import { Box, FormField, TextInput, Button, Heading, Anchor, Text } from 'grommet';
 import Alert from '../Alert';
 import Link from 'next/link';
@@ -7,7 +7,6 @@ import SecondaryHeader from '../SecondaryHeader';
 import { LinkPrevious } from 'grommet-icons';
 import { authTinlake } from '../../services/tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
-import NumberInput from '../NumberInput';
 import { numberToHex } from 'web3-utils';
 
 interface Props {
@@ -40,36 +39,27 @@ class MintNFT extends React.Component<Props, State> {
     for (let i = 0; i < 32; i = i + 1) {
       id += Math.round(Math.random() * 16);
     }
-    return numberToHex(id);
+    return `0x${id}`;
   }
 
   mint = async () => {
-    const { referenceId, amount, assetType } = this.state
-    if (referenceId === '' || assetType === '') {
-      this.setState({ is: 'error', errorMsg: 'Both Reference ID and Asset Type must be defined.' });
-    } else if (amount === '0') {
-      this.setState({ is: 'error', errorMsg: 'Amount cannot be 0.' });
-    } else {
-      this.setState({ is: 'loading' });
-      try {
-        await authTinlake();
+    try {
+      await authTinlake();
 
-        const res = await this.props.tinlake.mintNFT(
-          this.props.tinlake.ethConfig.from, this.state.tokenId, referenceId, amount, assetType);
-        if (res.status === SUCCESS_STATUS && res.events[0].event.name === 'Transfer') {
-          this.setState({ is: 'success' });
-        } else {
-          this.setState({ is: 'error' });
-        }
-      } catch (e) {
-        console.log(e);
-        this.setState({ is: 'error', errorMsg: e.message });
+      const res = await this.props.tinlake.mintNFT(this.props.tinlake.ethConfig.from, this.state.tokenId);
+      if (res.status === SUCCESS_STATUS && res.events[0].event.name === 'Transfer') {
+        this.setState({ is: 'success' });
+      } else {
+        this.setState({ is: 'error' });
       }
+    } catch (e) {
+      console.log(e);
+      this.setState({ is: 'error', errorMsg: e.message });
     }
-  }
+  };
 
   render() {
-    const { is, tokenId, errorMsg, referenceId, amount, assetType } = this.state;
+    const { is, tokenId, errorMsg } = this.state;
 
     return <Box>
       <SecondaryHeader>
@@ -103,31 +93,6 @@ class MintNFT extends React.Component<Props, State> {
                 <TextInput
                   value={this.state.tokenId}
                   disabled={true}
-                />
-              </FormField>
-              <FormField label="Reference ID">
-                <TextInput
-                  value={referenceId}
-                  onChange={e => this.setState({ referenceId: e.currentTarget.value })}
-                  disabled={is === 'success'}
-                />
-              </FormField>
-              <FormField label="Amount">
-                <NumberInput
-                  precision={18}
-                  suffix=" USD"
-                  value={baseToDisplay(amount, 18)}
-                  onValueChange={({ value }) => {
-                    this.setState({ amount: displayToBase(value, 18) });
-                  }}
-                  disabled={is === 'success'}
-                />
-              </FormField>
-              <FormField label="Asset Type">
-                <TextInput
-                  value={assetType}
-                  onChange={e => this.setState({ assetType: e.currentTarget.value })}
-                  disabled={is === 'success'}
                 />
               </FormField>
             </Box>

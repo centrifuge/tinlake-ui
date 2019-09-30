@@ -99,6 +99,7 @@ class WhitelistNFT extends React.Component<Props, State> {
   getNFT = async (currentTokenId: string) => {
     const { tinlake } = this.props;
     if (currentTokenId && currentTokenId.length > 0) {
+      console.log(currentTokenId)
       const result = await getNFT(tinlake, currentTokenId);
       const { tokenId, nft, errorMessage } = result as Partial< {tokenId:string, nft:NFT, errorMessage:string} >
       if (tokenId !== this.state.tokenId) {
@@ -186,8 +187,8 @@ class WhitelistNFT extends React.Component<Props, State> {
 
           {nftError && <Alert type="error" margin={{ vertical: 'large' }}>
           { nftError } </Alert>}
-          {nft &&
-            <NftData data={nft} authedAddr={tinlake.ethConfig.from} />}
+          {/*{nft &&*/}
+            {/*<NftData data={nft} authedAddr={tinlake.ethConfig.from} />}*/}
         </Box>
       }
     </Box>;
