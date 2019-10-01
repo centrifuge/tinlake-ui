@@ -8,7 +8,7 @@ export function networkIdToName(id: string) {
     case '42': return 'Kovan';
     case '100': return 'XDai';
     case '99': return 'Local';
-    default: return 'Unknown';
+    default: return 'unknown';
   }
 }
 
