@@ -6,7 +6,6 @@ import Alert from '../Alert';
 import { Box, Button, Heading, Text, FormField, TextInput } from 'grommet';
 import NftData from '../NftData';
 import SecondaryHeader from '../SecondaryHeader';
-import Link from 'next/link';
 import { BackLink } from '../BackLink';
 import LoanData from '../LoanData';
 import { authTinlake } from '../../services/tinlake';

@@ -107,9 +107,7 @@ class LoanBorrow extends React.Component<Props, State> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <Link href={`/borrower/loan?loanId=${loanId}`}>
-            <LinkPrevious  />
-          </Link>
+          <BackLink href={`/borrower/loan?loanId=${loanId}`} />
           <Heading level="3">Borrow Loan {loanId}</Heading>
         </Box>
 
