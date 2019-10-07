@@ -3,6 +3,6 @@ import Link from 'next/link';
 
 export const BackLink = (props : {href: string}) => (
   <Link href={props.href} >
-      <LinkPrevious style={{ cursor: 'pointer' }}/>
+    <LinkPrevious style={{ cursor: 'pointer' }}/>
   </Link>
   );
