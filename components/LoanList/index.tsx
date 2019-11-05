@@ -4,16 +4,19 @@ import Link from 'next/link';
 import { Box, DataTable, Anchor, Text } from 'grommet';
 import { connect } from 'react-redux';
 import { InternalListLoan, LoansState, getLoans } from '../../ducks/loans';
-import Address from '../Address';
 import NumberDisplay from '../NumberDisplay';
 import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
+import { DisplayField } from '@centrifuge/axis-display-field';
+import { AuthState } from '../../ducks/auth';
+import { getNFTLink, getAddressLink } from '../../utils/linkGenerator'
 
 interface Props {
   tinlake: Tinlake;
   loans?: LoansState;
   getLoans?: (tinlake: Tinlake) => Promise<void>;
   mode: 'borrower' | 'admin' | '';
+  auth?: AuthState;
 }
 
 class LoanList extends React.Component<Props> {
@@ -22,7 +25,8 @@ class LoanList extends React.Component<Props> {
   }
 
   render() {
-    const { loans, mode, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
+    const { loans, mode, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
+    const network = auth && auth.network
     const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => l.loanOwner === ethFrom) :
       loans!.loans;
     if (loans!.loansState === 'loading') {
@@ -34,14 +38,35 @@ class LoanList extends React.Component<Props> {
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
-          render: (l: InternalListLoan) => <Address address={bnToHex(l.tokenId
-          ).toString()} />,
+          render: (l: InternalListLoan) => 
+            <Box style={{ maxWidth: '150px' }}>
+              <DisplayField   
+                copy={true}
+                as={'span'}
+                value={bnToHex(l.tokenId).toString()}
+                link={{
+                    href: getNFTLink(network || '', bnToHex(l.tokenId).toString(), l.registry),
+                    target: '_blank',
+                }}
+              />
+            </Box>,
         },
         {
           header: 'NFT Owner', property: 'nftOwner', align: 'end',
           render: (l: InternalListLoan) => <div>
-            <Address address={l.loanOwner} />
-            {l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} />}
+            <Box style={{ maxWidth: '150px' }}>
+              <DisplayField   
+                copy={true}
+                as={'span'}
+                value={l.loanOwner}
+                link={{
+                    href: getAddressLink(network || '', l.loanOwner),
+                    target: '_blank',
+                }}
+              />
+              {l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} />}
+            </Box>
+            
           </div>,
         },
         { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },
@@ -50,7 +75,7 @@ class LoanList extends React.Component<Props> {
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ?
             <NumberDisplay suffix=" DAI" precision={18}
               value={baseToDisplay(l.principal, 18)} />
-            : '-',
+            : '-'
         },
         {
           header: <HeaderCell text={'Interest Rate'}></HeaderCell>, property: 'fee', align: 'end',
