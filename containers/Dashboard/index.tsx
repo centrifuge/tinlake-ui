@@ -14,7 +14,7 @@ import { Graph, TimeSeriesData } from '../../components/Graph';
 import config from '../../config';
 
 const periodSelectionOptions = ['7d', '30d', '90d'];
-const defaultPeriodSelection = '7d';
+const defaultPeriodSelection = '90d';
 
 interface Props {
   tinlake: Tinlake;
@@ -61,7 +61,7 @@ class Dashboard extends React.Component<Props, State> {
     };
 
     const updatedCollateralValueTimeSeriesData = timeSeriesData.reduce((collateralValueTimeSeriesData: TimeSeriesData, entry: TinlakeEventEntry) => {
-      const dateLabel = (new Date(parseInt(entry.timestamp, 10))).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const dateLabel = (new Date(parseInt(entry.timestamp, 10))).toLocaleDateString('UTC', { month: 'short', day: 'numeric', timeZone:'UTC' });
       collateralValueTimeSeriesData.labels.push(dateLabel);
       collateralValueTimeSeriesData.xValues[0].data.push((parseInt(entry.total_debt, 10) / Math.pow(10, 18)).toFixed(2));
       collateralValueTimeSeriesData.xValues[1].data.push((parseInt(entry.total_value_of_nfts, 10) / Math.pow(10, 18)).toFixed(2));
@@ -163,6 +163,8 @@ class Dashboard extends React.Component<Props, State> {
       </Box>
 
       <LoanList tinlake={tinlake} mode="" />
+      <Box pad={{ horizontal: 'medium', vertical: 'medium' }}>
+      </Box>
     </Box>;
   }
 }
