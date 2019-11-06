@@ -15,6 +15,7 @@ const SUCCESS_STATUS = '0x1';
 
 interface Props {
   tinlake: Tinlake;
+  tokenId: string;
 }
 
 interface State {
@@ -41,6 +42,10 @@ class WhitelistNFT extends React.Component<Props, State> {
   };
 
   componentWillMount() {
+    const { tokenId } =  this.props;
+    this.setState({ tokenId: tokenId || '' }, () => {
+      if (tokenId) { this.getNFT(tokenId); }
+    });
   }
 
   // handlers
@@ -112,7 +117,12 @@ class WhitelistNFT extends React.Component<Props, State> {
   }
 
   render() {
-    const { tinlake } = this.props;
+    const { tinlake, externalTokenId} = this.props;
+
+    if (externalTokenId) {
+      this.setState({tokenId: externalTokenId})
+    }
+
     const { tokenId, principal, appraisal, interestRate, is, errorMsg, nft, nftError } = this.state;
 
     return <Box>
