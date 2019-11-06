@@ -117,12 +117,7 @@ class WhitelistNFT extends React.Component<Props, State> {
   }
 
   render() {
-    const { tinlake, externalTokenId} = this.props;
-
-    if (externalTokenId) {
-      this.setState({tokenId: externalTokenId})
-    }
-
+    const { tinlake } = this.props;
     const { tokenId, principal, appraisal, interestRate, is, errorMsg, nft, nftError } = this.state;
 
     return <Box>
