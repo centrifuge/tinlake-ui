@@ -76,9 +76,9 @@ class LoanList extends React.Component<Props> {
 
         { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },
         {
-          header: 'Principal', property: 'principal', align: 'end',
+          header: 'Principal (DAI)', property: 'principal', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ?
-            <NumberDisplay suffix=" DAI" precision={18}
+            <NumberDisplay suffix="" precision={18}
               value={baseToDisplay(l.principal, 18)} />
             : '-'
         },
@@ -88,9 +88,9 @@ class LoanList extends React.Component<Props> {
             <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />,
         },
         {
-          header: 'Debt', property: 'debt', align: 'end',
+          header: 'Debt (DAI)', property: 'debt', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix=" DAI" precision={18} value={baseToDisplay(l.debt, 18)} />,
+            <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />,
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
