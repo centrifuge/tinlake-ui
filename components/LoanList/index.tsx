@@ -8,15 +8,13 @@ import NumberDisplay from '../NumberDisplay';
 import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { DisplayField } from '@centrifuge/axis-display-field';
-import { AuthState } from '../../ducks/auth';
-import { getNFTLink, getAddressLink } from '../../utils/linkGenerator'
+import { getNFTLink, getAddressLink } from '../../utils/etherscanLinkGenerator'
 
 interface Props {
   tinlake: Tinlake;
   loans?: LoansState;
   getLoans?: (tinlake: Tinlake) => Promise<void>;
   mode: 'borrower' | 'admin' | '';
-  auth?: AuthState;
 }
 
 class LoanList extends React.Component<Props> {
@@ -25,17 +23,19 @@ class LoanList extends React.Component<Props> {
   }
 
   render() {
-    const { loans, mode, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const network = auth && auth.network
+    const { loans, mode, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
     const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => l.loanOwner === ethFrom) :
       loans!.loans;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
+    filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId) )
+    
     return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
       <DataTable data={filteredLoans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
+        { header: <HeaderCell text={'Reference ID'}></HeaderCell>, property: 'refId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
           render: (l: InternalListLoan) => 
@@ -45,7 +45,7 @@ class LoanList extends React.Component<Props> {
                 as={'span'}
                 value={bnToHex(l.tokenId).toString()}
                 link={{
-                    href: getNFTLink(network || '', bnToHex(l.tokenId).toString(), l.registry),
+                    href: getNFTLink(bnToHex(l.tokenId).toString(), l.registry),
                     target: '_blank',
                 }}
               />
@@ -60,20 +60,26 @@ class LoanList extends React.Component<Props> {
                 as={'span'}
                 value={l.loanOwner}
                 link={{
-                    href: getAddressLink(network || '', l.loanOwner),
+                    href: getAddressLink(l.loanOwner),
                     target: '_blank',
                 }}
               />
-              {l.nftOwner === ethFrom && <Badge text={'Me'} style={{ marginLeft: 5 }} />}
             </Box>
             
           </div>,
         },
+        {
+          header: '', property: '', align: 'end',
+          render: (l: InternalListLoan) => <div> 
+            {l.nftOwner === ethFrom && <Badge text={'Me'} />}
+          </div>,
+        }, 
+
         { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },
         {
           header: 'Principal', property: 'principal', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ?
-            <NumberDisplay suffix=" DAI" precision={18}
+            <NumberDisplay suffix=" DAI" precision={2}
               value={baseToDisplay(l.principal, 18)} />
             : '-'
         },
@@ -85,7 +91,7 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Debt', property: 'debt', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix=" DAI" precision={18} value={baseToDisplay(l.debt, 18)} />,
+            <NumberDisplay suffix=" DAI" precision={2} value={baseToDisplay(l.debt, 18)} />,
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,

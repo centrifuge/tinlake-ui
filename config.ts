@@ -4,6 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 
 const config = {
   rpcUrl: publicRuntimeConfig.RPC_URL,
+  etherscanUrl: publicRuntimeConfig.ETHERSCAN_URL,
   contractAddresses: publicRuntimeConfig.TINLAKE_ADDRESSES && JSON.parse(publicRuntimeConfig.TINLAKE_ADDRESSES),
   nftDataDefinition: publicRuntimeConfig.NFT_DATA_DEFINITION && JSON.parse(publicRuntimeConfig.NFT_DATA_DEFINITION),
   transactionTimeout: publicRuntimeConfig.TRANSACTION_TIMEOUT,
@@ -11,6 +12,7 @@ const config = {
   isDemo: publicRuntimeConfig.ENV && (publicRuntimeConfig.ENV === 'demo'),
   network: publicRuntimeConfig.RPC_URL && networkUrlToName(publicRuntimeConfig.RPC_URL)
 };
+console.log("url", config.etherscanUrl)
 if (!config.nftDataDefinition) {
   throw new Error('Missing env NFT_DATA_DEFINITION');
 }
