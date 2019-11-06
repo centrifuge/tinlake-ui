@@ -85,8 +85,7 @@ class MintNFT extends React.Component<Props, State> {
               <Link href={{ pathname: '/admin/whitelist-nft', query: { tokenId }}}>
                 <Anchor>Please proceed to whitelisting</Anchor> 
               </Link> your NFT.</p>
-             <p> Your NFT ID will automatically be pasted in the respective field.</p>
-          
+            <p> Your NFT ID will automatically be pasted in the respective field.</p>
             <p>If you want to whitelist your NFT later, <b>please make sure to copy your Token ID!</b></p>
          </Alert>}
           {is === 'error' && <Alert type="error">
