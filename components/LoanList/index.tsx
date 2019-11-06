@@ -8,7 +8,7 @@ import NumberDisplay from '../NumberDisplay';
 import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { DisplayField } from '@centrifuge/axis-display-field';
-import { getNFTLink, getAddressLink } from '../../utils/etherscanLinkGenerator'
+import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator'
 
 interface Props {
   tinlake: Tinlake;
@@ -42,9 +42,9 @@ class LoanList extends React.Component<Props> {
               <DisplayField   
                 copy={true}
                 as={'span'}
-                value={bnToHex(l.tokenId).toString()}
+                value={hexToInt(bnToHex(l.tokenId).toString())}
                 link={{
-                    href: getNFTLink(bnToHex(l.tokenId).toString(), l.registry),
+                    href: getNFTLink(hexToInt(bnToHex(l.tokenId).toString()), l.registry),
                     target: '_blank',
                 }}
               />
