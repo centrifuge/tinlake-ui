@@ -10,8 +10,7 @@ import { menuItems } from '../../menuItems';
 class WhitelistNFTPage extends React.Component<{ tokenId: string }> {
 
   static async getInitialProps({ query }: any) {
-    const { tokenId } = query
-    return { tokenId }
+    return { tokenId: query.tokenId };
   }
 
   render() {
