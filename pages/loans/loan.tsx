@@ -6,7 +6,7 @@ import { Box } from 'grommet';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 
-class BorrowerLoanPage extends React.Component<{ loanId: string }> {
+class LoanPage extends React.Component<{ loanId: string }> {
   static async getInitialProps({ query }: any) {
     return { loanId: query.loanId };
   }
@@ -36,4 +36,4 @@ class BorrowerLoanPage extends React.Component<{ loanId: string }> {
   }
 }
 
-export default BorrowerLoanPage;
+export default LoanPage;

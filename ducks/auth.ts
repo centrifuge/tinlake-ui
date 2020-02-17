@@ -1,7 +1,6 @@
 import { AnyAction, Action } from 'redux';
 import Tinlake, { Address } from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
-import config from '../config';
 import { networkIdToName } from '../utils/networkNameResolver';
 
 // Actions
@@ -12,17 +11,12 @@ const CLEAR_NETWORK = 'tinlake-ui/auth/CLEAR_NETWORK';
 const RECEIVE_NETWORK = 'tinlake-ui/auth/RECEIVE_NETWORK';
 const OBSERVING_AUTH_CHANGES = 'tinlake-ui/auth/OBSERVING_AUTH_CHANGES';
 
-const { isDemo } = config;
-
 export interface User {
   address: Address;
   permissions: Permissions;
 }
 
 export interface Permissions {
-  // TODO: get rid of this
-  isAdmin: boolean;
-
   canSetCeiling: boolean;
   canSetThreshold: boolean;
   canSetInterestRate: boolean;
@@ -84,9 +78,7 @@ export function loadUser(tinlake: Tinlake, address: Address):
     dispatch({ type: LOAD });
 
     const user = {
-      address,
-      permissions:
-        { isAdmin: isDemo || (await tinlake.isAdmin(address)) }
+      address
     };
     dispatch({ user, type: RECEIVE });
   };

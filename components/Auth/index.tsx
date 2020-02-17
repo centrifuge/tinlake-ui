@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { authTinlake } from '../../services/tinlake';
 
 interface ExtendedAuthState extends AuthState {
-  isAdmin: boolean;
   isAuthenticated: boolean;
   isAuthorized: boolean;
 }
@@ -82,8 +81,6 @@ class Auth extends React.Component<Props, State> {
       ...auth!,
       isAuthenticated: !isAuthenticating,
       isAuthorized: !isAuthorizing,
-      // TODO: remove this
-      isAdmin: !!auth!.user && auth!.user.permissions.isAdmin
     };
 
     return this.props.render(extendedAuthState);

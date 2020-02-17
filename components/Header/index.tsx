@@ -3,7 +3,6 @@ import { Box, Button, Image, Text, Anchor } from 'grommet';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 import { AuthState } from '../../ducks/auth';
-import Badge from '../Badge';
 import { formatAddress } from '../../utils/formatAddress';
 import config from '../../config';
 import { authTinlake } from '../../services/tinlake';
@@ -13,7 +12,7 @@ export interface MenuItem {
   label: string;
   route: string;
   secondary?: boolean;
-  permission?: 'admin' | 'borrower' | 'demo';
+  permission?: 'admin' | 'loans' | 'demo';
 }
 
 interface HeaderProps {
@@ -35,7 +34,6 @@ class Header extends React.Component<HeaderProps> {
     const { selectedRoute, menuItems, auth } = this.props;
     const user = auth && auth.user;
     const address = user && user.address;
-    const isAdmin = user && user.permissions.isAdmin;
     const network = auth && auth.network;
 
     const sectionGap = 'medium';
@@ -68,8 +66,8 @@ class Header extends React.Component<HeaderProps> {
         {menuItems.filter((item) => {
           return (
             (user && isDemo) ||
-            (user && isAdmin) && item.permission === 'admin' ||
-            (user && !isAdmin) && item.permission === 'borrower' ||
+            (user && item.permission === 'admin') ||
+            (user && item.permission === 'loans') ||
             !item.permission
             )
             && !item.secondary;
@@ -89,11 +87,6 @@ class Header extends React.Component<HeaderProps> {
         )}
       </Box>
       { !user && <Button onClick={this.connectAccount} label="Connect" /> }
-      { user &&
-        <Box direction="row" gap={itemGap} align="center" justify="end">
-        { isAdmin &&  <Badge text={'Admin'} style={{  }} /> }
-        </Box>
-      }
       { user &&
         <Box direction="column">
           <Box direction="row" gap={itemGap} align="center" justify="start">
