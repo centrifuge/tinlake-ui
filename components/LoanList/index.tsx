@@ -8,7 +8,7 @@ import NumberDisplay from '../NumberDisplay';
 import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { DisplayField } from '@centrifuge/axis-display-field';
-import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator'
+import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator';
 
 interface Props {
   tinlake: Tinlake;
@@ -30,49 +30,51 @@ class LoanList extends React.Component<Props> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-    filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId) )
-    
+    // TODO: if mode === 'lender'
+
+    filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId));
+
     return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
-      <DataTable  style={{ tableLayout: "auto" }} data={filteredLoans} sortable columns={[
+      <DataTable  style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
-          render: (l: InternalListLoan) => 
+          render: (l: InternalListLoan) =>
             <Box style={{ maxWidth: '150px' }}>
-              <DisplayField   
+              <DisplayField
                 copy={true}
                 as={'span'}
                 value={hexToInt(bnToHex(l.tokenId).toString())}
                 link={{
-                    href: getNFTLink(hexToInt(bnToHex(l.tokenId).toString()), l.registry),
-                    target: '_blank',
+                  href: getNFTLink(hexToInt(bnToHex(l.tokenId).toString()), l.registry),
+                  target: '_blank'
                 }}
               />
-            </Box>,
+            </Box>
         },
         {
           header: 'NFT Owner', property: 'nftOwner', align: 'end',
           render: (l: InternalListLoan) => <div>
             <Box style={{ maxWidth: '150px' }}>
-              <DisplayField   
+              <DisplayField
                 copy={true}
                 as={'span'}
                 value={l.loanOwner}
                 link={{
-                    href: getAddressLink(l.loanOwner),
-                    target: '_blank',
+                  href: getAddressLink(l.loanOwner),
+                  target: '_blank'
                 }}
               />
             </Box>
-            
-          </div>,
+
+          </div>
         },
         {
           header: '', property: '', align: 'end',
-          render: (l: InternalListLoan) => <div> 
+          render: (l: InternalListLoan) => <div>
             {l.nftOwner === ethFrom && <Badge text={'Me'} />}
-          </div>,
-        }, 
+          </div>
+        },
 
         { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },
         {
@@ -85,27 +87,27 @@ class LoanList extends React.Component<Props> {
         {
           header: <HeaderCell text={'Interest Rate'}></HeaderCell>, property: 'fee', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Repaid' ? '-' :
-            <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />,
+            <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />
         },
         {
           header: 'Debt (DAI)', property: 'debt', align: 'end',
           render: (l: InternalListLoan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />,
+            <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
           render: (l: InternalListLoan) =>
-          { const loanUrlPrefix = (mode !== '') ? `/${mode}/` : ``
-           return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>
+          { const loanUrlPrefix = (mode !== '') ? `/${mode}/` : '';
+            return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>;
           }
-      },
+        }
       ]} />
     </Box>;
   }
 }
 
 const HeaderCell = (props : {text: string}) => (
-  <Box pad={{ left: 'small'}}><Text>{props.text}</Text></Box>
+  <Box pad={{ left: 'small' }}><Text>{props.text}</Text></Box>
 );
 
 export default connect(state => state, { getLoans })(LoanList);

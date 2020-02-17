@@ -7,15 +7,12 @@ import { Box, FormField, TextInput, Button, Heading } from 'grommet';
 import NftData from '../NftData';
 import SecondaryHeader from '../SecondaryHeader';
 import LoanData from '../LoanData';
-import Auth from '../Auth';
-import config from '../../config'
 import Link from 'next/link';
 import { BackLink } from '../BackLink';
 
-const { isDemo }  = config
 interface Props {
   loanId: string;
-  mode: 'borrower' | 'admin' | '';
+  mode: 'borrower' | 'admin' |'';
   tinlake: Tinlake;
   loans?: LoansState;
   getLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
@@ -53,15 +50,6 @@ class LoanDetail extends React.Component<Props> {
         </Box>
 
         <Box direction="row" gap="small" align="center">
-          {status === 'Whitelisted' &&
-            <Auth tinlake={tinlake}
-              render={auth => ( auth.isAdmin && !isDemo ) ?
-              <Link href={`/admin/unwhitelist-nft?loanId=${loanId}`}>
-                <Button primary label="Unwhitelist" />
-              </Link> : null} />
-          }
-          {status === 'Whitelisted' && loanOwner === tinlake.ethConfig.from &&
-            <Link href={`/borrower/borrow?loanId=${loanId}`}><Button primary label="Borrow" /></Link>}
           {status === 'Ongoing' && loanOwner === tinlake.ethConfig.from &&
             <Link href={`/borrower/repay?loanId=${loanId}`}><Button primary label="Repay" /></Link>}
         </Box>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { AuthState } from '../../ducks/auth';
 import Badge from '../Badge';
 import { formatAddress } from '../../utils/formatAddress';
-import config from '../../config'
+import config from '../../config';
 import { authTinlake } from '../../services/tinlake';
 
 const { isDemo } = config
@@ -13,7 +13,7 @@ export interface MenuItem {
   label: string;
   route: string;
   secondary?: boolean;
-  permission?: "admin" | "borrower" | "demo" 
+  permission?: "admin" | "borrower" | "demo"
 }
 
 interface HeaderProps {
