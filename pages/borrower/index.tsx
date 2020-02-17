@@ -7,9 +7,9 @@ import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import Auth from '../../components/Auth';
 import Alert from '../../components/Alert';
-import config from '../../config'
+import config from '../../config';
 
-const { isDemo } = config
+const { isDemo } = config;
 
 class BorrowerLoanListPage extends React.Component {
 
@@ -31,7 +31,7 @@ class BorrowerLoanListPage extends React.Component {
               </SecondaryHeader>
 
               <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>
-                auth.user === null && 
+                auth.user === null &&
                   <Alert margin="medium" type="error">
                     Please authenticate to view your loans.
                   </Alert> ||

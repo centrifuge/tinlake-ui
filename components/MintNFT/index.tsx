@@ -1,8 +1,7 @@
 import * as React from 'react';
 import Tinlake, { displayToBase, baseToDisplay } from 'tinlake';
-import { Box, FormField, TextInput, Button, Heading, Anchor, Text } from 'grommet';
+import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
 import Alert from '../Alert';
-import Link from 'next/link';
 import SecondaryHeader from '../SecondaryHeader';
 import { BackLink } from '../BackLink';
 import { authTinlake } from '../../services/tinlake';
@@ -22,7 +21,7 @@ interface State {
   errorMsg: string;
 }
 
-const SUCCESS_STATUS = '0x1'
+const SUCCESS_STATUS = '0x1';
 
 class MintNFT extends React.Component<Props, State> {
   state: State = {
@@ -44,12 +43,12 @@ class MintNFT extends React.Component<Props, State> {
 
   mint = async () => {
     const { referenceId, assetType, amount } = this.state;
-   
+
     {
       this.setState({ is: 'loading' });
       try {
         await authTinlake();
-        const base = displayToBase(baseToDisplay(amount, 2), 2)
+        const base = displayToBase(baseToDisplay(amount, 2), 2);
         const res = await this.props.tinlake.mintNFT(
           this.props.tinlake.ethConfig.from, this.state.tokenId, referenceId, base, assetType);
         if (res.status === SUCCESS_STATUS && res.events[0].event.name === 'Transfer') {
@@ -103,7 +102,7 @@ class MintNFT extends React.Component<Props, State> {
             <b>Please specify metadata of NFT:</b>
           </Box>
 
-          <Box direction="row" gap="large" margin={"medium"} justify="evenly">
+          <Box direction="row" gap="large" margin={'medium'} justify="evenly">
               { is === 'success' && <FormField label="Token ID">
                 <TextInput
                   value={this.state.tokenId}

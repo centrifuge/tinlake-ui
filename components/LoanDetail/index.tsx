@@ -45,7 +45,7 @@ class LoanDetail extends React.Component<Props> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <BackLink href={`/${mode}`} /> 
+          <BackLink href={`/${mode}`} />
           <Heading level="3">View Loan {loanId}</Heading>
         </Box>
 

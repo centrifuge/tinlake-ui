@@ -30,8 +30,6 @@ class LoanList extends React.Component<Props> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-    // TODO: if mode === 'lender'
-
     filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId));
 
     return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
@@ -96,8 +94,8 @@ class LoanList extends React.Component<Props> {
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
-          render: (l: InternalListLoan) =>
-          { const loanUrlPrefix = (mode !== '') ? `/${mode}/` : '';
+          render: (l: InternalListLoan) => {
+            const loanUrlPrefix = (mode !== '') ? `/${mode}/` : '';
             return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>;
           }
         }

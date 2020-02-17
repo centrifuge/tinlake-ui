@@ -14,9 +14,9 @@ import { calcRepayAmount } from '../../utils/calcRepayAmount';
 import { authTinlake } from '../../services/tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
 import Auth from '../Auth';
-import config from '../../config'
+import config from '../../config';
 import BN from 'bn.js';
-const { isDemo } = config
+const { isDemo } = config;
 const SUCCESS_STATUS = '0x1';
 
 const playgroundDAIAmount = '100';
@@ -74,7 +74,7 @@ class LoanRepay extends React.Component<Props, State> {
       await authTinlake();
       const { tinlake } = this.props;
       const ethFrom = tinlake.ethConfig.from;
-      const amount = (new BN( displayToBase(playgroundDAIAmount, 18))).toString();
+      const amount = (new BN(displayToBase(playgroundDAIAmount, 18))).toString();
       const res = await tinlake.mintCurrency(ethFrom, amount);
       if (res.status !== SUCCESS_STATUS || res.events[0].event.name !== 'Transfer') {
         this.setState({ is: 'error', errorMsg: JSON.stringify(res) });
@@ -82,7 +82,7 @@ class LoanRepay extends React.Component<Props, State> {
       }
 
       this.setState({ is: 'funded' });
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       this.setState({ is: 'error', errorMsg: e.message });
     }
@@ -149,7 +149,7 @@ class LoanRepay extends React.Component<Props, State> {
           {status === 'Ongoing' && loanOwner === tinlake.ethConfig.from &&
             <Button primary onClick={this.repay} label="Confirm"
               disabled={is === 'loading' || is === 'success'} />}
-        </Box> 
+        </Box>
       </SecondaryHeader>
 
       <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>

@@ -95,7 +95,7 @@ class Dashboard extends React.Component<Props, State> {
 
   render() {
     const { dashboard, tinlake } = this.props;
-    const { state, data } = dashboard!;
+    const { data } = dashboard!;
     const { showCollateralGraph,
             collateralTimeSeriesPeriod,
             collateralValueTimeSeriesData,
@@ -113,34 +113,34 @@ class Dashboard extends React.Component<Props, State> {
           <Box basis={'1/4'} gap="medium">
             <DashboardMetric label="DAI, Outstanding Debt">
             { data ?
-              ( <NumberDisplay value={baseToDisplay(data.totalDebt, 18)} /> )
-            : ( <Spinner height={'calc(4vh)'} margin={{"bottom": "calc(1vh)"}}/> )   
+              (<NumberDisplay value={baseToDisplay(data.totalDebt, 18)} />)
+            : (<Spinner height={'calc(4vh)'} margin={{ bottom: 'calc(1vh)' }}/>)
             }
             </DashboardMetric>
           </Box>
           <Box basis={'1/4'} gap="medium">
             <DashboardMetric label="DAI, Collateral Value">
               { data ?
-                ( <NumberDisplay value={baseToDisplay(data.totalValueOfNFTs, 18)} /> )
-              : ( <Spinner height={'calc(4vh)'} margin={{"bottom": "calc(1vh)"}}/> )   
+                (<NumberDisplay value={baseToDisplay(data.totalValueOfNFTs, 18)} />)
+              : (<Spinner height={'calc(4vh)'} margin={{ bottom: 'calc(1vh)' }}/>)
               }
             </DashboardMetric>
           </Box>
           <Box basis={'1/4'} gap="medium">
             <DashboardMetric label="Collateral Value / Debt">
               { data ?
-                ( <NumberDisplay value={calcRatioPercent(data.totalValueOfNFTs, data.totalDebt)} suffix=" %" /> )
-              : ( <Spinner height={'calc(4vh)'} margin={{"bottom": "calc(1vh)"}}/> )   
+                (<NumberDisplay value={calcRatioPercent(data.totalValueOfNFTs, data.totalDebt)} suffix=" %" />)
+              : (<Spinner height={'calc(4vh)'} margin={{ bottom: 'calc(1vh)' }}/>)
               }
             </DashboardMetric>
           </Box>
           <Box basis={'1/4'} gap="medium">
             <DashboardMetric label="Ongoing Loans">
               { data ?
-                ( <NumberDisplay value={data.loanCount.toString()} precision={0} /> )
-              : ( <Spinner height={'calc(4vh)'} margin={{"bottom": "calc(1vh)"}}/> )   
+                (<NumberDisplay value={data.loanCount.toString()} precision={0} />)
+              : (<Spinner height={'calc(4vh)'} margin={{ bottom: 'calc(1vh)' }}/>)
               }
-             
+
             </DashboardMetric>
           </Box>
         </Box>
