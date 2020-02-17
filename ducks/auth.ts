@@ -15,8 +15,20 @@ const OBSERVING_AUTH_CHANGES = 'tinlake-ui/auth/OBSERVING_AUTH_CHANGES';
 const { isDemo } = config;
 
 export interface User {
-  isAdmin: boolean;
   address: Address;
+  permissions: Permissions;
+}
+
+export interface Permissions {
+  // TODO: get rid of this
+  isAdmin: boolean;
+
+  canSetCeiling: boolean;
+  canSetThreshold: boolean;
+  canSetInterestRate: boolean;
+  canSetLoanPrice: boolean;
+  canActAsKeeper: boolean;
+  isLoanOwner: boolean;
 }
 
 export interface AuthState {
@@ -73,7 +85,8 @@ export function loadUser(tinlake: Tinlake, address: Address):
 
     const user = {
       address,
-      isAdmin: isDemo || (await tinlake.isAdmin(address))
+      permissions:
+        { isAdmin: isDemo || (await tinlake.isAdmin(address)) }
     };
     dispatch({ user, type: RECEIVE });
   };

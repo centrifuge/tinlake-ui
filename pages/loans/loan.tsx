@@ -15,7 +15,7 @@ class BorrowerLoanPage extends React.Component<{ loanId: string }> {
     const { loanId } = this.props;
     return <Box align="center">
       <Header
-        selectedRoute={`/borrower/loan?loanId=${loanId}`}
+        selectedRoute={`/loans/loan?loanId=${loanId}`}
         menuItems={menuItems}
       />
       <Box
@@ -25,7 +25,7 @@ class BorrowerLoanPage extends React.Component<{ loanId: string }> {
         <Box width="xlarge" >
           {loanId ? (
             <WithTinlake render={tinlake =>
-              <LoanDetail tinlake={tinlake} loanId={loanId} mode="borrower" />
+              <LoanDetail tinlake={tinlake} loanId={loanId} mode="loans" />
             } />
           ) : (
               <Alert margin="medium" type="error">Please provide an ID</Alert>

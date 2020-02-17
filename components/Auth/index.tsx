@@ -49,7 +49,7 @@ class Auth extends React.Component<Props, State> {
       try {
         await authTinlake();
       } catch (e) {
-        console.log(`authentication failed with Error ${e}`)
+        console.log(`authentication failed with Error ${e}`);
       }
       if (this.isMounted) {
         this.setState({ isAuthenticating: false });
@@ -82,7 +82,8 @@ class Auth extends React.Component<Props, State> {
       ...auth!,
       isAuthenticated: !isAuthenticating,
       isAuthorized: !isAuthorizing,
-      isAdmin: !!auth!.user && auth!.user.isAdmin
+      // TODO: remove this
+      isAdmin: !!auth!.user && auth!.user.permissions.isAdmin
     };
 
     return this.props.render(extendedAuthState);

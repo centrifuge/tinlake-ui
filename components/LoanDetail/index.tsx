@@ -12,7 +12,7 @@ import { BackLink } from '../BackLink';
 
 interface Props {
   loanId: string;
-  mode: 'borrower' | 'admin' |'';
+  mode: 'loans' | 'admin' |'';
   tinlake: Tinlake;
   loans?: LoansState;
   getLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
@@ -51,7 +51,7 @@ class LoanDetail extends React.Component<Props> {
 
         <Box direction="row" gap="small" align="center">
           {status === 'Ongoing' && loanOwner === tinlake.ethConfig.from &&
-            <Link href={`/borrower/repay?loanId=${loanId}`}><Button primary label="Repay" /></Link>}
+            <Link href={`/loans/repay?loanId=${loanId}`}><Button primary label="Repay" /></Link>}
         </Box>
       </SecondaryHeader>
 

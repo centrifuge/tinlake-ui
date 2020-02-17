@@ -16,7 +16,7 @@ class BorrowerLoanListPage extends React.Component {
   render() {
     return <Box align="center">
       <Header
-        selectedRoute={'/borrower'}
+        selectedRoute={'/loans'}
         menuItems={menuItems}
       />
       <Box
@@ -35,12 +35,12 @@ class BorrowerLoanListPage extends React.Component {
                   <Alert margin="medium" type="error">
                     Please authenticate to view your loans.
                   </Alert> ||
-                auth.user && auth.isAdmin && !isDemo &&
+                auth.user && auth.user.permissions.isAdmin && !isDemo &&
                   <Alert margin="medium" type="error">
                     Please use a borrower account to access this page.
                   </Alert>
               } />
-              <LoanList tinlake={tinlake} mode="borrower" />
+              <LoanList tinlake={tinlake} mode="loans" />
             </Box>
           } />
         </Box>

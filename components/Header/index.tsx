@@ -35,7 +35,7 @@ class Header extends React.Component<HeaderProps> {
     const { selectedRoute, menuItems, auth } = this.props;
     const user = auth && auth.user;
     const address = user && user.address;
-    const isAdmin = user && user.isAdmin;
+    const isAdmin = user && user.permissions.isAdmin;
     const network = auth && auth.network;
 
     const sectionGap = 'medium';
