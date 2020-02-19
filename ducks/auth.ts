@@ -17,12 +17,20 @@ export interface User {
 }
 
 export interface Permissions {
+  // loan admin permissions
+  canIssueLoan: boolean;
   canSetCeiling: boolean;
-  canSetThreshold: boolean;
   canSetInterestRate: boolean;
+  // tranche admin permissions
+  canSetEquityRatio: boolean;
+  canSetRiskScore: boolean;
+  canSetJuniorTrancheInterestRate: boolean;
+  // lender admin permissions
+  canSetInvestorAllowance: boolean;
+  // collector permissions
+  canSetThreshold: boolean;
   canSetLoanPrice: boolean;
   canActAsKeeper: boolean;
-  isLoanOwner: boolean;
 }
 
 export interface AuthState {
@@ -75,11 +83,35 @@ export function loadUser(tinlake: Tinlake, address: Address):
       return;
     }
 
+    // loan admin permissions
+    const wardCeiling = await tinlake.isWard(address, 'CEILING');
+    const wardPile = await tinlake.isWard(address, 'PILE');
+    // tranche admin permissions
+    const wardAssessor = await tinlake.isWard(address, 'ASSESSOR');
+    const wardPricePool = await tinlake.isWard(address, 'PRICE_POOL');
+    // TODO const wardJuniorTranche = await this.tinlake.isWard(address, 'JUNIOR');
+    // lender permissions
+    const wardJuniorOperator = await tinlake.isWard(address, 'JUNIOR_OPERATOR');
+    // collector permissions
+    const wardThreshold = await tinlake.isWard(address, 'THRESHOLD');
+    const wardCollector = await tinlake.isWard(address, 'COLLECTOR');
+
     dispatch({ type: LOAD });
 
     const user = {
-      address
-    };
+      address,
+      permissions: {
+        canSetCeiling: wardCeiling.toNumber() === 1,
+        canSetInterestRate: wardPile.toNumber() === 1,
+        canSetThreshold: wardThreshold.toNumber() === 1,
+        canSetLoanPrice: wardCollector.toNumber() === 1,
+        canSetEquityRatio: wardAssessor.toNumber() === 1,
+        canSetRiskScore: wardPricePool.toNumber() === 1,
+        // // TODO: canSetJuniorTrancheInterestRate: wardJuniorTranche.toNumber() === 1,
+        canSetInvestorAllowance: wardJuniorOperator.toNumber() === 1,
+        // TODO: canActAsKeeper
+      }
+    }
     dispatch({ user, type: RECEIVE });
   };
 }

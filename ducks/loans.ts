@@ -65,64 +65,64 @@ export default function reducer(state: LoansState = initialState,
 export function getLoans(tinlake: Tinlake):
   ThunkAction<Promise<void>, LoansState, undefined, Action>  {
   return async (dispatch) => {
-    dispatch({ type: LOAD });
+    // dispatch({ type: LOAD });
 
     const count = await tinlake.loanCount();
 
-    const loanPromises: Promise<Loan>[] = [];
-    const balancePromises: Promise<BalanceDebt>[] = [];
-    const currentDebtPromises: Promise<BN>[] = [];
-
-    for (let i = startingLoanId; i < count.toNumber(); i += 1) {
-      loanPromises.push(tinlake.getLoan(`${i}`));
-      balancePromises.push(tinlake.getBalanceDebt(`${i}`));
-      currentDebtPromises.push(tinlake.getCurrentDebt(`${i}`));
-    }
-
-    const loans = await Promise.all(loanPromises);
-    const balanceDebtData = await Promise.all(balancePromises);
-    const currentDebtData = await Promise.all(currentDebtPromises);
-    const nftOwnerPromises: Promise<Address>[] = [];
-    const loanOwnerPromises: Promise<Address>[] = [];
-    for (let i = 0; i < count.toNumber() - startingLoanId; i += 1) {
-      nftOwnerPromises.push(tinlake.ownerOfNFT(bnToHex(loans[i].tokenId)));
-      loanOwnerPromises.push(tinlake.ownerOfLoan(`${i + startingLoanId}`));
-    }
-    const nftOwners: Address[] = [];
-    const loanOwners: Address[] = [];
-    for (let i = 0; i < count.toNumber() - startingLoanId; i += 1) {
-      try {
-        nftOwners[i] = await nftOwnerPromises[i];
-      } catch (e) {
-        console.error(`Could not get NFT owner for Loan ID ${i + startingLoanId}, ` +
-        `NFT ID ${bnToHex(loans[i].tokenId)}`);
-        nftOwners[i] = '';
-      }
-      try {
-        loanOwners[i] = await loanOwnerPromises[i];
-      } catch (e) {
-        console.error(`Could not get loan owner for Loan ID ${i + startingLoanId}, ` +
-          `NFT ID ${bnToHex(loans[i].tokenId)}`);
-        loanOwners[i] = '';
-      }
-    }
-
-    const extendedLoansData: InternalListLoan[] = loans.map((loan, i) => {
-      return ({
-        loanId: `${i + startingLoanId}`,
-        loanOwner: loanOwners[i],
-        nftOwner: nftOwners[i],
-        principal: loan.principal,
-        price: loan.price,
-        fee: balanceDebtData[i].fee,
-        registry: loan.registry,
-        tokenId: loan.tokenId,
-        balance: balanceDebtData[i].balance,
-        debt: currentDebtData[i],
-        status: getLoanStatus(loan.principal, currentDebtData[i])
-      });
-    });
-    dispatch({ type: RECEIVE, loans: extendedLoansData });
+    // const loanPromises: Promise<Loan>[] = [];
+    // const balancePromises: Promise<BalanceDebt>[] = [];
+    // const currentDebtPromises: Promise<BN>[] = [];
+    //
+    // for (let i = startingLoanId; i < count.toNumber(); i += 1) {
+    //   loanPromises.push(tinlake.getLoan(`${i}`));
+    //   balancePromises.push(tinlake.getBalanceDebt(`${i}`));
+    //   currentDebtPromises.push(tinlake.getCurrentDebt(`${i}`));
+    // }
+    //
+    // const loans = await Promise.all(loanPromises);
+    // const balanceDebtData = await Promise.all(balancePromises);
+    // const currentDebtData = await Promise.all(currentDebtPromises);
+    // const nftOwnerPromises: Promise<Address>[] = [];
+    // const loanOwnerPromises: Promise<Address>[] = [];
+    // for (let i = 0; i < count.toNumber() - startingLoanId; i += 1) {
+    //   nftOwnerPromises.push(tinlake.ownerOfNFT(bnToHex(loans[i].tokenId)));
+    //   loanOwnerPromises.push(tinlake.ownerOfLoan(`${i + startingLoanId}`));
+    // }
+    // const nftOwners: Address[] = [];
+    // const loanOwners: Address[] = [];
+    // for (let i = 0; i < count.toNumber() - startingLoanId; i += 1) {
+    //   try {
+    //     nftOwners[i] = await nftOwnerPromises[i];
+    //   } catch (e) {
+    //     console.error(`Could not get NFT owner for Loan ID ${i + startingLoanId}, ` +
+    //     `NFT ID ${bnToHex(loans[i].tokenId)}`);
+    //     nftOwners[i] = '';
+    //   }
+    //   try {
+    //     loanOwners[i] = await loanOwnerPromises[i];
+    //   } catch (e) {
+    //     console.error(`Could not get loan owner for Loan ID ${i + startingLoanId}, ` +
+    //       `NFT ID ${bnToHex(loans[i].tokenId)}`);
+    //     loanOwners[i] = '';
+    //   }
+    // }
+    //
+    // const extendedLoansData: InternalListLoan[] = loans.map((loan, i) => {
+    //   return ({
+    //     loanId: `${i + startingLoanId}`,
+    //     loanOwner: loanOwners[i],
+    //     nftOwner: nftOwners[i],
+    //     principal: loan.principal,
+    //     price: loan.price,
+    //     fee: balanceDebtData[i].fee,
+    //     registry: loan.registry,
+    //     tokenId: loan.tokenId,
+    //     balance: balanceDebtData[i].balance,
+    //     debt: currentDebtData[i],
+    //     status: getLoanStatus(loan.principal, currentDebtData[i])
+    //   });
+    // });
+    // dispatch({ type: RECEIVE, loans: extendedLoansData });
   };
 }
 
