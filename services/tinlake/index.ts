@@ -3,7 +3,6 @@ import config from '../../config';
 import Eth from 'ethjs';
 
 const { contractAddresses, nftDataDefinition, transactionTimeout, rpcUrl } = config;
-
 let tinlake: Tinlake | null = null;
 let authing = false;
 let authed = false;
@@ -21,8 +20,7 @@ export async function getTinlake() {
     const accounts = await injectedProvider.enable();
     const account = accounts[0];
     tinlake = new Tinlake(injectedProvider, contractAddresses, nftDataDefinition.contractCall.outputs, transactionTimeout, {});
-    tinlake!.setEthConfig({ from: account });
-
+    tinlake!.setEthConfig({ from: account, gasLimit: `0x${config.gasLimit.toString(16)}` });
     authed = true;
     authing = false;
   } else {

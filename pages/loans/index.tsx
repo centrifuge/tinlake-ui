@@ -7,16 +7,13 @@ import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import Auth from '../../components/Auth';
 import Alert from '../../components/Alert';
-import config from '../../config';
 
-const { isDemo } = config;
-
-class BorrowerLoanListPage extends React.Component {
+class LoanListPage extends React.Component {
 
   render() {
     return <Box align="center">
       <Header
-        selectedRoute={'/borrower'}
+        selectedRoute={'/loans'}
         menuItems={menuItems}
       />
       <Box
@@ -34,13 +31,9 @@ class BorrowerLoanListPage extends React.Component {
                 auth.user === null &&
                   <Alert margin="medium" type="error">
                     Please authenticate to view your loans.
-                  </Alert> ||
-                auth.user && auth.isAdmin && !isDemo &&
-                  <Alert margin="medium" type="error">
-                    Please use a borrower account to access this page.
                   </Alert>
               } />
-              <LoanList tinlake={tinlake} mode="borrower" />
+              <LoanList tinlake={tinlake} />
             </Box>
           } />
         </Box>
@@ -49,4 +42,4 @@ class BorrowerLoanListPage extends React.Component {
   }
 }
 
-export default BorrowerLoanListPage;
+export default LoanListPage;

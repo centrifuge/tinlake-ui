@@ -42,15 +42,12 @@ class MintNFT extends React.Component<Props, State> {
   }
 
   mint = async () => {
-    const { referenceId, assetType, amount } = this.state;
-
     {
       this.setState({ is: 'loading' });
       try {
         await authTinlake();
-        const base = displayToBase(baseToDisplay(amount, 2), 2);
         const res = await this.props.tinlake.mintNFT(
-          this.props.tinlake.ethConfig.from, this.state.tokenId, referenceId, base, assetType);
+          this.props.tinlake.ethConfig.from);
         if (res.status === SUCCESS_STATUS && res.events[0].event.name === 'Transfer') {
           this.setState({ is: 'success' });
         } else {
@@ -69,7 +66,7 @@ class MintNFT extends React.Component<Props, State> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <BackLink href="/borrower" />
+          <BackLink href="/loans" />
           <Heading level="3">Mint NFT</Heading>
         </Box>
       </SecondaryHeader>

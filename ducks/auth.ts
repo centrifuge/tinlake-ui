@@ -1,7 +1,6 @@
 import { AnyAction, Action } from 'redux';
 import Tinlake, { Address } from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
-import config from '../config';
 import { networkIdToName } from '../utils/networkNameResolver';
 
 // Actions
@@ -12,11 +11,27 @@ const CLEAR_NETWORK = 'tinlake-ui/auth/CLEAR_NETWORK';
 const RECEIVE_NETWORK = 'tinlake-ui/auth/RECEIVE_NETWORK';
 const OBSERVING_AUTH_CHANGES = 'tinlake-ui/auth/OBSERVING_AUTH_CHANGES';
 
-const { isDemo } = config;
-
 export interface User {
-  isAdmin: boolean;
   address: Address;
+  permissions: Permissions;
+}
+
+export interface Permissions {
+  // loan admin permissions
+  canIssueLoan: boolean;
+  canSetCeiling: boolean;
+  canSetInterestRate: boolean;
+  // tranche admin permissions
+  canSetEquityRatio: boolean;
+  canSetRiskScore: boolean;
+  canSetJuniorTrancheInterestRate: boolean;
+  // lender admin permissions
+  canSetInvestorAllowance: boolean;
+  // collector permissions
+  canSetThreshold: boolean;
+  canSetLoanPrice: boolean;
+  canActAsKeeper: boolean;
+  ownerOf: Array<number>;
 }
 
 export interface AuthState {
@@ -69,12 +84,36 @@ export function loadUser(tinlake: Tinlake, address: Address):
       return;
     }
 
+    // loan admin permissions
+    const wardCeiling = await tinlake.isWard(address, 'CEILING');
+    const wardPile = await tinlake.isWard(address, 'PILE');
+    // tranche admin permissions
+    const wardAssessor = await tinlake.isWard(address, 'ASSESSOR');
+    const wardPricePool = await tinlake.isWard(address, 'PRICE_POOL');
+    // TODO const wardJuniorTranche = await this.tinlake.isWard(address, 'JUNIOR');
+    // lender permissions
+    const wardJuniorOperator = await tinlake.isWard(address, 'JUNIOR_OPERATOR');
+    // collector permissions
+    const wardThreshold = await tinlake.isWard(address, 'THRESHOLD');
+    const wardCollector = await tinlake.isWard(address, 'COLLECTOR');
+    // TODO get loans that belong to the address, set in permissions
+
     dispatch({ type: LOAD });
 
     const user = {
       address,
-      isAdmin: isDemo || (await tinlake.isAdmin(address))
-    };
+      permissions: {
+        canSetCeiling: wardCeiling.toNumber() === 1,
+        canSetInterestRate: wardPile.toNumber() === 1,
+        canSetThreshold: wardThreshold.toNumber() === 1,
+        canSetLoanPrice: wardCollector.toNumber() === 1,
+        canSetEquityRatio: wardAssessor.toNumber() === 1,
+        canSetRiskScore: wardPricePool.toNumber() === 1,
+        // // TODO: canSetJuniorTrancheInterestRate: wardJuniorTranche.toNumber() === 1,
+        canSetInvestorAllowance: wardJuniorOperator.toNumber() === 1,
+        // TODO: canActAsKeeper
+      }
+    }
     dispatch({ user, type: RECEIVE });
   };
 }

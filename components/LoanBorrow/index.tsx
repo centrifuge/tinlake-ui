@@ -6,7 +6,6 @@ import Alert from '../Alert';
 import { Box, FormField, Button, Heading, Text } from 'grommet';
 import NftData from '../NftData';
 import SecondaryHeader from '../SecondaryHeader';
-import Link from 'next/link';
 import { BackLink } from '../BackLink';
 import NumberInput from '../NumberInput';
 import NumberDisplay from '../NumberDisplay';
@@ -107,7 +106,7 @@ class LoanBorrow extends React.Component<Props, State> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <BackLink href={`/borrower/loan?loanId=${loanId}`} />
+          <BackLink href={`/loans/loan?loanId=${loanId}`} />
           <Heading level="3">Borrow Loan {loanId}</Heading>
         </Box>
 

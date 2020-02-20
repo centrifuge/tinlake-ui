@@ -137,7 +137,7 @@ class LoanRepay extends React.Component<Props, State> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <BackLink href={`/borrower/loan?loanId=${loanId}`} />
+          <BackLink href={`/loans/loan?loanId=${loanId}`} />
           <Heading level="3">Repay Loan {loanId}</Heading>
         </Box>
 

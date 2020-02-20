@@ -2,11 +2,11 @@ import * as React from 'react';
 import WithTinlake from '../../components/WithTinlake';
 import Alert from '../../components/Alert';
 import { Box } from 'grommet';
-import LoanBorrow from '../../components/LoanBorrow';
+import LoanRepay from '../../components/LoanRepay';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 
-class BorrowPage extends React.Component<{ loanId: string }> {
+class RepayPage extends React.Component<{ loanId: string }> {
   static async getInitialProps({ query }: any) {
     return { loanId: query.loanId };
   }
@@ -16,7 +16,7 @@ class BorrowPage extends React.Component<{ loanId: string }> {
 
     return <Box align="center">
       <Header
-        selectedRoute={`/borrower/borrow?loanId=${loanId}`}
+        selectedRoute={`/loans/?loanId=${loanId}`}
         menuItems={menuItems}
       />
       <Box
@@ -26,7 +26,7 @@ class BorrowPage extends React.Component<{ loanId: string }> {
         <Box width="xlarge">
           {loanId ? (
             <WithTinlake render={tinlake =>
-              <LoanBorrow tinlake={tinlake} loanId={loanId} />} />
+              <LoanRepay tinlake={tinlake} loanId={loanId} />} />
           ) : (
               <Alert margin="medium" type="error">Please provide an ID</Alert>
             )}
@@ -36,4 +36,4 @@ class BorrowPage extends React.Component<{ loanId: string }> {
   }
 }
 
-export default BorrowPage;
+export default RepayPage;

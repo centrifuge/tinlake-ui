@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Tinlake, { bnToHex, baseToDisplay, feeToInterestRate } from 'tinlake';
 import Link from 'next/link';
-import { Box, DataTable, Anchor, Text } from 'grommet';
+import { Box, DataTable, Anchor, Text, Button } from 'grommet';
 import { connect } from 'react-redux';
 import { InternalListLoan, LoansState, getLoans } from '../../ducks/loans';
 import NumberDisplay from '../NumberDisplay';
@@ -14,93 +14,96 @@ interface Props {
   tinlake: Tinlake;
   loans?: LoansState;
   getLoans?: (tinlake: Tinlake) => Promise<void>;
-  mode: 'borrower' | 'admin' | '';
 }
 
 class LoanList extends React.Component<Props> {
   componentWillMount() {
-    this.props.getLoans!(this.props.tinlake);
+    this.props.getLoans(this.props.tinlake);
   }
 
   render() {
-    const { loans, mode, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const filteredLoans = mode === 'borrower' ? loans!.loans.filter(l => l.loanOwner === ethFrom) :
-      loans!.loans;
+    const { loans, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-    filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId));
+    const filteredLoans = auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling ? loans!.loans : loans!.loans.filter(l => l.loanOwner === ethFrom)
+      filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId));
 
-    return <Box pad={{ horizontal: 'medium', bottom: 'large' }}>
-      <DataTable  style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[
-        { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
-        {
-          header: 'NFT ID', property: 'tokenId', align: 'end',
-          render: (l: InternalListLoan) =>
-            <Box style={{ maxWidth: '150px' }}>
-              <DisplayField
-                copy={true}
-                as={'span'}
-                value={hexToInt(bnToHex(l.tokenId).toString())}
-                link={{
-                  href: getNFTLink(hexToInt(bnToHex(l.tokenId).toString()), l.registry),
-                  target: '_blank'
-                }}
-              />
-            </Box>
-        },
-        {
-          header: 'NFT Owner', property: 'nftOwner', align: 'end',
-          render: (l: InternalListLoan) => <div>
-            <Box style={{ maxWidth: '150px' }}>
-              <DisplayField
-                copy={true}
-                as={'span'}
-                value={l.loanOwner}
-                link={{
-                  href: getAddressLink(l.loanOwner),
-                  target: '_blank'
-                }}
-              />
-            </Box>
+    return <Box>
+      <Box pad={{ bottom: 'large' }}>
+        <Link href={'/loans/issue'}>
+          <Button alignSelf={'end'} margin={{ right: 'medium' }} primary label="Create Loan"/>
+        </Link>
+      </Box>
+      {/*<DataTable  style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[*/}
+      {/*  { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },*/}
+      {/*  {*/}
+      {/*    header: 'NFT ID', property: 'tokenId', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) =>*/}
+      {/*      <Box style={{ maxWidth: '150px' }}>*/}
+      {/*        <DisplayField*/}
+      {/*          copy={true}*/}
+      {/*          as={'span'}*/}
+      {/*          value={hexToInt(bnToHex(l.tokenId).toString())}*/}
+      {/*          link={{*/}
+      {/*            href: getNFTLink(hexToInt(bnToHex(l.tokenId).toString()), l.registry),*/}
+      {/*            target: '_blank'*/}
+      {/*          }}*/}
+      {/*        />*/}
+      {/*      </Box>*/}
+      {/*  },*/}
+      {/*  {*/}
+      {/*    header: 'NFT Owner', property: 'nftOwner', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) => <div>*/}
+      {/*      <Box style={{ maxWidth: '150px' }}>*/}
+      {/*        <DisplayField*/}
+      {/*          copy={true}*/}
+      {/*          as={'span'}*/}
+      {/*          value={l.loanOwner}*/}
+      {/*          link={{*/}
+      {/*            href: getAddressLink(l.loanOwner),*/}
+      {/*            target: '_blank'*/}
+      {/*          }}*/}
+      {/*        />*/}
+      {/*      </Box>*/}
 
-          </div>
-        },
-        {
-          header: '', property: '', align: 'end',
-          render: (l: InternalListLoan) => <div>
-            {l.nftOwner === ethFrom && <Badge text={'Me'} />}
-          </div>
-        },
+      {/*    </div>*/}
+      {/*  },*/}
+      {/*  {*/}
+      {/*    header: '', property: '', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) => <div>*/}
+      {/*      {l.nftOwner === ethFrom && <Badge text={'Me'} />}*/}
+      {/*    </div>*/}
+      {/*  },*/}
 
-        { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },
-        {
-          header: 'Principal (DAI)', property: 'principal', align: 'end',
-          render: (l: InternalListLoan) => l.status === 'Whitelisted' ?
-            <NumberDisplay suffix="" precision={18}
-              value={baseToDisplay(l.principal, 18)} />
-            : '-'
-        },
-        {
-          header: <HeaderCell text={'Interest Rate'}></HeaderCell>, property: 'fee', align: 'end',
-          render: (l: InternalListLoan) => l.status === 'Repaid' ? '-' :
-            <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />
-        },
-        {
-          header: 'Debt (DAI)', property: 'debt', align: 'end',
-          render: (l: InternalListLoan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />
-        },
-        {
-          header: 'Actions', property: 'id', align: 'end', sortable: false,
-          render: (l: InternalListLoan) => {
-            const loanUrlPrefix = (mode !== '') ? `/${mode}/` : '';
-            return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>;
-          }
-        }
-      ]} />
-    </Box>;
+      {/*  { header: <HeaderCell text={'NFT Status'}></HeaderCell>, align: 'end', property: 'status' },*/}
+      {/*  {*/}
+      {/*    header: 'Principal (DAI)', property: 'principal', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) => l.status === 'Whitelisted' ?*/}
+      {/*      <NumberDisplay suffix="" precision={18}*/}
+      {/*        value={baseToDisplay(l.principal, 18)} />*/}
+      {/*      : '-'*/}
+      {/*  },*/}
+      {/*  {*/}
+      {/*    header: <HeaderCell text={'Interest Rate'}></HeaderCell>, property: 'fee', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) => l.status === 'Repaid' ? '-' :*/}
+      {/*      <NumberDisplay suffix="%" value={feeToInterestRate(l.fee)} />*/}
+      {/*  },*/}
+      {/*  {*/}
+      {/*    header: 'Debt (DAI)', property: 'debt', align: 'end',*/}
+      {/*    render: (l: InternalListLoan) => l.status === 'Whitelisted' ? '-' :*/}
+      {/*      <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />*/}
+      {/*  },*/}
+      {/*  {*/}
+      {/*    header: 'Actions', property: 'id', align: 'end', sortable: false,*/}
+      {/*    render: (l: InternalListLoan) => {*/}
+      {/*      const loanUrlPrefix = (mode !== '') ? `/${mode}/` : '';*/}
+      {/*      return  <Link href={`${loanUrlPrefix}loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>;*/}
+      {/*    }*/}
+      {/*  }*/}
+      {/*]} />*/}
+      </Box>;
   }
 }
 

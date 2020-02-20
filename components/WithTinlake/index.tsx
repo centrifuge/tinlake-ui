@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tinlake from 'tinlake';
+import {Tinlake} from 'tinlake';
 import { getTinlake } from '../../services/tinlake';
 
 interface Props {
@@ -8,11 +8,10 @@ interface Props {
 
 class WithTinlake extends React.Component<Props> {
   state = { loading: true };
-  tinlake: Tinlake|null = null;
+  tinlake: Tinlake |null = null;
   isMounted = false;
 
-  componentWillMount() {
-  }
+  componentWillMount() {}
 
   componentDidMount() {
     this.init();
@@ -25,7 +24,6 @@ class WithTinlake extends React.Component<Props> {
 
   init = async () => {
     this.tinlake = await getTinlake();
-
     if (this.isMounted) {
       this.setState({ loading: false });
     }
