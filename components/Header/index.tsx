@@ -12,7 +12,6 @@ export interface MenuItem {
   label: string;
   route: string;
   secondary?: boolean;
-  permission?: 'admin' | 'loans' | 'demo';
 }
 
 interface HeaderProps {
@@ -65,10 +64,7 @@ class Header extends React.Component<HeaderProps> {
 
         {menuItems.filter((item) => {
           return (
-            (user && isDemo) ||
-            (user && item.permission === 'admin') ||
-            (user && item.permission === 'loans') ||
-            !item.permission
+            (user && isDemo)
             )
             && !item.secondary;
         }
