@@ -25,7 +25,7 @@ class LoanPage extends React.Component<{ loanId: string }> {
         <Box width="xlarge" >
           {loanId ? (
             <WithTinlake render={tinlake =>
-                <LoanDetail tinlake={tinlake} loanId={loanId} mode={''} />
+                <LoanDetail tinlake={tinlake} loanId={loanId} />
             } />
           ) : (
               <Alert margin="medium" type="error">Please provide an ID</Alert>

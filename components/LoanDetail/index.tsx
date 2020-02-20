@@ -12,7 +12,6 @@ import { BackLink } from '../BackLink';
 
 interface Props {
   loanId: string;
-  mode: 'loans' | 'admin' |'';
   tinlake: Tinlake;
   loans?: LoansState;
   getLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
@@ -32,7 +31,7 @@ class LoanDetail extends React.Component<Props> {
   }
 
   render() {
-    const { loans, loanId, tinlake, mode } = this.props;
+    const { loans, loanId, tinlake } = this.props;
     const { singleLoan, singleLoanState } = loans!;
 
     if (singleLoanState === null || singleLoanState === 'loading') { return null; }
@@ -45,7 +44,7 @@ class LoanDetail extends React.Component<Props> {
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
-          <BackLink href={`/${mode}`} />
+          <BackLink href={'/loans'} />
           <Heading level="3">View Loan {loanId}</Heading>
         </Box>
 

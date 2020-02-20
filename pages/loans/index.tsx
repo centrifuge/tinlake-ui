@@ -33,7 +33,7 @@ class LoanListPage extends React.Component {
                     Please authenticate to view your loans.
                   </Alert>
               } />
-              <LoanList tinlake={tinlake} mode="loans" />
+              <LoanList tinlake={tinlake} />
             </Box>
           } />
         </Box>

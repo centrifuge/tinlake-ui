@@ -1,12 +1,11 @@
 import * as React from 'react';
 import WithTinlake from '../../components/WithTinlake';
 import LoanIssue from '../../components/IssueLoan';
-import Alert from '../../components/Alert';
 import { Box } from 'grommet';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 
-class IssuePage extends React.Component<> {
+class IssuePage extends React.Component {
 
   componentWillMount() {
   }

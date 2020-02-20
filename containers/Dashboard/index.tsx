@@ -24,7 +24,7 @@ class Dashboard extends React.Component<Props> {
           <Heading level="3">Recent Loans</Heading>
         </Box>
       </SecondaryHeader>
-      <LoanList tinlake={tinlake} mode="" />
+      <LoanList tinlake={tinlake} />
       <Box pad={{ horizontal: 'medium', vertical: 'medium' }}>
       </Box>
     </Box>;

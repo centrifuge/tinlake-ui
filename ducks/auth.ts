@@ -31,6 +31,7 @@ export interface Permissions {
   canSetThreshold: boolean;
   canSetLoanPrice: boolean;
   canActAsKeeper: boolean;
+  ownerOf: Array<number>;
 }
 
 export interface AuthState {
@@ -95,6 +96,7 @@ export function loadUser(tinlake: Tinlake, address: Address):
     // collector permissions
     const wardThreshold = await tinlake.isWard(address, 'THRESHOLD');
     const wardCollector = await tinlake.isWard(address, 'COLLECTOR');
+    // TODO get loans that belong to the address, set in permissions
 
     dispatch({ type: LOAD });
 
