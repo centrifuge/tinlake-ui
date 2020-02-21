@@ -84,33 +84,30 @@ export function loadUser(tinlake: Tinlake, address: Address):
       return;
     }
 
-    // loan admin permissions
-    const wardCeiling = await tinlake.isWard(address, 'CEILING');
-    const wardPile = await tinlake.isWard(address, 'PILE');
-    // tranche admin permissions
-    const wardAssessor = await tinlake.isWard(address, 'ASSESSOR');
-    const wardPricePool = await tinlake.isWard(address, 'PRICE_POOL');
-    // TODO const wardJuniorTranche = await this.tinlake.isWard(address, 'JUNIOR');
-    // lender permissions
-    const wardJuniorOperator = await tinlake.isWard(address, 'JUNIOR_OPERATOR');
-    // collector permissions
-    const wardThreshold = await tinlake.isWard(address, 'THRESHOLD');
-    const wardCollector = await tinlake.isWard(address, 'COLLECTOR');
-    // TODO get loans that belong to the address, set in permissions
+    const test = await tinlake.getLoanList();
+    console.log(test);
 
     dispatch({ type: LOAD });
+
+    const ceilingPermission = await tinlake.canSetCeiling(address)
+    const interestRatePermission = await tinlake.canSetInterestRate(address)
+    const thresholdPermission = await tinlake.canSetThreshold(address)
+    const loanPricePermission = await tinlake.canSetLoanPrice(address)
+    const equityRatioPermission = await tinlake.canSetEquityRatio(address)
+    const riskScorePermission = await tinlake.canSetRiskScore(address)
+    const investorAllowancePermission = await tinlake.canSetInvestorAllowance(address)
 
     const user = {
       address,
       permissions: {
-        canSetCeiling: wardCeiling.toNumber() === 1,
-        canSetInterestRate: wardPile.toNumber() === 1,
-        canSetThreshold: wardThreshold.toNumber() === 1,
-        canSetLoanPrice: wardCollector.toNumber() === 1,
-        canSetEquityRatio: wardAssessor.toNumber() === 1,
-        canSetRiskScore: wardPricePool.toNumber() === 1,
-        // // TODO: canSetJuniorTrancheInterestRate: wardJuniorTranche.toNumber() === 1,
-        canSetInvestorAllowance: wardJuniorOperator.toNumber() === 1,
+        canSetCeiling: ceilingPermission,
+        canSetInterestRate: interestRatePermission,
+        canSetThreshold: thresholdPermission,
+        canSetLoanPrice: loanPricePermission,
+        canSetEquityRatio: equityRatioPermission,
+        canSetRiskScore: riskScorePermission,
+        // TODO: canSetJuniorTrancheInterestRate
+        canSetInvestorAllowance: investorAllowancePermission
         // TODO: canActAsKeeper
       }
     }
