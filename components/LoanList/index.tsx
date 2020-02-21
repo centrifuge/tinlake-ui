@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tinlake, { bnToHex, baseToDisplay, feeToInterestRate } from 'tinlake';
+import Tinlake, { bnToHex, baseToDisplay } from 'tinlake';
 import Link from 'next/link';
 import { Box, DataTable, Anchor, Text, Button } from 'grommet';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import NumberDisplay from '../NumberDisplay';
 import Badge from '../Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { DisplayField } from '@centrifuge/axis-display-field';
-import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator';
+import { getNFTLink, hexToInt } from '../../utils/etherscanLinkGenerator';
 
 interface Props {
   tinlake: Tinlake;
@@ -29,10 +29,8 @@ class LoanList extends React.Component<Props> {
 
     let filteredLoans: InternalListLoan[];
     if (loans!.loansState === 'found' && auth.state === 'loaded') {
-      filteredLoans =  loans!.loans
-
-      // filteredLoans = auth.user && auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling ? loans!.loans : loans!.loans.filter(l => l.loanOwner === ethFrom)
-    };
+      filteredLoans = auth.user && auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling ? loans!.loans : loans!.loans.filter(l => l.ownerOf === ethFrom);
+    }
 
     return <Box>
       <Box pad={{ bottom: 'large' }}>
