@@ -84,9 +84,6 @@ export function loadUser(tinlake: Tinlake, address: Address):
       return;
     }
 
-    const test = await tinlake.getLoanList();
-    console.log(test);
-
     dispatch({ type: LOAD });
 
     const ceilingPermission = await tinlake.canSetCeiling(address)
