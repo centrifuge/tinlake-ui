@@ -1,11 +1,9 @@
 import * as React from 'react';
 import Tinlake from 'tinlake';
 import { connect } from 'react-redux';
-import Alert from '../Alert';
 import { AuthState } from '../../ducks/auth';
-import { Box, FormField, TextInput, Button, Heading } from 'grommet';
+import { Box, FormField, TextInput, Heading } from 'grommet';
 import SecondaryHeader from '../SecondaryHeader';
-import Link from 'next/link';
 import { BackLink } from '../BackLink';
 
 interface Props {
@@ -17,7 +15,6 @@ class LoanIssue extends React.Component<Props> {
 
   render() {
     const { tinlake, auth } = this.props;
-    console.log(auth)
     return <Box>
       <SecondaryHeader>
         <Box direction="row" gap="small" align="center">
