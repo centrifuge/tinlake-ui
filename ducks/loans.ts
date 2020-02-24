@@ -64,17 +64,17 @@ export function getLoans(tinlake: Tinlake):
     dispatch({ type: LOAD });
     const loans = await tinlake.getLoanList();
     let loansList = [];
-    for (let i = 1; i < loans.length; i += 1) {
-      let loan = {}
-      loan.loanId = loans[i].loanId.toNumber();
-      loan.registry = loans[i].registry;
-      loan.tokenId = loans[i].tokenId.toNumber();
-      loan.principal = loans[i].principal.toNumber();
-      loan.interestRate = loans[i].interestRate.toNumber();
-      loan.ownerOf = loans[i].ownerOf;
-      loan.debt = loans[i].debt.toNumber();
-      loansList.push(loan);
-    }
+    // for (let i = 1; i < loans.length; i += 1) {
+      // let loan = {}
+      // loan.loanId = loans[i].loanId;
+      // loan.registry = loans[i].registry;
+      // loan.tokenId = loans[i].tokenId;
+      // loan.principal = loans[i].principal;
+      // loan.interestRate = loans[i].interestRate;
+      // loan.ownerOf = loans[i].ownerOf;
+      // loan.debt = loans[i].debt;
+      // loansList.push(loan);
+    // }
     console.log(loansList);
     dispatch({ type: RECEIVE, loans: loansList});
   };
