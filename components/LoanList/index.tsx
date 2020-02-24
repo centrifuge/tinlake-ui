@@ -27,15 +27,10 @@ class LoanList extends React.Component<Props> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-    const filteredLoans = auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling ? loans!.loans : loans!.loans.filter(l => l.loanOwner === ethFrom)
+    const filteredLoans = !auth.user || (auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling) ? loans!.loans : loans!.loans.filter(l => l.loanOwner === ethFrom)
       filteredLoans && filteredLoans.sort((l1, l2) => parseInt(l2.loanId) - parseInt(l1.loanId));
 
     return <Box>
-      <Box pad={{ bottom: 'large' }}>
-        <Link href={'/loans/issue'}>
-          <Button alignSelf={'end'} margin={{ right: 'medium' }} primary label="Create Loan"/>
-        </Link>
-      </Box>
       {/*<DataTable  style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[*/}
       {/*  { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },*/}
       {/*  {*/}

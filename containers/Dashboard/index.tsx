@@ -20,9 +20,7 @@ class Dashboard extends React.Component<Props> {
     const { tinlake } = this.props;
     return <Box >
       <SecondaryHeader>
-        <Box pad={{ horizontal: 'medium', top: 'medium' }}>
-          <Heading level="3">Recent Loans</Heading>
-        </Box>
+          <Heading level="3">Loans</Heading>
       </SecondaryHeader>
       <LoanList tinlake={tinlake} />
       <Box pad={{ horizontal: 'medium', vertical: 'medium' }}>

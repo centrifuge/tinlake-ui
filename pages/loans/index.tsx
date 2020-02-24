@@ -1,15 +1,15 @@
 import * as React from 'react';
 import LoanList from '../../components/LoanList';
 import WithTinlake from '../../components/WithTinlake';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Button } from 'grommet';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import Auth from '../../components/Auth';
 import Alert from '../../components/Alert';
+import Link from 'next/link';
 
 class LoanListPage extends React.Component {
-
   render() {
     return <Box align="center">
       <Header
@@ -26,6 +26,7 @@ class LoanListPage extends React.Component {
               <SecondaryHeader>
                 <Heading level="3">Loans</Heading>
               </SecondaryHeader>
+      
 
               <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>
                 auth.user === null &&
@@ -33,6 +34,11 @@ class LoanListPage extends React.Component {
                     Please authenticate to view your loans.
                   </Alert>
               } />
+              <Box pad={{ bottom: 'large' }}>
+                <Link href={'/loans/detail'}>
+                  <Button alignSelf={'end'} margin={{ right: 'medium' }} primary label="Create Loan"/>
+                </Link>
+              </Box>
               <LoanList tinlake={tinlake} />
             </Box>
           } />
@@ -41,5 +47,4 @@ class LoanListPage extends React.Component {
     </Box>;
   }
 }
-
 export default LoanListPage;

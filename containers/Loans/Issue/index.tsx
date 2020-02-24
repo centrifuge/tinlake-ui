@@ -1,31 +1,20 @@
 import * as React from 'react';
-import Tinlake from 'tinlake';
 import { connect } from 'react-redux';
-import Alert from '../Alert';
-import { AuthState } from '../../ducks/auth';
+import { AuthState } from '../../../ducks/auth';
 import { Box, FormField, TextInput, Button, Heading } from 'grommet';
-import SecondaryHeader from '../SecondaryHeader';
-import Link from 'next/link';
-import { BackLink } from '../BackLink';
 
 interface Props {
   tinlake: Tinlake;
   auth: AuthState;
 }
 
+// pass loan pro
+
 class LoanIssue extends React.Component<Props> {
 
   render() {
     const { tinlake, auth } = this.props;
-    console.log(auth)
     return <Box>
-      <SecondaryHeader>
-        <Box direction="row" gap="small" align="center">
-          <BackLink href={'/loans'} />
-           <Heading level="3">Issue Loan</Heading>
-        </Box>
-      </SecondaryHeader>
-
       <Box pad={{ horizontal: 'medium' }}>
         <Box direction="row" gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
         <Box basis={'1/4'} gap="medium"><FormField label="Collateral NFT ID">
