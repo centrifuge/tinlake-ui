@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Box, FormField, TextInput } from 'grommet';
 import { baseToDisplay, feeToInterestRate } from 'tinlake';
 import NumberInput from '../NumberInput';
+import { Loan } from '../../ducks/loans';
 
 interface Props {
-  loan: any;
+  loan: Loan;
 }
 
 class LoanData extends React.Component<Props> {
