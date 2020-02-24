@@ -2,14 +2,9 @@ import * as React from 'react';
 import Tinlake, { baseToDisplay, displayToBase, interestRateToFee } from 'tinlake';
 import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
 import Alert from '../../../components/Alert';
-import SecondaryHeader from '../../../components/SecondaryHeader';
-import { BackLink } from '../../../components/BackLink';
-import { connect } from 'react-redux';
 import NftData from '../../../components/NftData';
-import { authTinlake } from '../../../services/tinlake';
 import { getNFT, NFT } from '../../../services/nft'
 import { Spinner } from '@centrifuge/axis-spinner';
-import NumberInput from '../../../components/NumberInput';
 
 interface Props {
   tinlake: Tinlake;
@@ -129,7 +124,7 @@ class IssueLoan extends React.Component<Props, State> {
 
       return <Box pad={{ horizontal: 'medium' }} >
         <Box direction="row">
-          <Text weight="bold">Please paste your ID below to open a loan for theis NFT</Text>
+          <Text weight="bold">Please paste your NFT ID below to open a new loan</Text>
         </Box>
         <Box direction="row" gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
           <Box basis={'1/4'} gap="medium">
