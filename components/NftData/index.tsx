@@ -18,7 +18,6 @@ class NftData extends React.Component<Props> {
 
   renderNFTData() {
     const { data } = this.props;
-    console.log(data, "nft")
     const { nftDataDefinition }  = config;
     if (!data.nftData) {
       return <Text> No NFT metadata found on this token!</Text>;
@@ -33,7 +32,6 @@ class NftData extends React.Component<Props> {
   render() {
     const { nftDataDefinition, contractAddresses } = config;
     const { data: { tokenId, nftOwner }, authedAddr } = this.props;
-    console.log(this.props)
 
     // create empty boxes for layout purposes if nft data has != 4 entries
     const nftDataFillers = [
