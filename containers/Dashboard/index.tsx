@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Box, Heading } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { DashboardState, subscribeDashboardData } from '../../ducks/dashboard';
-import LoanList from '../../components/LoanList';
+import LoanList from '../Loans/List';
 
 interface Props {
   tinlake: Tinlake;

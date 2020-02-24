@@ -1,16 +1,17 @@
 import * as React from 'react';
+import { Internalloan } from '../../ducks/loans';
 import { Text, Box, Heading, Paragraph } from 'grommet';
 import styled from 'styled-components';
 import Badge from '../Badge';
-import { NFT } from '../../services/nft';
+import { NFT } from '../../ducks/nft';
 import NftDataField, { DisplayedField } from '../NftDataField';
 import config from '../../config';
 import { DisplayField } from '@centrifuge/axis-display-field';
 import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator';
-import { bnToHex } from 'tinlake';
+import { bnToHex } from '../../containers/Loans/Info/node_modules/tinlake';
 
 interface Props {
-  data: NFT;
+  data: Internalloan | NFT;
   authedAddr: string;
 }
 
@@ -18,7 +19,6 @@ class NftData extends React.Component<Props> {
 
   renderNFTData() {
     const { data } = this.props;
-    console.log(data, "nft")
     const { nftDataDefinition }  = config;
     if (!data.nftData) {
       return <Text> No NFT metadata found on this token!</Text>;
@@ -33,7 +33,6 @@ class NftData extends React.Component<Props> {
   render() {
     const { nftDataDefinition, contractAddresses } = config;
     const { data: { tokenId, nftOwner }, authedAddr } = this.props;
-    console.log(this.props)
 
     // create empty boxes for layout purposes if nft data has != 4 entries
     const nftDataFillers = [

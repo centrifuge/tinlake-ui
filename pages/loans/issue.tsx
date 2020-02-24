@@ -1,6 +1,6 @@
 import * as React from 'react';
 import WithTinlake from '../../components/WithTinlake';
-import LoanView from '../../containers/Loans/View';
+import IssueLoan from '../../containers/Loans/Issue';
 import { Box, Heading } from 'grommet';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -12,33 +12,31 @@ interface Props {
 }
 
 class LoanPage extends React.Component<Props> {
-  static async getInitialProps({ query }: any) {
-    return { loanId: query.loanId };
-  }
-
   render() {
     const { loanId } = this.props;
     return <Box align="center">
       <Header
-        selectedRoute={'/loans/loan'}
+        selectedRoute={'/loans/issue'}
         menuItems={menuItems}
       />
       <Box
         justify="center"
         direction="row"
       >
-        <Box width="xlarge">
+        <Box width="xlarge" >
           <SecondaryHeader>
             <Box direction="row" gap="small" align="center">
               <BackLink href={'/loans'} />
-              <Heading level="3">View Loan</Heading>
+              <Heading level="3">Open Loan</Heading>
             </Box>
           </SecondaryHeader>
 
-          {loanId && <WithTinlake render={tinlake => <LoanView tinlake={tinlake} loanId={loanId} />}> </WithTinlake>}
+          <WithTinlake render={tinlake =>
+            <IssueLoan tinlake={tinlake} loanId={loanId} />
+          }> </WithTinlake>
         </Box>;
       </Box>
-    </Box>
+    </Box>;
   }
 }
 

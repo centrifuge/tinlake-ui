@@ -1,5 +1,5 @@
 import * as React from 'react';
-import LoanList from '../../components/LoanList';
+import LoanList from '../../containers/Loans/List';
 import WithTinlake from '../../components/WithTinlake';
 import { Box, Heading, Button } from 'grommet';
 import Header from '../../components/Header';
@@ -25,20 +25,17 @@ class LoanListPage extends React.Component {
             <Box>
               <SecondaryHeader>
                 <Heading level="3">Loans</Heading>
+                <Link href={`/loans/issue`}>
+                  <Button primary label="Create Loan" />
+                </Link>
               </SecondaryHeader>
-      
 
               <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>
                 auth.user === null &&
-                  <Alert margin="medium" type="error">
-                    Please authenticate to view your loans.
+                <Alert margin="medium" type="error">
+                  Please authenticate to view the loan list.
                   </Alert>
               } />
-              <Box pad={{ bottom: 'large' }}>
-                <Link href={'/loans/detail'}>
-                  <Button alignSelf={'end'} margin={{ right: 'medium' }} primary label="Create Loan"/>
-                </Link>
-              </Box>
               <LoanList tinlake={tinlake} />
             </Box>
           } />

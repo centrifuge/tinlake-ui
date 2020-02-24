@@ -31,7 +31,6 @@ class WithTinlake extends React.Component<Props> {
 
   render() {
     if (this.state.loading || !this.tinlake) { return null; }
-
     return this.props.render(this.tinlake);
   }
 }
