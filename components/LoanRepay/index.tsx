@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tinlake, { baseToDisplay, displayToBase } from 'tinlake';
-import { LoansState, getLoan, subscribeDebt } from '../../ducks/loans';
+import { LoansState, getLoan} from '../../ducks/loans';
 import { connect } from 'react-redux';
 import Alert from '../Alert';
 import { Box, FormField, Button, Heading, Text } from 'grommet';

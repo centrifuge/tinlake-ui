@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Tinlake from 'tinlake';
-import { ApolloClient } from '../../services/apollo';
 import { connect } from 'react-redux';
 import { Box, Heading } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -9,7 +8,6 @@ import LoanList from '../Loans/List';
 
 interface Props {
   tinlake: Tinlake;
-  apolloClient: ApolloClient;
   dashboard?: DashboardState;
   subscribeDashboardData?: (tinlake: Tinlake) => () => void;
 }
