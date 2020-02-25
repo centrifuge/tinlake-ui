@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tinlake from 'tinlake';
-import { LoansState, getLoan } from '../../../ducks/loans';
+import { LoansState, loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
 import Alert from '../../../components/Alert';
 import { Box } from 'grommet';
@@ -11,20 +11,21 @@ interface Props {
   tinlake: Tinlake;
   loanId?: string;
   loans?: LoansState;
-  getLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
 }
 
 // on state change tokenId --> load nft data for loan collateral
 class LoanView extends React.Component<Props> {
   
   componentWillMount() {
-    this.props.loanId && this.props.getLoan!(this.props.tinlake, this.props.loanId);
+    this.props.loanId && this.props.loadLoan!(this.props.tinlake, this.props.loanId);
   }
 
   render() {
     const { loans, loanId, tinlake } = this.props;
     const { loan, loanState } = loans!;
 
+    console.log(loanState, loanId);
     if (loanState === null || loanState === 'loading') { return null; }
     if (loanState === 'not found') {
       return <Alert margin="medium" type="error">
@@ -39,4 +40,4 @@ class LoanView extends React.Component<Props> {
   }
 }
 
-export default connect(state => state, { getLoan })(LoanView);
+export default connect(state => state, { loadLoan })(LoanView);

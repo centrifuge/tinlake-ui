@@ -1,8 +1,7 @@
 import { AnyAction, Action } from 'redux';
-import Tinlake, { Loan, Address } from 'tinlake';
-import BN from 'bn.js';
+// import Tinlake from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
-import { NFT, getNFT } from '../services/nft'
+import { getLoans, getLoan, TinlakeResult, Loan } from '../services/tinlake/actions'
 
 // Actions
 const LOAD = 'tinlake-ui/loans/LOAD';
@@ -11,20 +10,6 @@ const LOAD_LOAN = 'tinlake-ui/loans/LOAD_LOAN';
 const LOAN_NOT_FOUND = 'tinlake-ui/loans/LOAN_NOT_FOUND';
 const RECEIVE_LOAN = 'tinlake-ui/loans/RECEIVE_LOAN';
 const RECEIVE_DEBT = 'tinlake-ui/loans/RECEIVE_DEBT';
-
-export interface Loan {
-  loanId: BN;
-  registry: Address;
-  tokenId: BN;
-  ownerOf: BN;
-  principal: BN;
-  interestRate: BN;
-  debt: BN;
-  threshold?: BN;
-  price?: BN;
-  status?: string;
-  nft?: NFT
-}
 
 export interface LoansState {
   loansState: null | 'loading' | 'found';
@@ -57,40 +42,27 @@ export default function reducer(state: LoansState = initialState,
   }
 }
 
-export function getLoans(tinlake: Tinlake):
+export function loadLoans(tinlake: Tinlake):
   ThunkAction<Promise<void>, LoansState, undefined, Action>  {
   return async (dispatch) => {
     dispatch({ type: LOAD });
-    const loans = await tinlake.getLoanList();
-    const loansList = [];
-    for (let i = 1; i < loans.length; i++) {
-     loansList.push(loans[i]);
-    }
-    dispatch({ type: RECEIVE, loans: loansList});
+    const result = await getLoans(tinlake); 
+    dispatch({ type: RECEIVE, loans: result.data});
   };
 }
 
-export function getLoan(tinlake: Tinlake, loanId: string, refresh = false):
+export function loadLoan(tinlake: Tinlake, loanId: string, refresh = false):
   ThunkAction<Promise<void>, LoansState, undefined, Action> {
   return async (dispatch) => {
     if (!refresh) {
       dispatch({ type: LOAD_LOAN });
     }
+    const result : TinlakeResult  = await getLoan(tinlake, loanId);
 
-    let loan;
-    const count = await tinlake.loanCount();
-    if (count.toNumber() <= Number(loanId) || Number(loanId) == 0) {
+    if (result.errorMsg) {
       dispatch({ type: LOAN_NOT_FOUND });
-    }
-
-    try {
-        loan = await tinlake.getLoan(loanId);
-    } catch (e) {
-        console.error(`Could not get loan for Loan ID ${loanId}`);
-    }
-    const nftData = await getNFT(tinlake, `${loan.tokenId}`);
-    loan.nft = nftData && nftData.nft || {};
-    dispatch({ type: RECEIVE_LOAN, loan});
+    }   
+    dispatch({ type: RECEIVE_LOAN, loan: result.data});
     
   };
 }

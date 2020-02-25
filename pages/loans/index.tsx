@@ -26,7 +26,7 @@ class LoanListPage extends React.Component {
               <SecondaryHeader>
                 <Heading level="3">Loans</Heading>
                 <Link href={`/loans/issue`}>
-                  <Button primary label="Create Loan" />
+                  <Button primary label="Open Loan" />
                 </Link>
               </SecondaryHeader>
 

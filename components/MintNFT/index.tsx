@@ -3,7 +3,6 @@ import Tinlake, { displayToBase, baseToDisplay } from 'tinlake';
 import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
 import Alert from '../Alert';
 import SecondaryHeader from '../SecondaryHeader';
-import { BackLink } from '../BackLink';
 import { authTinlake } from '../../services/tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
 import NumberInput from '../NumberInput';
