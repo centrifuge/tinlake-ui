@@ -1,6 +1,6 @@
 import * as React from 'react';
 import WithTinlake from '../components/WithTinlake';
-import LoanDetail from '../components/LoanDetail';
+import LoanDetail from '../containers/Loans/View';
 import Alert from '../components/Alert';
 import { Box } from 'grommet';
 import Header from '../components/Header';

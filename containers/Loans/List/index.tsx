@@ -1,14 +1,14 @@
 import * as React from 'react';
 import Tinlake, { bnToHex, baseToDisplay } from 'tinlake';
 import Link from 'next/link';
-import { Box, DataTable, Anchor, Text, Button } from 'grommet';
+import { Box, DataTable, Anchor, Text } from 'grommet';
 import { connect } from 'react-redux';
-import { Loan, LoansState, getLoans } from '../../ducks/loans';
-import NumberDisplay from '../NumberDisplay';
-import Badge from '../Badge';
+import { Loan, LoansState, getLoans } from '../../../ducks/loans';
+import NumberDisplay from '../../../components/NumberDisplay';
+import Badge from '../../../components/Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { DisplayField } from '@centrifuge/axis-display-field';
-import { getNFTLink, hexToInt } from '../../utils/etherscanLinkGenerator';
+import { getNFTLink, hexToInt } from '../../../utils/etherscanLinkGenerator';
 
 interface Props {
   tinlake: Tinlake;
@@ -29,16 +29,11 @@ class LoanList extends React.Component<Props> {
 
     let filteredLoans: Loan[];
     if (loans!.loansState === 'found' && auth.state === 'loaded') {
-      filteredLoans = auth.user && auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling ? loans!.loans : loans!.loans.filter(l => l.ownerOf === ethFrom);
+      filteredLoans = auth.user && (auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling) ? loans!.loans : loans!.loans.filter(l => l.ownerOf === ethFrom);
     }
 
-    return <Box>
-      <Box pad={{ bottom: 'large' }}>
-        <Link href={'/loans/issue'}>
-          <Button alignSelf={'end'} margin={{ right: 'medium' }} primary label="Create Loan"/>
-        </Link>
-      </Box>
-      <DataTable  style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[
+    return <Box pad={{horizontal: "large"}}>
+      <DataTable style={{ tableLayout: 'auto' }} data={filteredLoans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {
           header: 'NFT ID', property: 'tokenId', align: 'end',
@@ -93,15 +88,15 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
           render: (l: Loan) => {
-            return  <Link href={'/loans/loan?loanId=${l.loanId}'}><Anchor>View</Anchor></Link>;
+            return <Link href={`/loans/loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>;
           }
         }
       ]} />
-      </Box>;
+    </Box>;
   }
 }
 
-const HeaderCell = (props : {text: string}) => (
+const HeaderCell = (props: { text: string }) => (
   <Box pad={{ left: 'small' }}><Text>{props.text}</Text></Box>
 );
 

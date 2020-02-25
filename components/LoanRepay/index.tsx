@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tinlake, { baseToDisplay, displayToBase } from 'tinlake';
-import { LoansState, getLoan, subscribeDebt } from '../../ducks/loans';
+import { LoansState, getLoan} from '../../ducks/loans';
 import { connect } from 'react-redux';
 import Alert from '../Alert';
 import { Box, FormField, Button, Heading, Text } from 'grommet';
@@ -56,10 +56,10 @@ class LoanRepay extends React.Component<Props, State> {
 
   componentDidUpdate(nextProps: Props) {
     const loans = nextProps.loans;
-    if (!loans || !loans.singleLoan) { return; }
+    if (!loans || !loans.loan) { return; }
     if (this.state.touchedRepaymentAmount) { return; }
 
-    const { debt, fee } = loans.singleLoan;
+    const { debt, fee } = loans.loan;
 
     const repayAmount = calcRepayAmount(debt, fee).toString();
 
@@ -123,15 +123,15 @@ class LoanRepay extends React.Component<Props, State> {
 
   render() {
     const { loans, loanId, tinlake } = this.props;
-    const { singleLoan, singleLoanState } = loans!;
+    const { loan, loanState } = loans!;
 
-    if (singleLoanState === null || singleLoanState === 'loading') { return null; }
-    if (singleLoanState === 'not found') {
+    if (loanState === null || loanState === 'loading') { return null; }
+    if (loanState === 'not found') {
       return <Alert margin="medium" type="error">
         Could not find loan {loanId}</Alert>;
     }
 
-    const { status, loanOwner } = singleLoan!;
+    const { status, loanOwner } = loan!;
     const { repayAmount, is, errorMsg } = this.state;
 
     return <Box>
@@ -203,9 +203,9 @@ class LoanRepay extends React.Component<Props, State> {
             <Box basis={'1/4'} gap="medium" />
           </Box>
 
-          <LoanData loan={singleLoan!} />
+          <LoanData loan={loan!} />
 
-          <NftData data={singleLoan!} authedAddr={tinlake.ethConfig.from} />
+          <NftData data={loan!} authedAddr={tinlake.ethConfig.from} />
         </Box>
       }
     </Box>;

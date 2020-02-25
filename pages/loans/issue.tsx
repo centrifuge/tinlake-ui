@@ -1,15 +1,19 @@
 import * as React from 'react';
 import WithTinlake from '../../components/WithTinlake';
-import LoanIssue from '../../components/IssueLoan';
-import { Box } from 'grommet';
+import IssueLoan from '../../containers/Loans/Issue';
+import { Box, Heading } from 'grommet';
 import Header from '../../components/Header';
+import SecondaryHeader from '../../components/SecondaryHeader';
 import { menuItems } from '../../menuItems';
+import { BackLink } from '../../components/BackLink';
 
-class IssuePage extends React.Component {
+interface Props {
+  loanId: string;
+}
 
-  componentWillMount() {
-  }
+class LoanPage extends React.Component<Props> {
   render() {
+    const { loanId } = this.props;
     return <Box align="center">
       <Header
         selectedRoute={'/loans/issue'}
@@ -20,13 +24,20 @@ class IssuePage extends React.Component {
         direction="row"
       >
         <Box width="xlarge" >
-            <WithTinlake render={tinlake =>
-              <LoanIssue tinlake={tinlake} mode="loans" />
-            } />
-        </Box>
+          <SecondaryHeader>
+            <Box direction="row" gap="small" align="center">
+              <BackLink href={'/loans'} />
+              <Heading level="3">Open Loan</Heading>
+            </Box>
+          </SecondaryHeader>
+
+          <WithTinlake render={tinlake =>
+            <IssueLoan tinlake={tinlake} loanId={loanId} />
+          }> </WithTinlake>
+        </Box>;
       </Box>
     </Box>;
   }
 }
 
-export default IssuePage;
+export default LoanPage;

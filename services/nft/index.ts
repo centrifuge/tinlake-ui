@@ -8,22 +8,11 @@ export interface NFT {
 }
 
 export async function getNFT(tinlake: Tinlake, tokenId: string) {
-
-  let nftOwnerPromise;
-  let nftDataPromise;
-  try {
-    nftOwnerPromise = await tinlake.ownerOfNFT(tokenId);
-    nftDataPromise = await tinlake.getNFTData(tokenId);
-  } catch (e)
-  {
-    console.log(`NFT Data not supported ${tokenId}`, e);
-  }
-
   let nftOwner: Address;
   let nftData: any;
-
+  
   try {
-    nftOwner = await nftOwnerPromise;
+    nftOwner = await tinlake.getNFTOwner(tokenId);
   } catch (e) {
     return loggedError(e, 'Could not get NFT owner for NFT ID', tokenId);
   }
@@ -33,11 +22,11 @@ export async function getNFT(tinlake: Tinlake, tokenId: string) {
   }
 
   try {
-    nftData = await nftDataPromise;
+    nftData = await tinlake.getNFTData(tokenId);
   } catch (e) {
-    return loggedError(e, 'Could not get NFT data for NFT ID', tokenId);
+    // return loggedError(e, 'Could not get NFT data for NFT ID', tokenId);
+    nftData = null;
   }
-
   const replacedTokenId = tokenId.replace(/^0x/, '');
   const bnTokenId = new BN(replacedTokenId);
 
