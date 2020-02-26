@@ -1,6 +1,6 @@
 import * as React from 'react';
 import WithTinlake from '../../components/WithTinlake';
-import IssueLoan from '../../containers/Loans/Issue';
+import IssueLoan from '../../containers/Loan/Issue';
 import { Box, Heading } from 'grommet';
 import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tinlake, { bnToHex, baseToDisplay } from 'tinlake';
+import Tinlake, { bnToHex, baseToDisplay, feeToInterestRate } from 'tinlake';
 import Link from 'next/link';
 import { Box, DataTable, Anchor, Text } from 'grommet';
 import { connect } from 'react-redux';
@@ -70,15 +70,14 @@ class LoanList extends React.Component<Props> {
         },
         {
           header: 'Principal (DAI)', property: 'principal', align: 'end',
-          render: (l: Loan) => l.status === 'Whitelisted' ?
+          render: (l: Loan) =>
             <NumberDisplay suffix="" precision={18}
               value={baseToDisplay(l.principal, 18)} />
-            : '-'
         },
         {
           header: <HeaderCell text={'Interest Rate'}></HeaderCell>, property: 'fee', align: 'end',
           render: (l: Loan) => l.status === 'Repaid' ? '-' :
-            <NumberDisplay suffix="%" value={l.interestRate} />
+            <NumberDisplay suffix="%" value={feeToInterestRate(l.interestRate)} />
         },
         {
           header: 'Debt (DAI)', property: 'debt', align: 'end',

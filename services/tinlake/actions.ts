@@ -1,7 +1,6 @@
 import BN from 'bn.js';
-import Tinlake, { Address } from 'tinlake';
+import Tinlake, { baseToDisplay, displayToBase, interestRateToFee, Addresse } from 'tinlake';
 import config from '../../config';
-import LoanList from '../../components/LoanList';
 
 const { contractAddresses } = config;
 const SUCCESS_STATUS = '0x1';
@@ -45,7 +44,7 @@ export async function getNFT(tinlake: Tinlake, tokenId: string) {
   }
 
   if (!nftOwner) {
-    return loggedError(null, 'Could not get NFT owner for NFT ID', tokenId);
+    return loggedError({}, 'Could not get NFT owner for NFT ID', tokenId);
   }
 
   try {
@@ -93,28 +92,36 @@ export async function issue(tinlake: Tinlake, tokenId: string) {
   }
 }
 
-export async function getLoan(tinlake: Tinlake, loanId: string) : Promise<Loan> {
+export async function getLoan(tinlake: Tinlake, loanId: string): Promise<TinlakeResult> {
   let loan;
   const count = await tinlake.loanCount();
 
-
   if (count.toNumber() <= Number(loanId) || Number(loanId) == 0) {
-    loggedError({}, 'Loan not found', loanId);
+    return loggedError({}, 'Loan not found', loanId);
   }
+
   try {
-      loan = await tinlake.getLoan(loanId);
+    loan = await tinlake.getLoan(loanId);
   } catch (e) {
-    loggedError({}, 'Loan not found', loanId);
+    return loggedError(e, 'Loan not found', loanId);
   }
   const nftData = await getNFT(tinlake, `${loan.tokenId}`);
   loan.nft = nftData && nftData.nft || {};
+
   return {
     data: loan
   }
- }
+}
 
-export async function getLoans(tinlake: Tinlake) : Promise<Array<Loan>> {
-  const loans = await tinlake.getLoanList();
+export async function getLoans(tinlake: Tinlake): Promise<TinlakeResult> {
+  let loans;
+
+  try {
+    loans = await tinlake.getLoanList();
+  } catch (e) {
+    return loggedError(e, 'could not get loans', '');
+  }
+
   const loansList = [];
   for (let i = 1; i < loans.length; i++) {
     loansList.push(loans[i]);
@@ -123,6 +130,55 @@ export async function getLoans(tinlake: Tinlake) : Promise<Array<Loan>> {
     data: loansList
   }
 }
+
+export async function setCeiling(tinlake: tinlake, loanId: string, ceiling: string): Promise<TinlakeResult> {
+  let setRes;
+  try {
+    setRes = await tinlake.setCeiling(loanId, ceiling);
+  } catch (e) {
+    return loggedError(e, 'could not set ceiling', loanId);
+  }
+
+  if (setRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not set ceiling', loanId);
+  }
+}
+
+export async function setInterest(tinlake: tinlake, loanId: string, debt: string, rate: string): Promise<TinlakeResult> {
+  const rateGroup = interestRateToFee(rate);
+  let existsRateGroup = await tinlake.existsRateGroup(rateGroup);
+
+  // init rate group
+  if (!existsRateGroup) {
+    let initRes;
+    try {
+      initRes = await tinlake.initRate(rateGroup);
+    } catch (e) {
+      return loggedError(e, 'could not init rate group', loanId);
+    }
+
+    if (initRes.status !== SUCCESS_STATUS) {
+      return loggedError({}, 'could not init rate group', loanId);
+    }
+  }
+  // set rate group
+  let setRes;
+  try {
+    if (debt.toString() === "0") {
+      setRes = await tinlake.setRate(loanId, rateGroup);
+    } else {
+      setRes = await tinlake.changeRate(loanId, rateGroup);
+    }
+  } catch (e) {
+    return loggedError(e, 'could not set rate group', loanId);
+  }
+
+  if (setRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not set rate group', loanId);
+  }
+}
+
+
 
 function loggedError(error: any, message: string, id: string) {
   console.log(`${message} ${id}`, error);

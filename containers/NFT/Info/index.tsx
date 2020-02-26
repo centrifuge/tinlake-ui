@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Internalloan } from '../../ducks/loans';
+import { NFT } from '../../services/tinlake/actions';
 import { Text, Box, Heading, Paragraph } from 'grommet';
 import styled from 'styled-components';
 import Badge from '../Badge';
-import { NFT } from '../../ducks/nft';
 import NftDataField, { DisplayedField } from '../NftDataField';
 import config from '../../config';
 import { DisplayField } from '@centrifuge/axis-display-field';
@@ -11,7 +10,7 @@ import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkG
 import { bnToHex } from 'tinlake';
 
 interface Props {
-  data: Internalloan | NFT;
+  data: NFT;
   authedAddr: string;
 }
 
@@ -38,9 +37,8 @@ class NftData extends React.Component<Props> {
     const nftDataFillers = [
       ...Array(nftDataFillersNeeded(nftDataDefinition.displayedFields.length)).keys()];
 
-      console.log("token", tokenId);
     return <NftDataContainer>
-      <Heading level="6" margin="none">NFT Data</Heading>
+      <Heading level="5" margin="none">NFT Data</Heading>
       <Box direction="row" gap="medium" margin={{ bottom: 'large', top: 'medium' }}>
         <Box basis={'1/4'} gap="medium">
          <DisplayField
