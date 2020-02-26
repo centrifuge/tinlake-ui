@@ -1,18 +1,18 @@
 import * as React from 'react';
 import Tinlake, { baseToDisplay, bnToHex, displayToBase } from 'tinlake';
-import { LoansState, loadLoan } from '../../ducks/loans';
+import { LoansState, loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
-import Alert from '../Alert';
+import Alert from '../../Alert';
 import { Box, FormField, Button, Heading, Text } from 'grommet';
-import NftData from '../NftData';
-import SecondaryHeader from '../SecondaryHeader';
-import { BackLink } from '../BackLink';
-import NumberInput from '../NumberInput';
-import NumberDisplay from '../NumberDisplay';
-import LoanData from '../LoanData';
-import { authTinlake } from '../../services/tinlake';
+import NftData from '../../NftData';
+import SecondaryHeader from '../../SecondaryHeader';
+import { BackLink } from '../../BackLink';
+import NumberInput from '../../NumberInput';
+import NumberDisplay from '../../NumberDisplay';
+import LoanData from '../Data';
+import { authTinlake } from '../../../services/tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
-import Auth from '../Auth';
+import Auth from '../../Auth';
 
 const SUCCESS_STATUS = '0x1';
 

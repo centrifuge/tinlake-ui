@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Box, FormField, TextInput } from 'grommet';
 import { baseToDisplay, feeToInterestRate } from 'tinlake';
-import NumberInput from '../NumberInput';
-import { Loan } from '../../ducks/loans';
+import NumberInput from '../../NumberInput';
+import { Loan } from '../../../services/tinlake/actions';
 
 interface Props {
   loan: Loan;
@@ -20,7 +20,7 @@ class LoanData extends React.Component<Props> {
 
       <Box direction="row" pad={{ horizontal: 'medium' }} gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
         <Box basis={'1/3'} gap="medium">
-          <FormField label="Maximum Borrow Amount">
+          <FormField label="Maximum borrow amount">
             <NumberInput value={baseToDisplay(principal, 18)} suffix=" DAI" disabled precision={18} />
           </FormField>
         </Box> 
@@ -30,7 +30,7 @@ class LoanData extends React.Component<Props> {
           </FormField>
         </Box>
         <Box basis={'1/3'} gap="medium">
-          <FormField label="Interest Rate">
+          <FormField label="Interest rate">
             <NumberInput value={feeToInterestRate(interestRate)} suffix="%" disabled />
           </FormField>
         </Box>

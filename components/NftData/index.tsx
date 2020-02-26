@@ -38,7 +38,7 @@ class NftData extends React.Component<Props> {
       ...Array(nftDataFillersNeeded(nftDataDefinition.displayedFields.length)).keys()];
 
     return <NftDataContainer>
-      <Heading level="6" margin="none">NFT Data</Heading>
+      <Heading level="5" margin="none">NFT Data</Heading>
       <Box direction="row" gap="medium" margin={{ bottom: 'large', top: 'medium' }}>
         <Box basis={'1/4'} gap="medium">
          <DisplayField

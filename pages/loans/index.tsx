@@ -1,5 +1,5 @@
 import * as React from 'react';
-import LoanList from '../../containers/Loans/List';
+import LoanList from '../../containers/Loan/List';
 import WithTinlake from '../../components/WithTinlake';
 import { Box, Heading, Button } from 'grommet';
 import Header from '../../components/Header';

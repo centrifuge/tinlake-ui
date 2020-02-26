@@ -1,5 +1,5 @@
 import { AnyAction, Action } from 'redux';
-import Tinlake, { Address } from '../containers/loans/Issue/node_modules/tinlake';
+import Tinlake, { Address } from '../containers/Loan/Issue/node_modules/tinlake';
 import { ThunkAction } from 'redux-thunk';
 import { networkIdToName } from '../utils/networkNameResolver';
 
