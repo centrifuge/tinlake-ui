@@ -8,7 +8,7 @@ import NftDataField, { DisplayedField } from '../NftDataField';
 import config from '../../config';
 import { DisplayField } from '@centrifuge/axis-display-field';
 import { getNFTLink, getAddressLink, hexToInt } from '../../utils/etherscanLinkGenerator';
-import { bnToHex } from '../../containers/Loans/Info/node_modules/tinlake';
+import { bnToHex } from 'tinlake';
 
 interface Props {
   data: Internalloan | NFT;
@@ -38,6 +38,7 @@ class NftData extends React.Component<Props> {
     const nftDataFillers = [
       ...Array(nftDataFillersNeeded(nftDataDefinition.displayedFields.length)).keys()];
 
+      console.log("token", tokenId);
     return <NftDataContainer>
       <Heading level="6" margin="none">NFT Data</Heading>
       <Box direction="row" gap="medium" margin={{ bottom: 'large', top: 'medium' }}>
@@ -48,7 +49,7 @@ class NftData extends React.Component<Props> {
             as={'span'}
             value={hexToInt(bnToHex(tokenId).toString())}
             link={{
-              href: getNFTLink(hexToInt(bnToHex(tokenId).toString()), contractAddresses['NFT_COLLATERAL']),
+              href: getNFTLink(hexToInt(bnToHex(tokenId).toString()), contractAddresses['COLLATERAL_NFT']),
               target: '_blank'
             }}
           />

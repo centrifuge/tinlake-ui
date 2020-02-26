@@ -30,13 +30,12 @@ class LoanPage extends React.Component<Props> {
               <Heading level="3">Open Loan</Heading>
             </Box>
           </SecondaryHeader>
-
           <WithTinlake render={tinlake =>
             <IssueLoan tinlake={tinlake} loanId={loanId} />
           }> </WithTinlake>
-        </Box>;
+        </Box>
       </Box>
-    </Box>;
+    </Box>
   }
 }
 

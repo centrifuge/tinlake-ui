@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, Box, Heading, Paragraph } from 'grommet';
 import styled from 'styled-components';
 import Badge from '../Badge';
-import { NFT } from '../../services/nft';
+import { NFT } from '../../services/tinlake/actions';
 import NftDataField, { DisplayedField } from '../NftDataField';
 import config from '../../config';
 import { DisplayField } from '@centrifuge/axis-display-field';

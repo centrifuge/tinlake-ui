@@ -3,8 +3,11 @@ import Tinlake, { baseToDisplay, displayToBase, interestRateToFee } from 'tinlak
 import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
 import Alert from '../../../components/Alert';
 import NftData from '../../../components/NftData';
-import { getNFT, NFT } from '../../../services/nft'
+import { getNFT, issue, NFT, TinlakeResult } from '../../../services/tinlake/actions'
+import { authTinlake } from "../../../services/tinlake"
 import { Spinner } from '@centrifuge/axis-spinner';
+import LoanView from '../View';
+import WithTinlake from '../../../components/WithTinlake';
 
 interface Props {
   tinlake: Tinlake;
@@ -17,7 +20,7 @@ interface State {
   tokenId: string;
   loanId: string
   errorMsg: string;
-  is: null;
+  is: string;
 }
 
 class IssueLoan extends React.Component<Props, State> {
@@ -50,44 +53,25 @@ class IssueLoan extends React.Component<Props, State> {
   }
 
   issueLoan = async () => {
-    // const { tinlake } = this.props;
-    // const { tokenId, principal, appraisal, interestRate } = this.state;
-    // const addresses = tinlake.contractAddresses;
-    // if (principal === '0') {
-    //   this.setState({ is: 'error', errorMsg: 'Principal cannot be 0' });
-    //   // needs to be implemented on the contract level first
-    // } /*else if (principal > appraisal) {
-    //   this.setState({ is: 'error', errorMsg: 'Principal can not be heigher then appraisal'  });
-    // }*/
-    // else {
-    //   this.setState({ is: 'loading' });
-    //   try {
-    //     await authTinlake();
-    //     // init fee
-    //     const fee = interestRateToFee(interestRate);
-    //     const feeExists = await tinlake.existsFee(fee);
-    //     if (!feeExists) {
-    //       const res = await tinlake.initFee(fee);
-    //       if (res.status !== SUCCESS_STATUS) {
-    //         this.setState({ is: 'error', errorMsg: JSON.stringify(res) });
-    //         return;
-    //       }
-    //     }
-    //     // admit
-    //     const nftOwner = await tinlake.ownerOfNFT(tokenId);
-    //     const res2 = await tinlake.whitelist(addresses['NFT_COLLATERAL'], tokenId, principal, appraisal, fee, nftOwner);
-    //     if (res2.status !== SUCCESS_STATUS || res2.events[0].event.name !== 'Transfer') {
-    //       this.setState({ is: 'error', errorMsg: JSON.stringify(res2) });
-    //       return;
-    //     }
+    const { tinlake } = this.props;
+    const { tokenId } = this.state;
+    this.setState({ is: 'loading' });
 
-    //     const loanId = res2.events[0].data[2].toString();
-    //     this.setState({ is: 'success' });
-    //   } catch (e) {
-    //     console.log(e);
-    //     this.setState({ is: 'error', errorMsg: e.message });
-    //   }
-    // }
+    try {
+      await authTinlake();
+      // issue loan
+      const result: TinlakeResult = await issue(tinlake, tokenId);
+      if (result.errorMsg) {
+        this.setState({ is: 'error', errorMsg });
+        return;
+      }
+      const loanId = result.data;
+      this.setState({ loanId });
+      this.setState({ is: 'success' });
+    } catch (e) {
+      console.log(e);
+      this.setState({ is: 'error', errorMsg: e.message });
+    }
   }
 
   componentWillMount() {
@@ -99,33 +83,29 @@ class IssueLoan extends React.Component<Props, State> {
   }
 
   render() {
-    const { tokenId, is, nft, errorMsg, nftError } = this.state;
+    const { tokenId, is, nft, errorMsg, nftError, loanId } = this.state;
     const { tinlake } = this.props;
-
-    {
-      is === 'loading' ?
-      <Spinner height={'calc(100vh - 89px - 84px)'} message={'Initiating the whitelisting process. Please confirm the pending transactions in MetaMask, and do not leave this page until all transactions have been confirmed.'} />
-      :
-      <Box pad={{ horizontal: 'medium' }}>
-        {is === 'success' && <Alert type="success">
-          Successfully created loan for Token ID {tokenId}</Alert>}
-        {is === 'error' && <Alert type="error">
-          <Text weight="bold">
-            Error creating loan Token ID {tokenId}, see console for details</Text>
-          {errorMsg && <div><br />{errorMsg}</div>}
-        </Alert>
-        }
-        {/* {is !== 'success' &&
-          <Box direction="row" gap="medium" margin={{ top: 'medium' }}>
-            <b>Please paste your NFT ID below and set the loan parameters:</b>
-          </Box>
-        } */}
-      </Box>
-
-      return <Box pad={{ horizontal: 'medium' }} >
-        <Box direction="row">
-          <Text weight="bold">Please paste your NFT ID below to open a new loan</Text>
+    return <Box>
+      {is === 'loading' ?
+        <Spinner height={'calc(100vh - 89px - 84px)'} message={'Initiating the opening loan process. Please confirm the pending transactions in MetaMask, and do not leave this page until all transactions have been confirmed.'} />
+        :
+        <Box pad={{ horizontal: 'medium' }}>
+          {is === 'success' && <Alert type="success">
+            Successfully opened loan for Token ID {tokenId}</Alert>}
+          {is === 'error' && <Alert type="error">
+            <Text weight="bold">
+              Error opening loan for Token ID {tokenId}, see console for details</Text>
+            {errorMsg && <div><br />{errorMsg}</div>}
+          </Alert>}
+          {is !== 'success' &&
+            <Box direction="row" gap="medium" margin={{ top: 'medium' }}>
+              <b>Please paste your NFT ID below to open a loan:</b>
+            </Box>}
         </Box>
+      }
+      
+      {is !== 'success' && 
+      <Box pad={{ horizontal: 'medium' }} >
         <Box direction="row" gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
           <Box basis={'1/4'} gap="medium">
             <FormField label="Token ID">
@@ -136,22 +116,30 @@ class IssueLoan extends React.Component<Props, State> {
               />
             </FormField>
           </Box>
-          <Box basis={'1/4'} gap="medium" align="center">
+          <Box basis={'1/3'} gap="medium" align="end">
             <Button onClick={this.issueLoan} primary label="Open loan" disabled={is === 'loading' || is === 'success' || !nft} />
           </Box>
         </Box>
-
-        {nftError && <Alert type="error" margin={{ vertical: 'large' }}>
-         { nftError } </Alert>}
-         {nft &&
-          <NftData data={nft} authedAddr={tinlake.ethConfig.from} />}
       </Box>
-    }
-     
-    }
-  }
-  
+      }
 
-  export default IssueLoan;
+      {loanId ?
+        <Box margin={{ bottom: 'medium', top: 'large' }}><WithTinlake render={tinlake => <LoanView tinlake={tinlake} loanId={loanId} />}> </WithTinlake></Box>
+        :
+        <Box>
+          {nftError && <Alert type="error" margin={{ vertical: 'large' }}>
+            {nftError} </Alert>
+          }
+          {nft &&
+            <NftData data={nft} authedAddr={tinlake.ethConfig.from} />
+          }
+        </Box>
+      }
+    </Box>
+  }
+}
+
+
+export default IssueLoan;
 
 

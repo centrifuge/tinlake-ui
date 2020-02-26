@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tinlake, { baseToDisplay, displayToBase } from 'tinlake';
-import { LoansState, getLoan} from '../../ducks/loans';
+import { LoansState, loadLoan} from '../../ducks/loans';
 import { connect } from 'react-redux';
 import Alert from '../Alert';
 import { Box, FormField, Button, Heading, Text } from 'grommet';
@@ -25,7 +25,7 @@ interface Props {
   loanId: string;
   tinlake: Tinlake;
   loans?: LoansState;
-  getLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
   subscribeDebt?: (tinlake: Tinlake, loanId: string) => () => void;
 }
 
@@ -46,7 +46,7 @@ class LoanRepay extends React.Component<Props, State> {
   discardDebtSubscription = () => { };
 
   componentWillMount() {
-    this.props.getLoan!(this.props.tinlake, this.props.loanId);
+    this.props.loadLoan!(this.props.tinlake, this.props.loanId);
     // this.discardDebtSubscription = this.props.subscribeDebt!(this.props.tinlake, this.props.loanId);
   }
 
@@ -94,7 +94,7 @@ class LoanRepay extends React.Component<Props, State> {
     try {
       await authTinlake();
 
-      const { getLoan, tinlake, loanId } = this.props;
+      const { loadLoan, tinlake, loanId } = this.props;
       const { repayAmount } = this.state;
       const addresses = tinlake.contractAddresses;
       const ethFrom = tinlake.ethConfig.from;
@@ -112,7 +112,7 @@ class LoanRepay extends React.Component<Props, State> {
         return;
       }
 
-      await getLoan!(tinlake, loanId, true);
+      await loadLoan!(tinlake, loanId, true);
       this.setState({ is: 'success' });
 
     } catch (e) {
@@ -212,4 +212,4 @@ class LoanRepay extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { getLoan, subscribeDebt })(LoanRepay);
+export default connect(state => state, { loadLoan, subscribeDebt })(LoanRepay);

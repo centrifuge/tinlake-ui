@@ -3,7 +3,7 @@ import Tinlake, { bnToHex, baseToDisplay } from 'tinlake';
 import Link from 'next/link';
 import { Box, DataTable, Anchor, Text } from 'grommet';
 import { connect } from 'react-redux';
-import { Loan, LoansState, getLoans } from '../../../ducks/loans';
+import { Loan, LoansState, loadLoans } from '../../../ducks/loans';
 import NumberDisplay from '../../../components/NumberDisplay';
 import Badge from '../../../components/Badge';
 import { Spinner } from '@centrifuge/axis-spinner';
@@ -13,12 +13,12 @@ import { getNFTLink, hexToInt } from '../../../utils/etherscanLinkGenerator';
 interface Props {
   tinlake: Tinlake;
   loans?: LoansState;
-  getLoans?: (tinlake: Tinlake) => Promise<void>;
+  loadLoans?: (tinlake: Tinlake) => Promise<void>;
 }
 
 class LoanList extends React.Component<Props> {
   componentWillMount() {
-    this.props.getLoans(this.props.tinlake);
+    this.props.loadLoans(this.props.tinlake);
   }
 
   render() {
@@ -100,4 +100,4 @@ const HeaderCell = (props: { text: string }) => (
   <Box pad={{ left: 'small' }}><Text>{props.text}</Text></Box>
 );
 
-export default connect(state => state, { getLoans })(LoanList);
+export default connect(state => state, { loadLoans })(LoanList);
