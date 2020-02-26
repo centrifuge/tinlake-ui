@@ -2,7 +2,6 @@ import { AnyAction, Action } from 'redux';
 // import Tinlake from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
 import { getLoans, getLoan, TinlakeResult, Loan } from '../services/tinlake/actions'
-import { connect } from 'react-redux';
 
 // Actions
 const LOAD = 'tinlake-ui/loans/LOAD';
