@@ -6,6 +6,8 @@ import Header from '../../components/Header';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { menuItems } from '../../menuItems';
 import { BackLink } from '../../components/BackLink';
+import Auth from '../../components/Auth';
+import Alert from '../../components/Alert';
 
 interface Props {
   loanId: string;
@@ -34,8 +36,15 @@ class LoanPage extends React.Component<Props> {
               <Heading level="3">View Loan</Heading>
             </Box>
           </SecondaryHeader>
-
-          {loanId && <WithTinlake render={tinlake => <LoanView tinlake={tinlake} loanId={loanId} />}> </WithTinlake>}
+          <WithTinlake render={tinlake =>
+            <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization
+              render={auth => auth && auth.state === 'loaded' && auth.user ?
+                <Box> {loanId && <LoanView tinlake={tinlake} loanId={loanId} />} </Box>
+                :
+                <Alert margin="medium" type="error">
+                  Please authenticate to access this page </Alert>
+              } />
+          } />
         </Box>;
       </Box>
     </Box>
