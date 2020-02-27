@@ -69,9 +69,9 @@ class LoanList extends React.Component<Props> {
           </div>
         },
         {
-          header: 'Principal (DAI)', property: 'principal', align: 'end',
+          header: 'Max borrow amount (DAI)', property: 'principal', align: 'end',
           render: (l: Loan) =>
-            <NumberDisplay suffix="" precision={18}
+            <NumberDisplay suffix="" precision={4}
               value={baseToDisplay(l.principal, 18)} />
         },
         {
@@ -82,7 +82,7 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Debt (DAI)', property: 'debt', align: 'end',
           render: (l: Loan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix="" precision={18} value={baseToDisplay(l.debt, 18)} />
+            <NumberDisplay suffix="" precision={4} value={baseToDisplay(l.debt, 18)} />
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,

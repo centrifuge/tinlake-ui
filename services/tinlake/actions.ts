@@ -1,6 +1,7 @@
 import BN from 'bn.js';
-import Tinlake, { baseToDisplay, displayToBase, interestRateToFee, Addresse } from 'tinlake';
+import Tinlake, { bnToHex, interestRateToFee, Address} from 'tinlake';
 import config from '../../config';
+import Repay from '../../containers/Loan/Repay';
 
 const { contractAddresses } = config;
 const SUCCESS_STATUS = '0x1';
@@ -178,7 +179,109 @@ export async function setInterest(tinlake: tinlake, loanId: string, debt: string
   }
 }
 
+export async function borrow(tinlake: tinlake, loan: Loan, amount: string) {
+  const { loanId } = loan;
+  const address = tinlake.ethConfig.from;
 
+  // approve nft
+  let approveRes;
+  try {
+    approveRes = await tinlake.approveNFT(bnToHex(loan.tokenId), contractAddresses['SHELF']);
+  } catch(e){
+    return loggedError(e, 'could not approve tinlake to lock NFT.', loanId);
+  }
+  if (approveRes.status !== SUCCESS_STATUS || approveRes.events[0].event.name !== 'Approval') {
+    return loggedError({}, 'could not approve tinlake to lock NFT', loanId);
+  }
+
+  // lock nft
+  let lockRes;
+  try {
+    lockRes = await tinlake.lock(loanId);
+  } catch(e){
+    return loggedError(e, 'could not lock NFT.', loanId);
+  }
+  if (lockRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not lock NFT', loanId);
+  }
+
+  // borrow
+  let borrowRes;
+  try {
+    borrowRes = await tinlake.borrow(loanId, amount);
+  } catch(e){
+    return loggedError(e, 'could not borrow.', loanId);
+  }
+  if (borrowRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not borrow', loanId);
+  }
+  
+  //withdraw
+  let withdrawRes;
+  try {
+    withdrawRes = await tinlake.withdraw(loanId, amount, address);
+  } catch(e){
+    return loggedError(e, 'could not withdraw.', loanId);
+  }
+  if (withdrawRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not withdraw', loanId);
+  }
+}
+
+// repay full loan debt
+export async function repay(tinlake: tinlake, loan: Loan) {
+  const repayBuffer = new BN('1000000000000000000');
+  const { loanId } = loan;
+
+  // add buffer to repayAmount
+  const debt = await tinlake.getDebt(loanId);
+  // add buffer to cover for compounding
+  const repayAmount= debt.add(repayBuffer);
+
+  // approve currency
+  let approveRes;
+  try {
+    approveRes = await tinlake.approveCurrency(contractAddresses['SHELF'], repayAmount);
+  } catch(e){
+    return loggedError(e, 'could not approve.', loanId);
+  }
+  if (approveRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not approve', loanId);
+  }
+   
+  // repay
+  let repayRes;
+  try {
+    repayRes = await tinlake.repay(loanId, repayAmount);
+  } catch(e){
+    return loggedError(e, 'could not repay.', loanId);
+  }
+  if (repayRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not repay', loanId);
+  }
+
+  // unlock 
+  let unlockRes;
+  try {
+    unlockRes = await tinlake.unlock(loanId);
+  } catch(e){
+    return loggedError(e, 'could not unlock.', loanId);
+  }
+  if (unlockRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not unlock', loanId);
+  }
+
+  // close 
+  let closeRes;
+  try {
+    closeRes = await tinlake.close(loanId);
+  } catch(e){
+    return loggedError(e, 'could not unlock.', loanId);
+  }
+  if (closeRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not unlock', loanId);
+  }
+}
 
 function loggedError(error: any, message: string, id: string) {
   console.log(`${message} ${id}`, error);

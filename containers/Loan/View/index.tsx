@@ -1,12 +1,14 @@
 import * as React from 'react';
 import Tinlake from 'tinlake';
 import { LoansState, loadLoan } from '../../../ducks/loans';
-import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
+import { Box, Heading} from 'grommet';
 import { connect } from 'react-redux';
 import Alert from '../../../components/Alert';
 import LoanData from '../../../components/Loan/Data';
 import LoanCeiling from '../Ceiling';
 import LoanInterest from '../Interest';
+import LoanBorrow from '../Borrow';
+import LoanRepay from '../Repay';
 import NftData from '../../../components/NftData';
 
 
@@ -37,7 +39,6 @@ class LoanView extends React.Component<Props> {
     return <Box>
       <LoanData loan={loan!} />
 
-      {/* borrower section */}
       {/* admin section */}
       <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
         <Box gap="medium" align="start"  margin={{ bottom: "medium" }} >
@@ -48,7 +49,18 @@ class LoanView extends React.Component<Props> {
           <LoanInterest loan={loan!} tinlake={tinlake}> </LoanInterest>
           {/* ceiling permissions */}
           <LoanCeiling loan={loan!} tinlake={tinlake}> </LoanCeiling>
+        </Box>
+      </Box>
 
+
+       {/* borrower section */}
+       <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
+        <Box gap="medium" align="start"  margin={{ bottom: "medium" }} >
+          <Heading level="5" margin="none">Borrow / Repay </Heading>
+        </Box>
+        <Box direction="row">  
+          <LoanBorrow loan={loan!} tinlake={tinlake}> </LoanBorrow>
+          <LoanRepay loan={loan!} tinlake={tinlake}> </LoanRepay>
         </Box>
       </Box>
 
