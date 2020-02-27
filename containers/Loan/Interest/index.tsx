@@ -42,7 +42,7 @@ class LoanInterest extends React.Component<Props, State> {
     const { interestRate, is } = this.state;
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
-        <FormField label="Interest rate">
+        <FormField label="Interest rate per year">
           <NumberInput value={interestRate} suffix=" %"
             onValueChange={({ value }) =>
               this.setState({ interestRate: value })}

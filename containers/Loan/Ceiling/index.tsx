@@ -22,7 +22,7 @@ class LoanCeiling extends React.Component<Props, State> {
 
   componentWillMount() {
     const { loan } = this.props;
-    this.setState({ ceiling: loan.principal});
+    this.setState({ ceiling: (loan.principal || '0')});
   }
 
   setCeiling  = async () => {
