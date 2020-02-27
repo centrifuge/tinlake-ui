@@ -232,17 +232,12 @@ export async function borrow(tinlake: tinlake, loan: Loan, amount: string) {
 export async function repay(tinlake: tinlake, loan: Loan) {
   const repayBuffer = new BN('1000000000000000000');
   const { loanId } = loan;
-  console.log("loan", loanId);
-  const address = tinlake.ethConfig.from;
 
   // add buffer to repayAmount
   const debt = await tinlake.getDebt(loanId);
-  // add small buffer to cover for compounding
+  // add buffer to cover for compounding
   const repayAmount= debt.add(repayBuffer);
-  console.log(debt.toString());
-  console.log(repayAmount.toString());
 
-  
   // approve currency
   let approveRes;
   try {
@@ -257,7 +252,6 @@ export async function repay(tinlake: tinlake, loan: Loan) {
   // repay
   let repayRes;
   try {
-
     repayRes = await tinlake.repay(loanId, repayAmount);
   } catch(e){
     return loggedError(e, 'could not repay.', loanId);
@@ -269,7 +263,6 @@ export async function repay(tinlake: tinlake, loan: Loan) {
   // unlock 
   let unlockRes;
   try {
-    console.log("calling repay");
     unlockRes = await tinlake.unlock(loanId);
   } catch(e){
     return loggedError(e, 'could not unlock.', loanId);
@@ -281,7 +274,6 @@ export async function repay(tinlake: tinlake, loan: Loan) {
   // close 
   let closeRes;
   try {
-    console.log("calling repay");
     closeRes = await tinlake.close(loanId);
   } catch(e){
     return loggedError(e, 'could not unlock.', loanId);
