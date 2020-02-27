@@ -10,6 +10,7 @@ import LoanInterest from '../Interest';
 import LoanBorrow from '../Borrow';
 import LoanRepay from '../Repay';
 import NftData from '../../../components/NftData';
+import { AuthState } from '../../../ducks/auth';
 
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
   loanId?: string;
   loans?: LoansState;
   loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  auth: AuthState;
 }
 
 // on state change tokenId --> load nft data for loan collateral
@@ -27,7 +29,7 @@ class LoanView extends React.Component<Props> {
   }
 
   render() {
-    const { loans, loanId, tinlake } = this.props;
+    const { loans, loanId, tinlake, auth } = this.props;
     const { loan, loanState } = loans!;
     
     if (loanState === null || loanState === 'loading') { return null; }
@@ -36,24 +38,29 @@ class LoanView extends React.Component<Props> {
         Could not find loan {loanId}</Alert>;
     }
 
+    const hasAdminPermissions = auth.user && ( auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling);
+    const hasBorrowerPermissions = auth.user && loan && (loan.ownerOf === auth.user.address);
     return <Box>
       <LoanData loan={loan!} />
 
-      {/* admin section */}
-      <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
-        <Box gap="medium" align="start"  margin={{ bottom: "medium" }} >
-          <Heading level="5" margin="none">Loan Settings</Heading>
+      { hasAdminPermissions &&
+        <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
+          <Box gap="medium" align="start"  margin={{ bottom: "medium" }} >
+            <Heading level="5" margin="none">Loan Settings</Heading>
+          </Box>
+          <Box direction="row">
+            { auth.user && auth.user.permissions.canSetInterestRate && 
+              <LoanInterest loan={loan!} tinlake={tinlake}> </LoanInterest>
+            }
+            { auth.user && auth.user.permissions.canSetCeiling && 
+             <LoanCeiling loan={loan!} tinlake={tinlake}> </LoanCeiling>
+            }
+          </Box>
         </Box>
-        <Box direction="row">
-          {/* interest permissions */}   
-          <LoanInterest loan={loan!} tinlake={tinlake}> </LoanInterest>
-          {/* ceiling permissions */}
-          <LoanCeiling loan={loan!} tinlake={tinlake}> </LoanCeiling>
-        </Box>
-      </Box>
+      }
 
 
-       {/* borrower section */}
+      { hasBorrowerPermissions &&
        <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
         <Box gap="medium" align="start"  margin={{ bottom: "medium" }} >
           <Heading level="5" margin="none">Borrow / Repay </Heading>
@@ -63,6 +70,7 @@ class LoanView extends React.Component<Props> {
           <LoanRepay loan={loan!} tinlake={tinlake}> </LoanRepay>
         </Box>
       </Box>
+      }
 
 
       {/* // set max borrow amount

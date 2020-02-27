@@ -69,7 +69,6 @@ class IssueLoan extends React.Component<Props, State> {
       this.setState({ loanId });
       this.setState({ is: 'success' });
     } catch (e) {
-      console.log(e);
       this.setState({ is: 'error', errorMsg: e.message });
     }
   }

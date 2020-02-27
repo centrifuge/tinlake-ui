@@ -22,22 +22,21 @@ class LoanListPage extends React.Component {
       >
         <Box width="xlarge" >
           <WithTinlake render={tinlake =>
-            <Box>
-              <SecondaryHeader>
-                <Heading level="3">Loans</Heading>
-                <Link href={`/loans/issue`}>
-                  <Button primary label="Open Loan" />
-                </Link>
-              </SecondaryHeader>
-
-              <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization render={auth =>
-                auth.user === null &&
-                <Alert margin="medium" type="error">
-                  Please authenticate to view the loan list.
-                  </Alert>
+              <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization
+                render={auth => auth && auth.state === 'loaded' && auth.user ?
+                  <Box>
+                    <SecondaryHeader>
+                      <Heading level="3">Loans</Heading>
+                      <Link href={`/loans/issue`}>
+                        <Button primary label="Open Loan" />
+                      </Link>
+                    </SecondaryHeader>
+                    <LoanList tinlake={tinlake} auth={auth} />
+                  </Box>
+                  :
+                  <Alert margin="medium" type="error">
+                    Please authenticate to access this page </Alert>
               } />
-              <LoanList tinlake={tinlake} />
-            </Box>
           } />
         </Box>
       </Box>
