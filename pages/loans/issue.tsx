@@ -25,26 +25,25 @@ class LoanPage extends React.Component<Props> {
         justify="center"
         direction="row"
       >
-      <Box width="xlarge" >
-        <WithTinlake render={tinlake =>
-          <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization
-            render={auth => auth && auth.state === 'loaded' && auth.user ?
+        <Box width="xlarge" >
+          <WithTinlake render={tinlake =>
+            <Auth tinlake={tinlake} waitForAuthentication waitForAuthorization
+              render={auth => auth && auth.state === 'loaded' && auth.user ?
                 <Box>
-                <SecondaryHeader>
-                  <Box direction="row" gap="small" align="center">
-                    <BackLink href={'/loans'} />
-                    <Heading level="3">Open Loan</Heading>
-                  </Box>
-                </SecondaryHeader>
-                <IssueLoan tinlake={tinlake} loanId={loanId} />
+                  <SecondaryHeader>
+                    <Box direction="row" gap="small" align="center">
+                      <BackLink href={'/loans'} />
+                      <Heading level="3">Open Loan</Heading>
+                    </Box>
+                  </SecondaryHeader>
+                  <IssueLoan tinlake={tinlake} loanId={loanId} />
                 </Box>
-          
-              :
-              <Alert margin="medium" type="error">
-                Please authenticate to access this page</Alert>
-            } />
-        } />
-             </Box>
+                :
+                <Alert margin="medium" type="error">
+                  Please authenticate to access this page</Alert>
+              } />
+          } />
+        </Box>
       </Box>
     </Box>
   }

@@ -72,10 +72,6 @@ class LoanView extends React.Component<Props> {
       </Box>
       }
 
-
-      {/* // set max borrow amount
-      // set rate
-      // borrow repay */}
       { loan && loan.nft && <NftData data={loan.nft} authedAddr={tinlake.ethConfig.from} /> }
      
     </Box>
