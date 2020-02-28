@@ -1,5 +1,4 @@
 import { AnyAction, Action } from 'redux';
-// import Tinlake from 'tinlake';
 import { ThunkAction } from 'redux-thunk';
 import { getLoans, getLoan, TinlakeResult, Loan } from '../services/tinlake/actions'
 
@@ -9,7 +8,6 @@ const RECEIVE = 'tinlake-ui/loans/RECEIVE';
 const LOAD_LOAN = 'tinlake-ui/loans/LOAD_LOAN';
 const LOAN_NOT_FOUND = 'tinlake-ui/loans/LOAN_NOT_FOUND';
 const RECEIVE_LOAN = 'tinlake-ui/loans/RECEIVE_LOAN';
-const RECEIVE_DEBT = 'tinlake-ui/loans/RECEIVE_DEBT';
 
 export interface LoansState {
   loansState: null | 'loading' | 'found';
@@ -34,10 +32,6 @@ export default function reducer(state: LoansState = initialState,
     case LOAD_LOAN: return { ...state, loanState: 'loading', loan: null };
     case LOAN_NOT_FOUND: return { ...state, loanState: 'not found' };
     case RECEIVE_LOAN: return { ...state, loanState: 'found', loan: action.loan };
-    case RECEIVE_DEBT: {
-      if (state.loan === null) { return state; }
-      return { ...state, loan: { ...state.loan, debt: action.debt } };
-    }
     default: return state;
   }
 }
@@ -64,13 +58,5 @@ export function loadLoan(tinlake: Tinlake, loanId: string, refresh = false):
     }   
     dispatch({ type: RECEIVE_LOAN, loan: result.data});
     
-  };
-}
-
-export function getDebt(tinlake: Tinlake, loanId: string):
-  ThunkAction<Promise<void>, LoansState, undefined, Action> {
-  return async (dispatch) => {
-    const debt = await tinlake.getCurrentDebt(loanId);
-    dispatch({ loanId, debt, type: RECEIVE_DEBT });
   };
 }

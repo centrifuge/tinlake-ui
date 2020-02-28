@@ -7,11 +7,12 @@ import { getNFT, issue, NFT, TinlakeResult } from '../../../services/tinlake/act
 import { authTinlake } from "../../../services/tinlake"
 import { Spinner } from '@centrifuge/axis-spinner';
 import LoanView from '../View';
-import WithTinlake from '../../../components/WithTinlake';
+import { AuthState } from '../../../ducks/auth';
 
 interface Props {
   tinlake: Tinlake;
   tokenId: string;
+  auth: AuthState;
 }
 
 interface State {
@@ -78,12 +79,11 @@ class IssueLoan extends React.Component<Props, State> {
     this.setState({ tokenId: tokenId || '' }, () => {
       if (tokenId) { this.getNFT(tokenId); }
     });
-
   }
 
   render() {
     const { tokenId, is, nft, errorMsg, nftError, loanId } = this.state;
-    const { tinlake } = this.props;
+    const { tinlake, auth } = this.props;
     return <Box>
       {is === 'loading' ?
         <Spinner height={'calc(100vh - 89px - 84px)'} message={'Initiating the opening loan process. Please confirm the pending transactions in MetaMask, and do not leave this page until all transactions have been confirmed.'} />
@@ -115,7 +115,7 @@ class IssueLoan extends React.Component<Props, State> {
               />
             </FormField>
           </Box>
-          <Box basis={'1/3'} gap="medium" align="end">
+          <Box gap="medium" align="end">
             <Button onClick={this.issueLoan} primary label="Open loan" disabled={is === 'loading' || is === 'success' || !nft} />
           </Box>
         </Box>
@@ -123,7 +123,7 @@ class IssueLoan extends React.Component<Props, State> {
       }
 
       {loanId ?
-        <Box margin={{ bottom: 'medium', top: 'large' }}><WithTinlake render={tinlake => <LoanView tinlake={tinlake} loanId={loanId} />}> </WithTinlake></Box>
+        <Box margin={{ bottom: 'medium', top: 'large' }}> <LoanView auth={auth} tinlake={tinlake} loanId={loanId} /></Box>
         :
         <Box>
           {nftError && <Alert type="error" margin={{ vertical: 'large' }}>

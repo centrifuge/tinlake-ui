@@ -1,7 +1,6 @@
 import BN from 'bn.js';
-import Tinlake, { bnToHex, interestRateToFee, Address} from 'tinlake';
+import Tinlake, { bnToHex, interestRateToFee } from 'tinlake';
 import config from '../../config';
-import Repay from '../../containers/Loan/Repay';
 
 const { contractAddresses } = config;
 const SUCCESS_STATUS = '0x1';
@@ -25,6 +24,16 @@ export interface Loan {
   price?: BN;
   status?: string;
   nft?: NFT
+}
+
+export interface Investor {
+  maxSupplyJunior: BN;
+  maxSupplySenior?: BN;
+  maxRedeemJunior: BN;
+  maxRedeemSenior?: BN;
+  tokenBalanceJunior: BN;
+  tokenBalanceSenior?: BN;
+  address: string;
 }
 
 export interface TinlakeResult {
@@ -282,6 +291,80 @@ export async function repay(tinlake: tinlake, loan: Loan) {
     return loggedError({}, 'could not unlock', loanId);
   }
 }
+
+export async function getInvestor(tinlake: Tinlake, address: string) {
+  let investor;
+  try {
+    investor = await tinlake.getInvestor(address);
+  } catch (e) {
+    return loggedError(e, 'Investor not found', address);
+  }
+  return {
+    data: investor
+  }
+}
+
+export async function setAllowanceJunior(tinlake: Tinlake, address: string, maxSupplyAmount: string, maxRedeemAmount: string) {
+ let setRes;
+  try {
+    setRes = await tinlake.approveAllowanceJunior(address, maxSupplyAmount, maxRedeemAmount);
+  } catch (e) {
+    return loggedError(e, 'could not set allowance.', address);
+  }
+  if (setRes.status !== SUCCESS_STATUS) {
+    return loggedError(null, 'could not set allowance.', address);
+  }
+}
+
+export async function supplyJunior(tinlake: tinlake, supplyAmount: string) {
+
+  // approve currency
+  let approveRes;
+  try {
+    approveRes = await tinlake.approveCurrency(contractAddresses['JUNIOR'], supplyAmount);
+  } catch(e){
+    return loggedError(e, 'could not approve currency.', '');
+  }
+  if (approveRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not approve currency.', '');
+  }
+   
+  // repay
+  let supplyRes;
+  try {
+    supplyRes = await tinlake.supplyJunior(supplyAmount);
+  } catch(e){
+    return loggedError(e, 'could not supply junior.', '');
+  }
+  if (supplyRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not supply junior.', '');
+  }
+}
+
+export async function redeemJunior(tinlake: tinlake, redeemAmount: string) {
+  // approve junior token 
+  let approveRes;
+  try {
+    approveRes = await tinlake.approveJuniorToken(contractAddresses['JUNIOR'], redeemAmount);
+  } catch(e){
+    return loggedError(e, 'could not approve juniorToken.', '');
+  }
+  if (approveRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not approve juniorToken.', '');
+  }
+   
+  // repay
+  let redeemRes;
+  try {
+    redeemRes = await tinlake.redeemJunior(redeemAmount);
+  } catch(e){
+    return loggedError(e, 'could not redeem junior.', '');
+  }
+  if (redeemRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'could not redeem junior.', '');
+  }
+}
+
 
 function loggedError(error: any, message: string, id: string) {
   console.log(`${message} ${id}`, error);
