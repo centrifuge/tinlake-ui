@@ -48,7 +48,7 @@ export async function getNFT(tinlake: Tinlake, tokenId: string) {
   let nftData: any;
 
   try {
-    nftOwner = await tinlake.getNFTOwner(tokenId);
+    nftOwner = await tinlake.getOwnerOfCollateral(tokenId);
   } catch (e) {
     return loggedError(e, 'Could not get NFT owner for NFT ID', tokenId);
   }
