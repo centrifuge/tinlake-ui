@@ -65,9 +65,8 @@ class LoanList extends React.Component<Props> {
             <NumberDisplay suffix="%" value={feeToInterestRate(l.interestRate)} />
         },
         {
-          header: 'Debt (DAI)', property: 'debt', align: 'end',
-          render: (l: Loan) => l.status === 'Whitelisted' ? '-' :
-            <NumberDisplay suffix="" precision={4} value={baseToDisplay(l.debt, 18)} />
+          header: 'Loan Status', property: 'status', align: 'end',
+          render: (l: Loan) => l.status
         },
         {
           header: 'Actions', property: 'id', align: 'end', sortable: false,
