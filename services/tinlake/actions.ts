@@ -8,13 +8,13 @@ const nftRegistryAddress = contractAddresses['COLLATERAL_NFT'];
 
 export interface NFT {
   tokenId: BN;
-  nftOwner: Address;
+  nftOwner: string;
   nftData: any;
 }
 
 export interface Loan {
   loanId: BN;
-  registry: Address;
+  registry: string;
   tokenId: BN;
   ownerOf: BN;
   principal: BN;
@@ -44,7 +44,7 @@ export interface TinlakeResult {
 }
 
 export async function getNFT(tinlake: Tinlake, tokenId: string) {
-  let nftOwner: Address;
+  let nftOwner: string;
   let nftData: any;
 
   try {
@@ -133,7 +133,7 @@ export async function getLoans(tinlake: Tinlake): Promise<TinlakeResult> {
   }
 
   const loansList = [];
-  for (let i = 1; i < loans.length; i++) {
+  for (let i = 0; i < loans.length; i++) {
     loansList.push(loans[i]);
   }
   return {
