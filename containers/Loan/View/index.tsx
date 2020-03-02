@@ -9,9 +9,10 @@ import LoanCeiling from '../Ceiling';
 import LoanInterest from '../Interest';
 import LoanBorrow from '../Borrow';
 import LoanRepay from '../Repay';
+import { Spinner } from '@centrifuge/axis-spinner';
 import NftData from '../../../components/NftData';
 import { AuthState } from '../../../ducks/auth';
-
+import { TransactionState } from '../../../ducks/transactions';
 
 interface Props {
   tinlake: Tinlake;
@@ -19,6 +20,7 @@ interface Props {
   loans?: LoansState;
   loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
   auth: AuthState;
+  transactions?: TransactionState;
 }
 
 // on state change tokenId --> load nft data for loan collateral
@@ -29,7 +31,7 @@ class LoanView extends React.Component<Props> {
   }
 
   render() {
-    const { loans, loanId, tinlake, auth } = this.props;
+    const { loans, loanId, tinlake, auth, transactions } = this.props;
     const { loan, loanState } = loans!;
     
     if (loanState === null || loanState === 'loading') { return null; }
@@ -40,6 +42,12 @@ class LoanView extends React.Component<Props> {
 
     const hasAdminPermissions = auth.user && ( auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling);
     const hasBorrowerPermissions = auth.user && loan && (loan.ownerOf === auth.user.address);
+
+    console.log(this.props, transactions);
+    if (transactions && transactions.transactionState &&  transactions.transactionState === 'processing') {
+      return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Processing Transaction...'} />;
+    }
+
     return <Box>
       <LoanData loan={loan!} />
 

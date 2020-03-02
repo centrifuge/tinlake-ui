@@ -3,6 +3,7 @@ import { Box, FormField, Button } from 'grommet';
 import NumberInput from '../../../components/NumberInput';
 import { Loan, borrow } from '../../../services/tinlake/actions';
 import { baseToDisplay, displayToBase } from 'tinlake';
+import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
@@ -11,6 +12,8 @@ interface Props {
   loan: Loan;
   tinlake: Tinlake;
   loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  transactionSubmitted?: () => Promise<void>;
+  responseReceived?: () => Promise<void>;
 }
 
 interface State {
@@ -32,16 +35,22 @@ class LoanBorrow extends React.Component<Props, State> {
       const { borrowAmount } = this.state;
       const { loan, tinlake } = this.props;
       this.setState({ is: 'loading' });
+      this.props.transactionSubmitted && this.props.transactionSubmitted();
       const res = await borrow(tinlake, loan, borrowAmount);
       if (res && res.errorMsg) {
+        this.props.responseReceived && this.props.responseReceived();
         this.setState({ is: 'error' });
         return;
       }
+      this.props.responseReceived && this.props.responseReceived();
       this.setState({ is: 'success' });
       this.props.loadLoan && this.props.loadLoan(tinlake, loan.loanId);
     } catch (e) {
+      this.props.responseReceived && this.props.responseReceived();
+      this.setState({ is: null });
       console.log(e);
     }
+    
 
   }
 
@@ -64,4 +73,4 @@ class LoanBorrow extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadLoan })(LoanBorrow);
+export default connect(state => state, { loadLoan, transactionSubmitted, responseReceived  })(LoanBorrow);

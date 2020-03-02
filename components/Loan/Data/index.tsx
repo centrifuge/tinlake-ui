@@ -10,11 +10,14 @@ interface Props {
 
 class LoanData extends React.Component<Props> {
   render() {
-    const { loanId, debt, principal, interestRate } =  this.props.loan;
+    const { loanId, status, debt, principal, interestRate } =  this.props.loan;
     return <Box>
-      <Box direction="row" pad={{ horizontal: 'medium' }}>
+      <Box direction="row" gap="medium"  pad={{ horizontal: 'medium' }}>
        <FormField label="Loan ID">
             <TextInput value={loanId} disabled />
+        </FormField>
+        <FormField label="Status">
+            <TextInput value={status} disabled />
         </FormField>
       </Box>
 
