@@ -133,7 +133,7 @@ export async function getLoans(tinlake: Tinlake): Promise<TinlakeResult> {
   }
 
   const loansList = [];
-  for (let i = 1; i < loans.length; i++) {
+  for (let i = 0; i < loans.length; i++) {
     loansList.push(loans[i]);
   }
   return {
