@@ -47,6 +47,8 @@ class LoanBorrow extends React.Component<Props, State> {
 
   render() {
     const { borrowAmount, is } = this.state;
+    const { loan } = this.props;
+    const ceilingSet = loan.principal.toString() !== '0';
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
         <FormField label="Borrow amount">
@@ -58,7 +60,7 @@ class LoanBorrow extends React.Component<Props, State> {
         </FormField>
       </Box>
       <Box align="start">
-        <Button onClick={this.borrow} primary label="Borrow" disabled={is === 'loading'} />
+        <Button onClick={this.borrow} primary label="Borrow" disabled={is === 'loading' || !ceilingSet } />
       </Box>
     </Box>;
   }

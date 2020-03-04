@@ -47,6 +47,9 @@ class LoanRepay extends React.Component<Props, State> {
 
   render() {
     const { repayAmount, is } = this.state;
+    const { loan } = this.props;
+    const hasDebt = loan.debt.toString() !== '0';
+
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
         <FormField label="Repay amount">
@@ -58,7 +61,7 @@ class LoanRepay extends React.Component<Props, State> {
         </FormField>
       </Box>
       <Box align="start">
-        <Button onClick={this.repay} primary label="Repay"  disabled={is === 'loading'} />
+        <Button onClick={this.repay} primary label="Repay"  disabled={is === 'loading' || !hasDebt} />
       </Box>
     </Box>;
   }
