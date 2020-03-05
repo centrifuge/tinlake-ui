@@ -23,7 +23,7 @@ class InvestorRedeem extends React.Component<Props, State> {
 
   componentWillMount() {
     const { investor } = this.props;
-    this.setState({ redeemAmount: (investor && investor.maxRedeemJunior || '0') });
+    this.setState({ redeemAmount: (investor && investor.tokenBalanceJunior || '0') });
   }
 
   redeemJunior = async () => {
