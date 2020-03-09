@@ -15,21 +15,22 @@ class InvestorMetric extends React.Component<Props> {
 
     return <Box pad={{ horizontal: 'medium' }}>
     <Box direction="row" gap="medium" margin={{ vertical: 'medium' }}>
-      <Box basis={'1/3'} gap="medium">
+      <Box basis={'1/2'} gap="medium">
         <DashboardMetric label="Junior token balance">
-            <NumberDisplay value={baseToDisplay(tokenBalanceJunior, 18)} suffix=" TIN" />
+            <NumberDisplay value={baseToDisplay(tokenBalanceJunior, 18)} suffix=" TIN" precision={18} />
         </DashboardMetric>
       </Box>
-      <Box basis={'1/3'} gap="medium">
+
+      <Box basis={'1/2'} gap="medium">
         <DashboardMetric label="Junior maximum supply amount">
-            <NumberDisplay value={baseToDisplay(maxSupplyJunior, 18)} suffix=" DAI"  />
+            <NumberDisplay value={baseToDisplay(maxSupplyJunior, 18)} suffix=" DAI" precision={18} />
         </DashboardMetric>
       </Box>
-      <Box basis={'1/3'} gap="medium">
+      {/* <Box basis={'1/3'} gap="medium">
         <DashboardMetric label="Junior maximum redeem amount">
-            <NumberDisplay value={baseToDisplay(maxRedeemJunior, 18)} suffix=" TIN" />
+            <NumberDisplay value={baseToDisplay(maxRedeemJunior, 18)} suffix=" TIN" precision={18} />
         </DashboardMetric>
-      </Box>
+      </Box> */}
     </Box>
   </Box>;
   }

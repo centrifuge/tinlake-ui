@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Tinlake, { baseToDisplay, displayToBase, interestRateToFee } from 'tinlake';
-import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
+import { Box, FormField, TextInput, Button, Text } from 'grommet';
 import Alert from '../../../components/Alert';
 import NftData from '../../../components/NftData';
 import { getNFT, issue, NFT, TinlakeResult } from '../../../services/tinlake/actions'

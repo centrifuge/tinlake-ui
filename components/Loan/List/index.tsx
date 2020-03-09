@@ -16,6 +16,7 @@ interface Props {
 class LoanList extends React.Component<Props> {
   render() {
     const { loans, userAddress } =  this.props;
+    console.log("address", userAddress);
 
     return <Box pad={{horizontal: "large"}} margin={{bottom: "xlarge"}}>
       <DataTable style={{ tableLayout: 'auto' }} data={loans} sortable columns={[
