@@ -3,6 +3,7 @@ import loansReducer from '../ducks/loans';
 import investmentsReducer from '../ducks/investments';
 import dashboardReducer from '../ducks/dashboard';
 import authReducer from '../ducks/auth';
+import transactionReducer from '../ducks/transactions';
 import thunk from 'redux-thunk';
 
 declare global {
@@ -19,7 +20,8 @@ const makeStore = (initialState: any) => {
         loans: loansReducer,
         investments: investmentsReducer,
         dashboard: dashboardReducer,
-        auth: authReducer
+        auth: authReducer,
+        transactions: transactionReducer
       },
     ),
     initialState,

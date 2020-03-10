@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Tinlake from 'tinlake';
 import { AuthState } from '../../../ducks/auth';
 import { InvestorState, loadInvestor } from '../../../ducks/investments';
 import { connect } from 'react-redux';
@@ -11,13 +10,16 @@ import { isValidAddress } from '../../../utils/address';
 import InvestorSupply from '../Supply';
 import InvestorRedeem from '../Redeem';
 import InvestorAllowance from '../Allowance';
-import InvestorMetric from '../../../components/Investment/Metric'
+import InvestorMetric from '../../../components/Investment/Metric';
+import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
 
 interface Props {
   tinlake: Tinlake;
   auth: AuthState;
   loadInvestor?: (tinlake: Tinlake, address: string) => Promise<void>;
   investments?: InvestorState;
+  transactions?: TransactionState;
+  resetTransactionState?: () => void;
 }
 
 interface State {
@@ -30,6 +32,9 @@ class InvestmentView extends React.Component<Props, State> {
 
   showInvestor = async () => {
     const { investorAddress } = this.state;
+
+    this.props.resetTransactionState && this.props.resetTransactionState();
+
     this.setState({ is: null, errorMsg: '' });
     if (!isValidAddress(investorAddress)) {
       this.setState({ is: "error", errorMsg: 'Please input a valid Ethereum address.' });
@@ -42,22 +47,46 @@ class InvestmentView extends React.Component<Props, State> {
     this.setState({
       investorAddress: ""
     });
+    this.props.resetTransactionState && this.props.resetTransactionState();
+  }
+
+  componentWillUnmount() {
+    this.props.resetTransactionState && this.props.resetTransactionState();
   }
 
   render() {
     const { investorAddress, is, errorMsg } = this.state;
-    const { tinlake, investments, auth } = this.props;
+    const { tinlake, investments, auth, transactions } = this.props;
 
     const investor = investments && investments.investor;
     const investorState = investments && investments.investorState
 
     const isJuniorAdmin = auth.user && auth.user.permissions.canSetInvestorAllowanceJunior;
     const isInvestor = (auth.user && investor) && (auth.user.address.toLowerCase() === investor.address.toLowerCase());
+   
     if (investorState && investorState === 'loading') {
-      return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
+      return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading Investor information...'} />;
+    }
+
+    if (transactions && transactions.transactionState && transactions.transactionState === 'processing') {
+      return <Spinner height={'calc(100vh - 89px - 84px)'} message={transactions.loadingMessage || 'Processing Transaction. This may take a fev seconds. Please wait...'} />;
     }
 
     return <Box>
+
+      {transactions && transactions.successMessage &&
+      <Box pad={{ horizontal: 'medium' }} margin={{ bottom: "large" }}>
+          <Alert type="success">
+            {transactions.successMessage} </Alert>
+      </Box>}
+
+      {transactions && transactions.errorMessage &&
+      <Box pad={{ horizontal: 'medium' }} margin={{ bottom: "large" }}>
+          <Alert type="error">
+            {transactions.errorMessage}
+          </Alert>
+      </Box>}
+
       <Box pad={{ horizontal: 'medium' }}>
         {is === 'error' && <Alert type="error">
           {errorMsg && <div>{errorMsg}</div>}
@@ -128,7 +157,7 @@ class InvestmentView extends React.Component<Props, State> {
 }
 
 
-export default connect(state => state, { loadInvestor })(InvestmentView);
+export default connect(state => state, { loadInvestor, resetTransactionState })(InvestmentView);
 
 
 const InvestorDataContainer = styled(Box)`

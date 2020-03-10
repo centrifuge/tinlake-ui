@@ -376,7 +376,7 @@ export async function redeemJunior(tinlake: tinlake, redeemAmount: string) {
 function loggedError(error: any, message: string, id: string) {
   console.log(`${message} ${id}`, error);
   return {
-    errorMsg: `${message} ${id}`,
+    errorMsg: `${error} - ${message} ${id}`,
     id
   };
 }
