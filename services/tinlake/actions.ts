@@ -192,7 +192,14 @@ export async function borrow(tinlake: tinlake, loan: Loan, amount: string) {
   const { loanId } = loan;
   const address = tinlake.ethConfig.from;
 
+  // make sure tranche has enough funds
+  const trancheReserve = await tinlake.getTrancheBalance();
+  if(new BN(amount).cmp(trancheReserve) > 0) {
+    return loggedError({},'tranche reserve does not have enough funds.', loanId);
+  }
+
   // approve nft
+  
   let approveRes;
   try {
     approveRes = await tinlake.approveNFT(bnToHex(loan.tokenId), contractAddresses['SHELF']);
@@ -369,7 +376,7 @@ export async function redeemJunior(tinlake: tinlake, redeemAmount: string) {
 function loggedError(error: any, message: string, id: string) {
   console.log(`${message} ${id}`, error);
   return {
-    errorMsg: `${message} ${id}`,
+    errorMsg: `${error} - ${message} ${id}`,
     id
   };
 }

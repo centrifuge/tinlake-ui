@@ -31,8 +31,8 @@ class Dashboard extends React.Component<Props> {
       </SecondaryHeader>
       { (loans!.loansState === 'loading') ?
         <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />  :
-        <LoanListData loans={loans!.loans} userAddress={tinlake.ethConfig.ethFrom}> </LoanListData>
-    }
+        <LoanListData loans={loans!.loans} userAddress={tinlake.ethConfig.from}> </LoanListData>
+      }
 
       <Box pad={{ horizontal: 'medium', vertical: 'medium' }}>
       </Box>

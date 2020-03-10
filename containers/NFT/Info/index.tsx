@@ -22,6 +22,7 @@ class NftData extends React.Component<Props> {
     if (!data.nftData) {
       return <Text> No NFT metadata found on this token!</Text>;
     }
+
     return nftDataDefinition.displayedFields.map((field: DisplayedField) =>
         <Box basis={'1/4'} gap="medium" key={field.key}>
           <NftDataField displayedField={field} value={data.nftData[field.key]} />

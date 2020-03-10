@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Tinlake, { baseToDisplay, displayToBase, interestRateToFee } from 'tinlake';
-import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
+import { Box, FormField, TextInput, Button, Text } from 'grommet';
 import Alert from '../../../components/Alert';
 import NftData from '../../../components/NftData';
 import { getNFT, issue, NFT, TinlakeResult } from '../../../services/tinlake/actions'
@@ -88,6 +87,7 @@ class IssueLoan extends React.Component<Props, State> {
       {is === 'loading' ?
         <Spinner height={'calc(100vh - 89px - 84px)'} message={'Initiating the opening loan process. Please confirm the pending transactions in MetaMask, and do not leave this page until all transactions have been confirmed.'} />
         :
+        <Box>
         <Box pad={{ horizontal: 'medium' }}>
           {is === 'success' && <Alert type="success">
             Successfully opened loan for Token ID {tokenId}</Alert>}
@@ -101,9 +101,9 @@ class IssueLoan extends React.Component<Props, State> {
               <b>Please paste your NFT ID below to open a loan:</b>
             </Box>}
         </Box>
-      }
+   
       
-      {is !== 'success' && 
+      {is !== 'success' &&
       <Box pad={{ horizontal: 'medium' }} >
         <Box direction="row" gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
           <Box basis={'1/4'} gap="medium">
@@ -134,6 +134,8 @@ class IssueLoan extends React.Component<Props, State> {
           }
         </Box>
       }
+      </Box>
+    }
     </Box>
   }
 }

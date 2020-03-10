@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Box, FormField, Button } from 'grommet';
 import NumberInput from '../../../components/NumberInput';
 import { Investor, supplyJunior } from '../../../services/tinlake/actions';
+import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { baseToDisplay, displayToBase } from 'tinlake';
 import { loadInvestor } from '../../../ducks/investments';
 import { connect } from 'react-redux';
@@ -11,12 +12,12 @@ interface Props {
   investor: Investor;
   tinlake: Tinlake;
   loadInvestor?: (tinlake: Tinlake, address: string, refresh?: boolean) => Promise<void>;
+  transactionSubmitted?: (loadingMessage: string) => Promise<void>;
+  responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
 }
 
 interface State {
   supplyAmount: string;
-  is: 'loading' | 'success' | 'error' | null;
-  errorMsg: string | null;
 }
 
 class InvestorSupply extends React.Component<Props, State> {
@@ -27,29 +28,29 @@ class InvestorSupply extends React.Component<Props, State> {
   }
 
   supplyJunior = async () => {
+    this.props.transactionSubmitted && this.props.transactionSubmitted("Investment initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.");
     try {
       await authTinlake();
       const { supplyAmount } = this.state;
       const { investor, tinlake } = this.props;
-      this.setState({ is: 'loading' });
-
       const res = await supplyJunior(tinlake, supplyAmount);
-      if (res && res.errorMs) {
-        this.setState({ is: 'error' });
+      if (res && res.errorMsg) {
+        this.props.responseReceived && this.props.responseReceived(null, `Investment failed. ${res.errorMsg}`);
         return;
       }
-      this.setState({ is: 'success' });
+      this.props.responseReceived && this.props.responseReceived(`Investment successful. Please check your wallet for TIN tokens.`, null);
       this.props.loadInvestor && this.props.loadInvestor(tinlake, investor.address);
     } catch (e) {
+      this.props.responseReceived && this.props.responseReceived(null, `Investment failed. ${e}`);
       console.log(e);
     }
   }
 
   render() {
-    const { supplyAmount, is } = this.state;
+    const { supplyAmount } = this.state;
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
-        <FormField label="Supply amount">
+        <FormField label="Investment amount">
           <NumberInput value={baseToDisplay(supplyAmount, 18)} suffix=" DAI" precision={18}
             onValueChange={({ value }) =>
               this.setState({ supplyAmount: displayToBase(value) })}
@@ -57,10 +58,10 @@ class InvestorSupply extends React.Component<Props, State> {
         </FormField>
       </Box>
       <Box align="start">
-        <Button onClick={this.supplyJunior} primary label="Supply" disabled={is === 'loading'} />
+        <Button onClick={this.supplyJunior} primary label="Invest"  />
       </Box>
     </Box>;
   }
 }
 
-export default connect(state => state, { loadInvestor })(InvestorSupply);
+export default connect(state => state, { loadInvestor, transactionSubmitted, responseReceived })(InvestorSupply);
