@@ -10,7 +10,7 @@ import { Spinner } from '@centrifuge/axis-spinner';
 import NumberInput from '../NumberInput';
 
 interface Props {
-  tinlake: Tinlake;
+  tinlake: any;
 }
 
 interface State {

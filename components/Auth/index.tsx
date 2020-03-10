@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Tinlake, { Address } from 'tinlake';
 import { AuthState, loadUser, loadNetwork, observeAuthChanges } from '../../ducks/auth';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../services/tinlake';
@@ -10,14 +9,14 @@ interface ExtendedAuthState extends AuthState {
 }
 
 interface Props {
-  tinlake: Tinlake;
+  tinlake: any;
   waitForAuthentication?: boolean;
   waitForAuthorization?: boolean;
   render: (auth: ExtendedAuthState) => React.ReactElement | null | false;
   auth?: AuthState;
-  loadUser?: (tinlake: Tinlake, address: Address) => Promise<void>;
+  loadUser?: (tinlake: any, address: string) => Promise<void>;
   loadNetwork?: (network: string) => Promise<void>;
-  observeAuthChanges?: (tinlake: Tinlake) => Promise<void>;
+  observeAuthChanges?: (tinlake: any) => Promise<void>;
 }
 
 interface State {

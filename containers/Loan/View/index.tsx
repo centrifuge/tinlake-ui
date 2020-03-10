@@ -14,10 +14,10 @@ import { AuthState } from '../../../ducks/auth';
 import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
 
 interface Props {
-  tinlake: Tinlake;
+  tinlake: any;
   loanId?: string;
   loans?: LoansState;
-  loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  loadLoan?: (tinlake: any, loanId: string, refresh?: boolean) => Promise<void>;
   auth: AuthState;
   transactions?: TransactionState;
   resetTransactionState?: () => void

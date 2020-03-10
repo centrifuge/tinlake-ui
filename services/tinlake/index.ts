@@ -3,7 +3,7 @@ import config from '../../config';
 import Eth from 'ethjs';
 
 const { contractAddresses, nftDataDefinition, transactionTimeout, rpcUrl } = config;
-let tinlake: Tinlake | null = null;
+let tinlake: any | null = null;
 let authing = false;
 let authed = false;
 

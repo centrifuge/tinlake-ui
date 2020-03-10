@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 
 interface Props {
   loan: Loan;
-  tinlake: Tinlake;
-  loadLoan?: (tinlake: Tinlake, loanId: string, refresh?: boolean) => Promise<void>;
+  tinlake: any;
+  loadLoan?: (tinlake: any, loanId: string, refresh?: boolean) => Promise<void>;
   transactionSubmitted?: (loadingMessage: string) => Promise<void>;
   responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
 }

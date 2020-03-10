@@ -2,10 +2,9 @@ import * as React from 'react';
 import { AuthState } from '../../../ducks/auth';
 import { InvestorState, loadInvestor } from '../../../ducks/investments';
 import { connect } from 'react-redux';
-import { Box, FormField, TextInput, Button, Heading, Text } from 'grommet';
+import { Box, FormField, TextInput, Button, Heading} from 'grommet';
 import Alert from '../../../components/Alert';
 import { Spinner } from '@centrifuge/axis-spinner';
-import styled from 'styled-components';
 import { isValidAddress } from '../../../utils/address';
 import InvestorSupply from '../Supply';
 import InvestorRedeem from '../Redeem';
@@ -14,9 +13,9 @@ import InvestorMetric from '../../../components/Investment/Metric';
 import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
 
 interface Props {
-  tinlake: Tinlake;
+  tinlake: any;
   auth: AuthState;
-  loadInvestor?: (tinlake: Tinlake, address: string) => Promise<void>;
+  loadInvestor?: (tinlake: any, address: string) => Promise<void>;
   investments?: InvestorState;
   transactions?: TransactionState;
   resetTransactionState?: () => void;
@@ -118,12 +117,9 @@ class InvestmentView extends React.Component<Props, State> {
 
       {is !== 'error' && investorState && investorState === 'found' && investor && investor.address === investorAddress &&
         <Box>
-
           <Box pad={{ horizontal: 'medium' }} margin={{ top: "large", bottom: "large" }} >
             <Box>
-              <InvestorDataContainer>
-                <InvestorMetric investor={investor} />
-              </InvestorDataContainer>
+              <InvestorMetric investor={investor} />
             </Box>
           </Box>
 
@@ -143,6 +139,7 @@ class InvestmentView extends React.Component<Props, State> {
               <Box gap="medium" align="start" margin={{ bottom: "medium" }} >
                 <Heading level="5" margin="none">Supply / Redeem </Heading>
               </Box>
+
               <Box direction="row">
                 <InvestorSupply investor={investor!} tinlake={tinlake}> </InvestorSupply>
                 <InvestorRedeem investor={investor!} tinlake={tinlake}> </InvestorRedeem>
@@ -158,10 +155,3 @@ class InvestmentView extends React.Component<Props, State> {
 
 
 export default connect(state => state, { loadInvestor, resetTransactionState })(InvestmentView);
-
-
-const InvestorDataContainer = styled(Box)`
-  padding: 20px;
-  border-radius: 3px;
-  background: #f7f7f7;
-`;
