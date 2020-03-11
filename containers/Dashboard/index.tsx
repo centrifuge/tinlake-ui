@@ -3,17 +3,16 @@ import Tinlake from 'tinlake';
 import { connect } from 'react-redux';
 import { Box, Heading } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import { DashboardState, subscribeDashboardData } from '../../ducks/dashboard';
+import { AlayticsState } from '../../ducks/analyics';
 import { LoansState, loadLoans } from '../../ducks/loans';
 import { Spinner } from '@centrifuge/axis-spinner';
 import LoanListData from  '../../components/Loan/List';
 
 interface Props {
-  tinlake: Tinlake;
-  dashboard?: DashboardState;
+  tinlake: any;
+  dashboard?: Analyticstate;
   loans?: LoansState;
-  loadLoans?: (tinlake: Tinlake) => Promise<void>;
-  subscribeDashboardData?: (tinlake: Tinlake) => () => void;
+  loadLoans?: (tinlake: any) => Promise<void>;
 }
 
 class Dashboard extends React.Component<Props> {
@@ -40,4 +39,4 @@ class Dashboard extends React.Component<Props> {
   }
 }
 
-export default connect(state => state, { subscribeDashboardData, loadLoans })(Dashboard);
+export default connect(state => state, { loadLoans })(Dashboard);

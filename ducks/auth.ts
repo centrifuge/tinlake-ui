@@ -64,7 +64,7 @@ export default function reducer(state: AuthState = initialState,
 
 // side effects, only as applicable
 // e.g. thunks, epics, etc
-export function loadUser(tinlake: Tinlake, address: Address):
+export function loadUser(tinlake: any, address: Address):
   ThunkAction<Promise<void>, { auth: AuthState }, undefined, Action> {
   return async (dispatch, getState) => {
     const { auth } = getState();
@@ -133,7 +133,7 @@ export function loadNetwork(network: string):
 
 let providerChecks: number;
 
-export function observeAuthChanges(tinlake: Tinlake):
+export function observeAuthChanges(tinlake: any):
   ThunkAction<Promise<void>, { auth: AuthState }, undefined, Action> {
   return async (dispatch, getState) => {
 

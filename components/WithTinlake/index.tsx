@@ -3,12 +3,12 @@ import {Tinlake} from 'tinlake';
 import { getTinlake } from '../../services/tinlake';
 
 interface Props {
-  render: (tinlake: Tinlake) => React.ReactElement;
+  render: (tinlake: any) => React.ReactElement;
 }
 
 class WithTinlake extends React.Component<Props> {
   state = { loading: true };
-  tinlake: Tinlake |null = null;
+  tinlake: any |null = null;
   isMounted = false;
 
   componentWillMount() {}

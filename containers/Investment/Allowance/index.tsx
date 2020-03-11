@@ -10,8 +10,8 @@ import { authTinlake } from '../../../services/tinlake';
 
 interface Props {
   investor: Investor;
-  tinlake: Tinlake;
-  loadInvestor?: (tinlake: Tinlake, address: string, refresh?: boolean) => Promise<void>;
+  tinlake: any;
+  loadInvestor?: (tinlake: any, address: string, refresh?: boolean) => Promise<void>;
   transactionSubmitted?: (loadingMessage: string) => Promise<void>;
   responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
 }
@@ -51,7 +51,7 @@ class InvestorAllowance extends React.Component<Props, State> {
     const { supplyAmount, redeemAmount } = this.state;
     return <Box gap="medium" direction="row" margin={{ right: "large" }}>
        <Box basis={'1/3'}>
-          <FormField label="Maximum junior investment amount">
+          <FormField label="Junior maximum investment amount">
             <NumberInput value={baseToDisplay(supplyAmount, 18)} suffix=" DAI" precision={18}
               onValueChange={({ value }) =>
                 this.setState({ supplyAmount: displayToBase(value) })}
@@ -59,7 +59,7 @@ class InvestorAllowance extends React.Component<Props, State> {
           </FormField>
         </Box>
         <Box basis={'1/3'}>
-          <FormField label="Maximum junior redeem amount">
+          <FormField label="Junior maximum redeem amount">
             <NumberInput value={baseToDisplay(redeemAmount, 18)} suffix=" TIN" precision={18}
               onValueChange={({ value }) =>
                 this.setState({ redeemAmount: displayToBase(value) })}
