@@ -36,7 +36,7 @@ export default function reducer(state: LoansState = initialState,
   }
 }
 
-export function loadLoans(tinlake: Tinlake):
+export function loadLoans(tinlake: any):
   ThunkAction<Promise<void>, LoansState, undefined, Action>  {
   return async (dispatch) => {
     dispatch({ type: LOAD });
@@ -45,16 +45,16 @@ export function loadLoans(tinlake: Tinlake):
   };
 }
 
-export function loadLoan(tinlake: Tinlake, loanId: string, refresh = false):
+export function loadLoan(tinlake: any, loanId: string, refresh = false):
   ThunkAction<Promise<void>, LoansState, undefined, Action> {
   return async (dispatch) => {
     if (!refresh) {
       dispatch({ type: LOAD_LOAN });
     }
     const result : TinlakeResult  = await getLoan(tinlake, loanId);
-
-    if (result.errorMsg) {
+    if (result.errorMsg || !result.data) {
       dispatch({ type: LOAN_NOT_FOUND });
+      return;
     }   
     dispatch({ type: RECEIVE_LOAN, loan: result.data});
     

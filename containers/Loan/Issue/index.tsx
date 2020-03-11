@@ -9,7 +9,7 @@ import LoanView from '../View';
 import { AuthState } from '../../../ducks/auth';
 
 interface Props {
-  tinlake: Tinlake;
+  tinlake: any;
   tokenId: string;
   auth: AuthState;
 }

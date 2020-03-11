@@ -28,7 +28,7 @@ export default function reducer(state: InvestorState = initialState,
   }
 }
 
-export function loadInvestor(tinlake: Tinlake, address: string, refresh = false):
+export function loadInvestor(tinlake: any, address: string, refresh = false):
   ThunkAction<Promise<void>, InvestorState, undefined, Action> {
   return async (dispatch) => {
     if (!refresh) {
