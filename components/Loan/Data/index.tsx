@@ -19,9 +19,6 @@ class LoanData extends React.Component<Props> {
         <FormField label="Status">
           <TextInput value={status} disabled />
         </FormField>
-        <FormField label="Status">
-            <TextInput value={status} disabled />
-        </FormField>
       </Box>
 
       
