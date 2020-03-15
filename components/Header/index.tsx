@@ -64,9 +64,10 @@ class Header extends React.Component<HeaderProps> {
 
         {menuItems.filter((item) => {
           return (
-            (user && isDemo)
-            )
-            && !item.secondary;
+            user
+            &&  (isDemo && item.env === "demo"  || item.env === "")
+            && !item.secondary
+          )
         }
         )
         .map((item) => {

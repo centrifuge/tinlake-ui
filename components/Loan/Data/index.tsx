@@ -20,9 +20,7 @@ class LoanData extends React.Component<Props> {
           <TextInput value={status} disabled />
         </FormField>
       </Box>
-
       
-
       <Box direction="row" pad={{ horizontal: 'medium' }} gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
         <Box basis={'1/3'} gap="medium">
           <FormField label="Maximum borrow amount">
@@ -40,7 +38,7 @@ class LoanData extends React.Component<Props> {
           </FormField>
         </Box>
       </Box>       
-    </Box>;
+    </Box>
   }
 }
 

@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "browser": {
+    "child_process": false,
+    "fs": false
+  },
   "scripts": {
     "dev": "next",
     "build": "next build",

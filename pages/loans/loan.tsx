@@ -45,7 +45,7 @@ class LoanPage extends React.Component<Props> {
                   Please authenticate to access this page </Alert>
               } />
           } />
-        </Box>;
+        </Box>
       </Box>
     </Box>
   }
