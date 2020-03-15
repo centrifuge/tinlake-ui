@@ -78,12 +78,6 @@ export async function getNFT(tinlake: any, tokenId: string) {
   };
 }
 
-async function createProxyIfNotExists(tinlake: any) : Promise<string> {
-  // check if proxy exists 
-  // if not create
-  // return address
-  return '';
-}
 export async function issue(tinlake: any, tokenId: string) {
 
   
@@ -98,12 +92,7 @@ export async function issue(tinlake: any, tokenId: string) {
     return loggedError({}, 'Could Issue loan.', tokenId)
   }
 
-  // TODO: add DSNote to issue function
-  // const loanId = result.events[0].data[2].toString();
-  // return {
-  //     data: loanId
-  // }
-
+  // TODO: use NFT lookup
   const loanCount: BN = await tinlake.loanCount();
   const loanId = (loanCount.toNumber() - 1).toString()
   return {
@@ -201,7 +190,6 @@ export async function getAnalytics(tinlake: any) {
   try {
     const availableFunds = await tinlake.getTrancheBalance();
     const tokenPriceJunior = await tinlake.getTokenPriceJunior();
-    console.log("tokenPriceJunior", tokenPriceJunior.toString());
     return {
       data: {
         availableFunds,
