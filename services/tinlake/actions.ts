@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import Tinlake, { bnToHex, interestRateToFee } from 'tinlake';
+import { bnToHex, interestRateToFee } from 'tinlake';
 import config from '../../config';
 
 const { contractAddresses } = config;
@@ -79,6 +79,8 @@ export async function getNFT(tinlake: any, tokenId: string) {
 }
 
 export async function issue(tinlake: any, tokenId: string) {
+
+  
   let result;
   try {
     result = await tinlake.issue(nftRegistryAddress, tokenId);
@@ -90,11 +92,7 @@ export async function issue(tinlake: any, tokenId: string) {
     return loggedError({}, 'Could Issue loan.', tokenId)
   }
 
-  // TODO: add DSNote to issue function
-  // const loanId = result.events[0].data[2].toString();
-  // return {
-  //     data: loanId
-  // }
+  // TODO: use NFT lookup
   const loanCount: BN = await tinlake.loanCount();
   const loanId = (loanCount.toNumber() - 1).toString()
   return {
@@ -191,9 +189,11 @@ export async function setInterest(tinlake: any, loanId: string, debt: string, ra
 export async function getAnalytics(tinlake: any) {
   try {
     const availableFunds = await tinlake.getTrancheBalance();
+    const tokenPriceJunior = await tinlake.getTokenPriceJunior();
     return {
       data: {
-        availableFunds
+        availableFunds,
+        tokenPriceJunior
       }
     }
   } catch(e) {
@@ -202,7 +202,6 @@ export async function getAnalytics(tinlake: any) {
 
 
 } 
-
 
 export async function borrow(tinlake: any, loan: Loan, amount: string) {
   const { loanId } = loan;
@@ -261,15 +260,11 @@ export async function borrow(tinlake: any, loan: Loan, amount: string) {
 
 // repay full loan debt
 export async function repay(tinlake: any, loan: Loan) {
-  const repayBuffer = new BN('1000000000000000000');
   const { loanId } = loan;
 
-  // add buffer to repayAmount
-  const debt = await tinlake.getDebt(loanId);
-  // add buffer to cover for compounding
-  const repayAmount= debt.add(repayBuffer);
 
-  // approve currency
+  // user entrie user balance as repay amount to make sure that enough funds are provided to cover the entire debt
+  const repayAmount = await tinlake.getCurrencyBalance(tinlake.ethConfig.from);
   let approveRes;
   try {
     approveRes = await tinlake.approveCurrency(contractAddresses['SHELF'], repayAmount);
@@ -277,7 +272,7 @@ export async function repay(tinlake: any, loan: Loan) {
     return loggedError(e, 'Could not approve.', loanId);
   }
   if (approveRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not approve', loanId);
+    return loggedError({"response": approveRes}, 'Could not approve', loanId);
   }
    
   // repay
@@ -288,7 +283,7 @@ export async function repay(tinlake: any, loan: Loan) {
     return loggedError(e, 'Could not repay.', loanId);
   }
   if (repayRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not repay', loanId);
+    return loggedError({"response" : repayRes}, 'Could not repay', loanId);
   }
 
   // unlock 
