@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Image, Text, Anchor } from 'grommet';
+import { Box, Button, Image, Text, Anchor, ResponsiveContext } from 'grommet';
 import {Menu as MenuIcon, User as UserIcon, Close as CloseIcon} from "grommet-icons";
 import { connect } from 'react-redux';
 import Link from 'next/link';
@@ -71,7 +71,8 @@ class Header extends React.Component<HeaderProps> {
         }
     }
 };
-    return <Box
+    return <ResponsiveContext.Consumer>{ size => size === "large" ? (
+      <Box
     justify="center"
     align="center"
     height="xsmall"
@@ -92,7 +93,72 @@ class Header extends React.Component<HeaderProps> {
       <Link href="/">
         <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
       </Link>
-           
+      {user && <Box fill={false}>
+        <NavBar 
+        border={false}
+          theme={theme}
+          menuItems={menuItems.filter(item => 
+          {
+            return (
+              (user && isDemo ) ||
+              (user && isAdmin) && item.permission === "admin" ||
+              (user && !isAdmin) && item.permission === 'borrower' ||
+              !item.permission
+              ) 
+              && !item.secondary
+          }
+          )
+          } 
+          selectedRoute={selectedRoute} 
+          onRouteClick={
+            (item : MenuItem) => {
+                onRouteClick(item.route);
+            }
+    }/></Box>}
+      { !user && <Button onClick={this.connectAccount} label="Connect" /> }
+      <Box direction="row" gap="medium">
+      { user &&       
+        <Box direction="row" gap={itemGap} align="center" justify="end">
+        { isAdmin &&  <Badge text={'Admin'} /> }
+        </Box> 
+      }
+      { user && 
+        <Box direction="column">
+          <Box direction="row" gap={itemGap} align="center" justify="start">
+            <Text> { formatAddress(address || '') } </Text>
+          </Box>
+          <Box direction="row" justify="start" >
+            { network && <Text  style={{ color: '#808080' , lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text> }
+          </Box>
+        </Box>
+      }
+      { isDemo && 
+      <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="blank" label="Help"  style={{ textDecoration: 'none', fontWeight: 900}} />
+      }</Box>
+    </Box>
+    </Box>)
+    : 
+    (<Box
+    justify="center"
+    align="center"
+    height="xsmall"
+    fill="horizontal"
+    style={{ position: 'sticky', top: 0, height: '90px', zIndex: 1 }}
+    background="white"
+    border={{ side: 'bottom', color: 'light-4' }}
+  >
+    <Box
+      direction="row"
+      fill="vertical"
+      align="center"
+      justify="between"
+      pad={{ horizontal: 'medium' }}
+      gap={sectionGap}
+      width="xlarge"
+    >
+      <Link href="/">
+        <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
+      </Link>
       { !user && <Button onClick={this.connectAccount} label="Connect" /> }
       { user &&       
         <Box direction="row" gap={itemGap} align="center" justify="end">
@@ -135,7 +201,8 @@ class Header extends React.Component<HeaderProps> {
             }
     }/></Box>}
     </Box>
-    </Box>
+    
+    </Box>)}</ResponsiveContext.Consumer>
 
   }
 }
