@@ -1,12 +1,18 @@
 import React from 'react';
 import { Box, Button, Image, Text, Anchor } from 'grommet';
+import {Menu as MenuIcon, User as UserIcon, Close as CloseIcon} from "grommet-icons";
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import Router from 'next/router';
 import { AuthState } from '../../ducks/auth';
 import Badge from '../Badge';
 import { formatAddress } from '../../utils/formatAddress';
 import config from '../../config'
 import { authTinlake } from '../../services/tinlake';
+
+import { NavBar } from "./navbar";
+//import { NavBar } from "@centrifuge/axis-nav-bar";
+
 
 const { isDemo } = config
 export interface MenuItem {
@@ -24,6 +30,12 @@ interface HeaderProps {
 
 class Header extends React.Component<HeaderProps> {
 
+  constructor(props: HeaderProps) {
+    super(props);
+    this.state = {
+      chosenRoute: '/'
+    };
+  }
   connectAccount = async () => {
     try {
       await authTinlake();
@@ -42,6 +54,23 @@ class Header extends React.Component<HeaderProps> {
     const itemGap = 'small';
     const logoUrl = isDemo && "/static/demo_logo.svg" || "/static/logo.svg";
 
+    const onRouteClick = (route: string ) => {
+      this.setState({chosenRoute :route});
+      if (route.startsWith('/')) {
+          Router.push(route);
+      } else {
+          window.open(route);
+      }
+  };
+  const theme = {
+    navBar: {
+        icons: {
+            menu: MenuIcon,
+            close: CloseIcon,
+            user: UserIcon
+        }
+    }
+};
     return <Box
     justify="center"
     align="center"
@@ -63,34 +92,10 @@ class Header extends React.Component<HeaderProps> {
       <Link href="/">
         <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
       </Link>
-      <Box direction="row" gap={itemGap} margin={{ right: 'auto' }}>
 
-        {menuItems.filter(item => 
-        {
-          return (
-            (user && isDemo ) ||
-            (user && isAdmin) && item.permission === "admin" ||
-            (user && !isAdmin) && item.permission === 'borrower' ||
-            !item.permission
-            ) 
-            && !item.secondary
-        }
-        )
-        .map((item) => {
-          const anchorProps = {
-            ...(item.route === selectedRoute ?
-              { className: 'selected', color: '#0828BE' } : {}),
-          };
-          return <Link href={item.route} key={item.label}><Button
-            plain
-            label={item.label}
-            {...anchorProps}
-          /></Link>;
-        },
-        )}
-      </Box>
+      
       { !user && <Button onClick={this.connectAccount} label="Connect" /> }
-      { user && 
+      { user &&       
         <Box direction="row" gap={itemGap} align="center" justify="end">
         { isAdmin &&  <Badge text={'Admin'} style={{  }} /> }
         </Box> 
@@ -106,10 +111,31 @@ class Header extends React.Component<HeaderProps> {
         </Box>
       }
       { isDemo && 
-      <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" primary target="blank" label="Help"  style={{ textDecoration: 'none', fontWeight: 900}} />
+      <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="blank" label="Help"  style={{ textDecoration: 'none', fontWeight: 900}} />
       }
     </Box>
-  </Box>;
+    <NavBar 
+      theme={theme}
+        menuItems={menuItems.filter(item => 
+        {
+          return (
+            (user && isDemo ) ||
+            (user && isAdmin) && item.permission === "admin" ||
+            (user && !isAdmin) && item.permission === 'borrower' ||
+            !item.permission
+            ) 
+            && !item.secondary
+        }
+        )
+        } 
+        selectedRoute={selectedRoute} 
+        onRouteClick={
+          (item : MenuItem) => {
+              onRouteClick(item.route);
+          }
+  }/>
+    </Box>
+
   }
 }
 
