@@ -92,8 +92,7 @@ class Header extends React.Component<HeaderProps> {
       <Link href="/">
         <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
       </Link>
-
-      
+           
       { !user && <Button onClick={this.connectAccount} label="Connect" /> }
       { user &&       
         <Box direction="row" gap={itemGap} align="center" justify="end">
@@ -113,27 +112,29 @@ class Header extends React.Component<HeaderProps> {
       { isDemo && 
       <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="blank" label="Help"  style={{ textDecoration: 'none', fontWeight: 900}} />
       }
-    </Box>
-    <NavBar 
-      theme={theme}
-        menuItems={menuItems.filter(item => 
-        {
-          return (
-            (user && isDemo ) ||
-            (user && isAdmin) && item.permission === "admin" ||
-            (user && !isAdmin) && item.permission === 'borrower' ||
-            !item.permission
-            ) 
-            && !item.secondary
-        }
-        )
-        } 
-        selectedRoute={selectedRoute} 
-        onRouteClick={
-          (item : MenuItem) => {
-              onRouteClick(item.route);
+      {user && <Box fill={false}>
+        <NavBar 
+        border={false}
+          theme={theme}
+          menuItems={menuItems.filter(item => 
+          {
+            return (
+              (user && isDemo ) ||
+              (user && isAdmin) && item.permission === "admin" ||
+              (user && !isAdmin) && item.permission === 'borrower' ||
+              !item.permission
+              ) 
+              && !item.secondary
           }
-  }/>
+          )
+          } 
+          selectedRoute={selectedRoute} 
+          onRouteClick={
+            (item : MenuItem) => {
+                onRouteClick(item.route);
+            }
+    }/></Box>}
+    </Box>
     </Box>
 
   }
