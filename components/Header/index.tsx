@@ -73,27 +73,23 @@ class Header extends React.Component<HeaderProps> {
 };
     return <ResponsiveContext.Consumer>{ size => size === "large" ? (
       <Box
-    justify="center"
     align="center"
     height="xsmall"
     fill="horizontal"
     style={{ position: 'sticky', top: 0, height: '90px', zIndex: 1 }}
     background="white"
     border={{ side: 'bottom', color: 'light-4' }}
+    direction="row"
+    justify="evenly"
+    pad={{ horizontal: 'medium' }}
+    gap={sectionGap}
+    width="xlarge"
   >
-    <Box
-      direction="row"
-      fill="vertical"
-      align="center"
-      justify="between"
-      pad={{ horizontal: 'medium' }}
-      gap={sectionGap}
-      width="xlarge"
-    >
+    <Box direction="row" align="center">
       <Link href="/">
         <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
       </Link>
-      {user && <Box fill={false}>
+      <Box fill={false}>
         <NavBar 
         border={false}
           theme={theme}
@@ -114,9 +110,9 @@ class Header extends React.Component<HeaderProps> {
             (item : MenuItem) => {
                 onRouteClick(item.route);
             }
-    }/></Box>}
-      { !user && <Button onClick={this.connectAccount} label="Connect" /> }
+    }/></Box></Box>
       <Box direction="row" gap="medium">
+      { !user && <Button onClick={this.connectAccount} label="Connect" /> }
       { user &&       
         <Box direction="row" gap={itemGap} align="center" justify="end">
         { isAdmin &&  <Badge text={'Admin'} /> }
@@ -136,7 +132,7 @@ class Header extends React.Component<HeaderProps> {
       <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="blank" label="Help"  style={{ textDecoration: 'none', fontWeight: 900}} />
       }</Box>
     </Box>
-    </Box>)
+    )
     : 
     (<Box
     justify="center"
