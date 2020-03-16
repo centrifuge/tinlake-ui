@@ -40,7 +40,7 @@ class LoanListPage extends React.Component {
           } />
         </Box>
       </Box>
-    </Box>;
+    </Box>
   }
 }
 export default LoanListPage;
