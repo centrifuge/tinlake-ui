@@ -49,8 +49,14 @@ class LoanList extends React.Component<Props> {
         {
           header: '', property: '', align: 'end',
           render: (l: Loan) => <div>
-            {(l.ownerOf).toString() === userAddress && <Badge text={'Me'} />}
+            {(l.proxyOwner).toString() === userAddress && <Badge text={'Me'} />}
           </div>
+        },
+        {
+          header: 'Debt (DAI)', property: 'debt', align: 'end',
+          render: (l: Loan) =>
+            <NumberDisplay suffix="" precision={4}
+              value={baseToDisplay(l.debt, 18)} />
         },
         {
           header: 'Max borrow amount (DAI)', property: 'principal', align: 'end',

@@ -42,14 +42,14 @@ class LoanView extends React.Component<Props> {
     if (loanState === null || loanState === 'loading') { return null; }
     if (loanState === 'not found') {
       return <Alert margin="medium" type="error">
-        Could not find loan {loanId}</Alert>;
+        Could not find loan {loanId}</Alert>
     }
 
     const hasAdminPermissions = auth.user && (auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling);
-    const hasBorrowerPermissions = auth.user && loan && (loan.ownerOf === auth.user.address);
+    const hasBorrowerPermissions = auth.user && loan && (loan.proxyOwner && loan.proxyOwner === auth.user.address);
 
     if (transactions && transactions.transactionState && transactions.transactionState === 'processing') {
-      return <Spinner height={'calc(100vh - 89px - 84px)'} message={transactions.loadingMessage || 'Processing Transaction. This may take a fev seconds. Please wait...'} />;
+      return <Spinner height={'calc(100vh - 89px - 84px)'} message={transactions.loadingMessage || 'Processing Transaction. This may take a fev seconds. Please wait...'} />
     }
 
     return <Box>
