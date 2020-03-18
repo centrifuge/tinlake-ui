@@ -49,11 +49,7 @@ class LoanList extends React.Component<Props> {
         {
           header: '', property: '', align: 'end',
           render: (l: Loan) => <div>
-<<<<<<< HEAD
             {l.proxyOwner && (l.proxyOwner).toString() === userAddress && <Badge text={'Me'} />}
-=======
-            {(l.proxyOwner).toString() === userAddress && <Badge text={'Me'} />}
->>>>>>> upstream/naxos-proxy
           </div>
         },
         {
