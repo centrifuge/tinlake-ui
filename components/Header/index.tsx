@@ -8,9 +8,8 @@ import { formatAddress } from '../../utils/formatAddress';
 import config from '../../config';
 import { authTinlake } from '../../services/tinlake';
 import Router from 'next/router';
-//@ts-ignore
-//import { NavBar } from '@centrifuge/axis-nav-bar';
-import { NavBar} from './navbar';
+import { NavBar } from '@centrifuge/axis-nav-bar';
+
 
 const { isDemo } = config;
 export interface MenuItem {
