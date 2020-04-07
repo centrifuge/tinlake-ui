@@ -15,9 +15,6 @@
     "sourceMap": true,
     "strict": true,
     "target": "esnext",
-    "isolatedModules": true,
-    "files": [
-      "./node_modules/tinlake/types/tinlake.d.ts"
-    ]
+    "isolatedModules": true
   }
 }
