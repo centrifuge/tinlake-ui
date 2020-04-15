@@ -18,7 +18,7 @@ interface Props {
   loadLoans?: (tinlake: any) => Promise<void>;
   loadAnalyticsData?: (tinlake: any) => Promise<void>;
   auth: AuthState;
-  analytics: AnalyticsState
+  analytics?: AnalyticsState
 }
 
 class LoanList extends React.Component<Props> {

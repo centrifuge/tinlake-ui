@@ -199,7 +199,16 @@ export async function getAnalytics(tinlake: any) {
           availableFunds: await tinlake.getJuniorReserve(),
           tokenPrice: await tinlake.getTokenPriceJunior(),
           token: "TIN"
-        }
+        },
+        senior: {
+          type: "Senior",
+          availableFunds: await tinlake.getSeniorReserve(),
+          tokenPrice: await tinlake.getTokenPriceSenior(),
+          token: "DROP",
+          interestRate: await tinlake.getSeniorInterestRate()
+        },
+        minJuniorRatio: await tinlake.getMinJuniorRatio(),
+        currentJuniorRatio: await tinlake.getCurrentJuniorRatio()
       }
     }
   } catch(e) {
@@ -284,6 +293,31 @@ export async function setAllowanceJunior(tinlake: any, address: string, maxSuppl
   }
   if (setRes.status !== SUCCESS_STATUS) {
     return loggedError(null, 'Could not set allowance.', address);
+  }
+}
+
+export async function setAllowanceSenior(tinlake: any, address: string, maxSupplyAmount: string, maxRedeemAmount: string) {
+  let setRes;
+   try {
+     setRes = await tinlake.approveAllowanceSenior(address, maxSupplyAmount, maxRedeemAmount);
+   } catch (e) {
+     return loggedError(e, 'Could not set allowance.', address);
+   }
+   if (setRes.status !== SUCCESS_STATUS) {
+     return loggedError(null, 'Could not set allowance.', address);
+   }
+ }
+
+export async function setMinJuniorRatio(tinlake: any, ratio: string) {
+  let setRes;
+  try {
+    setRes = await tinlake.setMinimumJuniorRatio(ratio);
+  } catch (e) {
+    return loggedError(e, 'Could not set min junior ratio', '');
+  }
+
+  if (setRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'Could not set min junior ratio', '');
   }
 }
 
