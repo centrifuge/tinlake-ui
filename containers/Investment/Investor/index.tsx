@@ -46,7 +46,7 @@ class InvestorView extends React.Component<Props, State> {
     const { resetTransactionState, loadAnalyticsData, tinlake } = this.props;
     resetTransactionState && resetTransactionState();
     loadAnalyticsData && loadAnalyticsData(tinlake);
-    this.setState({ is: null, errorMsg: ''});
+    this.setState({ is: null, errorMsg: '' });
     this.showInvestor();
   }
 
@@ -65,9 +65,9 @@ class InvestorView extends React.Component<Props, State> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading Investor information...'} />;
     }
 
-  
+
     return <Box>
-      
+
       <Box pad={{ horizontal: 'medium' }}>
         {is === 'error' && <Alert type="error">
           {errorMsg && <div>{errorMsg}</div>}
