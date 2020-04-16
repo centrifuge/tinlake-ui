@@ -36,7 +36,7 @@ class LoanPage extends React.Component<Props> {
                       <Heading level="3">Open Loan</Heading>
                     </Box>
                   </SecondaryHeader>
-                  <IssueLoan tinlake={tinlake} loanId={loanId} />
+                  <IssueLoan tinlake={tinlake} loanId={loanId}/>
                 </Box>
                 :
                 <Alert margin="medium" type="error">

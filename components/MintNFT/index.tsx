@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Tinlake, { displayToBase, baseToDisplay } from 'tinlake';
+import { displayToBase, baseToDisplay } from 'tinlake';
 import { Box, FormField, TextInput, Button, Heading, Anchor, Text } from 'grommet';
 import Alert from '../Alert';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { BackLink } from '../BackLink';
 import { authTinlake } from '../../services/tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
 import NumberInput from '../NumberInput';
+import config from '../../config';
 
 interface Props {
   tinlake: any;
@@ -22,7 +23,7 @@ interface State {
   errorMsg: string;
 }
 
-const SUCCESS_STATUS = '0x1'
+const SUCCESS_STATUS = '0x1';
 
 class MintNFT extends React.Component<Props, State> {
   state: State = {
@@ -44,14 +45,12 @@ class MintNFT extends React.Component<Props, State> {
 
   mint = async () => {
     const { referenceId, assetType, amount, tokenId } = this.state;
-   
     {
       this.setState({ is: 'loading' });
       try {
         await authTinlake();
         const base = displayToBase(baseToDisplay(amount, 2), 2);
-        const res = await this.props.tinlake.mintNFT(
-          this.props.tinlake.ethConfig.from, tokenId, referenceId, base, assetType);
+        const res = await this.props.tinlake.mintNFT(config.contractAddresses.COLLATERAL_NFT, this.props.tinlake.ethConfig.from, tokenId, referenceId, base, assetType);
         if (res.status === SUCCESS_STATUS && res.events[0].event.name === 'Transfer') {
           this.setState({ is: 'success' });
         } else {
@@ -81,9 +80,9 @@ class MintNFT extends React.Component<Props, State> {
         <Box >
           {is === 'success' && <Alert type="success">
             Successfully minted NFT for Token ID {tokenId}
-            <p> 
-              <Link href={{ pathname: `/loans/issue`, query: { tokenId }}}>
-                <Anchor>Please proceed to loan opening</Anchor> 
+            <p>
+              <Link href={{ pathname: '/loans/issue', query: { tokenId } }}>
+                <Anchor>Please proceed to loan opening</Anchor>
               </Link> your NFT.</p>
             <p> Your NFT ID will automatically be pasted in the respective field.</p>
             <p>If you want to open a loan, <b>please make sure to copy your Token ID!</b></p>
@@ -100,11 +99,11 @@ class MintNFT extends React.Component<Props, State> {
             <p>In this demo, you can mint a test NFT reflecting an sample invoice worth USD 1.000 into your wallet. Please fill in a "NFT Reference" as a unique identifier for your invoice NFT below. Then proceed with Mint NFT.
               The NFT will be minted into your wallet and on the next screen you will be provided with the Token ID of this NFT.</p>
            <b>Please store or copy this Token ID, as it will be used again to open a loan on Tinlake.</b>
-            <p>If you already have a token ID, <Link href={`/loans/issue`}>
+            <p>If you already have a token ID, <Link href={'/loans/issue'}>
               <Anchor>please proceed to loan opening</Anchor></Link>.</p>
           </Alert>}
 
-          <Box direction="row" gap="large" margin={{vertical:"large"}}>
+          <Box direction="row" gap="large" margin={{ vertical:'large' }}>
             <b>Please specify metadata of NFT:</b>
           </Box>
 

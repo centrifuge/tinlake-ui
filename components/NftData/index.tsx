@@ -30,8 +30,8 @@ class NftData extends React.Component<Props> {
   }
 
   render() {
-    const { nftDataDefinition, contractAddresses } = config;
-    const { data: { tokenId, nftOwner }, authedAddr } = this.props;
+    const { nftDataDefinition } = config;
+    const { data: { registry, tokenId, nftOwner }, authedAddr } = this.props;
 
     // create empty boxes for layout purposes if nft data has != 4 entries
     const nftDataFillers = [
@@ -47,7 +47,7 @@ class NftData extends React.Component<Props> {
             as={'span'}
             value={hexToInt(bnToHex(tokenId).toString())}
             link={{
-              href: getNFTLink(hexToInt(bnToHex(tokenId).toString()), contractAddresses['NFT_COLLATERAL']),
+              href: getNFTLink(hexToInt(bnToHex(tokenId).toString()), registry),
               target: '_blank'
             }}
           />
