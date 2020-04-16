@@ -1,5 +1,5 @@
 import { FunctionComponent } from 'react';
-import { Text, Box } from 'grommet';
+import { Text, Box, Heading } from 'grommet';
 
 interface Props {
   label: string;
@@ -7,14 +7,14 @@ interface Props {
 
 const DashboardMetric: FunctionComponent<Props> = ({ label, children }) => {
   return <Box
-    pad="small"
+    pad="medium"
     background="white"
     elevation="small"
     gap="xsmall"
     margin="small"
   >
-    <Text textAlign="center" weight="bold" style={{ fontSize: 28, lineHeight: '40px' }}>
-      {children}</Text>
+    <Heading truncate={true} level="4" textAlign="center" margin="none" style={{ lineHeight: '40px', textOverflow: 'clip' }}>
+      {children}</Heading>
     <Text textAlign="center">{label}</Text>
   </Box>;
 };

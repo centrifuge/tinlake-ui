@@ -32,10 +32,8 @@ class JuniorRatio extends React.Component<Props, State> {
         const { tinlake, loadAnalyticsData, responseReceived, transactionSubmitted } = this.props;
         transactionSubmitted && transactionSubmitted(`Setting mininum junior ratio initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.`);
         try {
-          console.log("setting min junior ratio", minJuniorRatio);
           const res = await setMinJuniorRatio(tinlake, minJuniorRatio);
           if (res && res.errorMsg) {
-            console.log(res);
             responseReceived && responseReceived(null, `Setting minimun junior ratio failed. ${res.errorMsg}`);
             return;
           } 
@@ -48,7 +46,7 @@ class JuniorRatio extends React.Component<Props, State> {
     }
     render() {
         const { minJuniorRatio } = this.state;
-        return <Box>
+        return <Box pad={{ horizontal: 'medium' }}>
             <Box direction="row" margin={{ top: 'medium' }}>
                 <Heading level="4">Set minimum junior ratio</Heading>
             </Box>

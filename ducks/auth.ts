@@ -108,7 +108,6 @@ export function loadUser(tinlake: any, address: string):
         // TODO: canActAsKeeper
       }
     }
-    console.log("permissions", user.permissions);
     dispatch({ user, type: RECEIVE });
   };
 }

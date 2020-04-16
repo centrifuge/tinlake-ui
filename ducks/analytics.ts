@@ -14,6 +14,7 @@ export interface AnalyticsState {
     junior: Tranche,
     senior?: Tranche
   };
+  availableFunds: BN,
   minJuniorRatio: BN,
   currentJuniorRatio: BN
 }

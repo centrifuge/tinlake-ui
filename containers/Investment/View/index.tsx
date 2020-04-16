@@ -50,24 +50,24 @@ class InvestmentsView extends React.Component<Props, State> {
       { analytics && analytics.data &&  <Box margin={{ bottom: "medium" }}> <InvestmentsOverview data={analytics && analytics.data} /> </Box>}
 
       {transactions && transactions.errorMessage &&
-      <Box margin={{ bottom: 'small' }}>
+      <Box pad={{ horizontal: 'medium' }} margin={{ bottom: 'small' }}>
           <Alert type="error">
             {transactions.errorMessage}
           </Alert>
       </Box>}
 
       { analytics && analytics.data && auth && auth.user && auth.user.permissions.canSetMinimumJuniorRatio &&
-        <JuniorRatio tinlake={tinlake} minJuniorRatio={analytics.data.minJuniorRatio}> </JuniorRatio>       
+        <JuniorRatio pad={{ horizontal: 'medium' }}tinlake={tinlake} minJuniorRatio={analytics.data.minJuniorRatio}> </JuniorRatio>       
       }
 
 
-      <Box margin={{ top: 'large' }}>
+      <Box margin={{ top: 'large' }} pad={{ horizontal: 'medium' }}>
         <Box direction="row" gap="medium" margin={{ top: 'medium' }}>
         <Heading level="4">Load investor details</Heading>
         </Box>
       </Box>
 
-      <Box>
+      <Box pad={{ horizontal: 'medium' }}>
         <Box direction="row" gap="medium" margin={{ bottom: 'medium' }}>
           <Box basis={'1/3'}>
             <FormField label="Investor Address">

@@ -10,7 +10,6 @@ import LoanListData from '../../../components/Loan/List';
 import NumberDisplay from '../../../components/NumberDisplay';
 import DashboardMetric from '../../../components/DashboardMetric';
 import { Loan } from '../../../services/tinlake/actions';
-import InfoBox from '../../../components/InfoBox';
 
 interface Props {
   tinlake: any;
@@ -30,7 +29,7 @@ class LoanList extends React.Component<Props> {
 
   render() {
     const { loans, analytics, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const availableFunds = analytics && analytics.data && analytics.data.junior && analytics.data.junior.availableFunds || 0;
+    const availableFunds = analytics && analytics.data && analytics.data.availableFunds || 0;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
@@ -42,11 +41,11 @@ class LoanList extends React.Component<Props> {
     }
 
     return <Box>
-      <InfoBox basis={'1/2'} gap="medium" margin={{ bottom: 'medium' }}>
+      <Box basis={'1/2'} gap="medium" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">
             <NumberDisplay value={baseToDisplay(availableFunds, 18)} suffix=" DAI" precision={18} />
         </DashboardMetric>
-      </InfoBox>
+      </Box>
       <LoanListData loans={filteredLoans} userAddress={ethFrom}> </LoanListData>
     </Box>;
   }

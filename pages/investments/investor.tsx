@@ -1,7 +1,7 @@
 import * as React from 'react';
 import InvestorView from '../../containers/Investment/Investor';
 import WithTinlake from '../../components/WithTinlake';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import Header from '../../components/Header';
 import { menuItems } from '../../menuItems';
 import SecondaryHeader from '../../components/SecondaryHeader';
@@ -37,7 +37,11 @@ class InvestorPage extends React.Component<Props> {
                                     <SecondaryHeader>
                                         <Box direction="row" gap="small" align="center">
                                             <BackLink href={'/investments'} />
-                                            <Heading level="3">Investor Details</Heading>
+                                            <Box direction="row" gap="small" align="center"> 
+                                                <Heading level="3">Investor Details </Heading>
+                                                <Text style={{color: '#808080'}}> for address: {investorAddress}</Text>
+                                            </Box>
+                                        
                                         </Box>
                                     </SecondaryHeader>
                                     <InvestorView investorAddress={investorAddress} tinlake={tinlake} auth={auth} />
