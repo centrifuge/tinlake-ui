@@ -81,8 +81,6 @@ class InvestmentsView extends React.Component<Props, State> {
           <Box align="start">
         
           <Button primary href={`/investments/investor?investorAddress=${this.state.investorAddress}`} component={canLoadInvestor && ButtonLink} label="Load investor details" disabled={!canLoadInvestor} />
-          {/* <Link href={`/loans/loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>; */}
-   
           </Box>
         </Box>
       </Box>

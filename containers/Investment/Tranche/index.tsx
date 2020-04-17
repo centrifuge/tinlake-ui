@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { AuthState } from '../../../ducks/auth';
-import { connect } from 'react-redux';
 import { Box, Heading } from 'grommet';
 import Alert from '../../../components/Alert';
 import { Spinner } from '@centrifuge/axis-spinner';
@@ -83,6 +82,5 @@ class TrancheView extends React.Component<Props> {
     </Box>;
   }
 }
-
 
 export default TrancheView;

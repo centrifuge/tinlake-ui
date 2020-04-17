@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import { baseToDisplay } from 'tinlake';
+import { baseToDisplay, feeToInterestRate} from 'tinlake';
 import BN from 'bn.js';
 import NumberDisplay from '../../NumberDisplay';
 import DashboardMetric from '../../DashboardMetric';
@@ -12,7 +12,7 @@ interface Props {
 class InvestmentsOverview extends React.Component<Props> {
   render() {
     const { minJuniorRatio, currentJuniorRatio, senior} = this.props.data;
-    const dropInterestRate = senior && senior.interestRate || new BN(0);
+    const seniorInterestRate = senior && senior.interestRate || new BN(0);
    
     return <Box> 
       <Box direction="row" >
@@ -29,7 +29,7 @@ class InvestmentsOverview extends React.Component<Props> {
         </Box>
         <Box basis={'1/3'}  >
           <DashboardMetric label={`DROP interest rate`}  >
-            <NumberDisplay value={baseToDisplay(dropInterestRate, 27)} precision={2} > </NumberDisplay>
+            <NumberDisplay value={feeToInterestRate(seniorInterestRate)} precision={2} > </NumberDisplay>
           </DashboardMetric>
         </Box>
       </Box>

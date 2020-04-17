@@ -25,6 +25,7 @@ interface Props {
 interface State {
   errorMsg: string;
   is: string | null;
+  selectedTab: number;
 }
 
 class InvestorView extends React.Component<Props, State> {
@@ -33,7 +34,6 @@ class InvestorView extends React.Component<Props, State> {
     const { investorAddress } = this.props;
     const { loadInvestor, tinlake } = this.props;
     resetTransactionState && resetTransactionState();
-
     this.setState({ is: null, errorMsg: '' });
     if (!isValidAddress(investorAddress)) {
       this.setState({ is: 'error', errorMsg: 'Please input a valid Ethereum address.' });
@@ -43,21 +43,32 @@ class InvestorView extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const { resetTransactionState, loadAnalyticsData, tinlake } = this.props;
-    resetTransactionState && resetTransactionState();
+    const { loadAnalyticsData, tinlake } = this.props;
+    resetTransactionState()
     loadAnalyticsData && loadAnalyticsData(tinlake);
-    this.setState({ is: null, errorMsg: '' });
     this.showInvestor();
   }
 
   componentWillUnmount() {
+   resetTransactionState()
+  }
+
+  resetTransactionState() {
     const { resetTransactionState } = this.props;
     resetTransactionState && resetTransactionState();
   }
 
+  selectTab(tab : number) {
+    const { selectedTab } = this.state;
+    if (tab != selectedTab) {
+      this.resetTransactionState()
+    }
+    this.setState({selectedTab: tab});
+  }
+
   render() {
     const { is, errorMsg } = this.state;
-    const { tinlake, investments, auth, analytics, transactions, investorAddress } = this.props;
+    const { tinlake, investments, auth, analytics, transactions } = this.props;
     const investor = investments && investments.investor;
     const investorState = investments && investments.investorState;
 
@@ -74,31 +85,14 @@ class InvestorView extends React.Component<Props, State> {
         </Alert>}
       </Box>
 
-      {/* <Box pad={{ horizontal: 'medium' }}>
-        <Box direction="row" gap="medium" margin={{ top: 'small' }}>
-          <Heading level="4">Investor details shown for address:</Heading>
-        </Box>
-      </Box>
-      <Box direction="row" gap="medium" margin={{ bottom: 'medium' }} pad={{ horizontal: 'medium' }}>
-        <Box basis={'1/3'} gap="medium">
-          <FormField>
-            <TextInput
-              disabled
-              value={investorAddress}
-            />
-          </FormField>
-        </Box>
-      </Box> */}
-
-
       <Box pad={{ horizontal: 'medium', top: 'large' }} >
-        <Tabs justify="center" flex="grow" >
+        <Tabs justify="center" flex="grow" onActive={(i) => this.selectTab(i)}>
           <Tab title='Junior tranche / TIN token' style={{
             flex: 1,
             fontWeight: 900,
-          }}>
+          }}
+          >
             <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} analytics={analytics} trancheType={"junior"} />
-
           </Tab>
           <Tab title='Senior tranche / DROP token' style={{
             flex: 1,
