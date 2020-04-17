@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AuthState } from '../../../ducks/auth';
 import { connect } from 'react-redux';
 import Link from 'next/link';
-import { Box, FormField, TextInput, Button, Heading } from 'grommet';
+import { Box, FormField, TextInput, Button, Heading, Anchor } from 'grommet';
 import { isValidAddress } from '../../../utils/address';
 import JuniorRatio from '../JuniorRatio';
 import InvestmentsOverview from '../../../components/Investment/Overview';
@@ -80,20 +80,20 @@ class InvestmentsView extends React.Component<Props, State> {
           </Box>
           <Box align="start">
         
-          <Button primary href={`/investments/investor?investorAddress=${this.state.investorAddress}`} component={canLoadInvestor && ButtonLink} label="Load investor details" disabled={!canLoadInvestor} />
+          
+        
+          <Link href={{ pathname: `/investments/investor`, query: { investorAddress: this.state.investorAddress}}} >
+          <Anchor>
+            <Button primary  label="Load investor details" disabled={!canLoadInvestor}/>
+          </Anchor>
+          </Link>
+          {/* <Link href={`/loans/loan?loanId=${l.loanId}`}><Anchor>View</Anchor></Link>; */}
+   
           </Box>
         </Box>
       </Box>
     </Box>;
   }
 }
-
-const ButtonLink = ({ className, href, hrefAs, children, prefetch }) => (
-    <Link href={href} as={hrefAs} prefetch>
-      <a className={className}>
-        {children}
-      </a>
-    </Link>
-  )
   
 export default connect(state => state, { loadAnalyticsData, resetTransactionState })(InvestmentsView);
