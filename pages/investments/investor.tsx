@@ -39,7 +39,9 @@ class InvestorPage extends React.Component<Props> {
                       <BackLink href={'/investments'} />
                       <Box direction="row" gap="small" align="center">
                         <Heading level="3">Investor Details </Heading>
-                        <Text style={{ color: '#808080' }}> for address: {investorAddress}</Text>
+                      </Box>
+                      <Box align="end">
+                          <Text style={{ color: '#808080' }}> address: {investorAddress}</Text>
                       </Box>
 
                     </Box>

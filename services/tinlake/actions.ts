@@ -194,26 +194,34 @@ export async function setInterest(tinlake: any, loanId: string, debt: string, ra
 
 export async function getAnalytics(tinlake: any) {
   const juniorReserve = await tinlake.getJuniorReserve();
+  const juniorTokenPrice = await tinlake.getTokenPriceJunior();
   const seniorReserve = await tinlake.getSeniorReserve();
+  const seniorTokenPrice = await tinlake.getTokenPriceSenior();
+  const seniorInterestRate = await tinlake.getSeniorInterestRate();
+  const minJuniorRatio = await tinlake.getMinJuniorRatio();
+  const juniorAssetValue = await tinlake.getAssetValueJunior();
+  // temp fix: until solved on contract level
+  const currentJuniorRatio = (juniorAssetValue.toString() === '0') ? new BN(0) : await tinlake.getCurrentJuniorRatio();
+
   try {
     return {
       data: {
         junior: {
           type: "junior",
           availableFunds: juniorReserve,
-          tokenPrice: await tinlake.getTokenPriceJunior(),
+          tokenPrice: juniorTokenPrice,
           token: "TIN"
         },
         senior: {
           type: "senior",
           availableFunds: seniorReserve,
-          tokenPrice: await tinlake.getTokenPriceSenior(),
+          tokenPrice: seniorTokenPrice,
           token: "DROP",
-          interestRate: await tinlake.getSeniorInterestRate()
+          interestRate: seniorInterestRate
         },
         availableFunds: juniorReserve.add(seniorReserve),
-        minJuniorRatio: await tinlake.getMinJuniorRatio(),
-        currentJuniorRatio: await tinlake.getCurrentJuniorRatio()
+        minJuniorRatio: minJuniorRatio,
+        currentJuniorRatio: currentJuniorRatio
       }
     }
   } catch (e) {

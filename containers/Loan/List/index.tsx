@@ -40,11 +40,13 @@ class LoanList extends React.Component<Props> {
       filteredLoans = hasAdminPermissions  ? loans.loans : loans.loans.filter(l => l.proxyOwner && (l.proxyOwner === auth.user.address));
     }
 
-    return <Box>
-      <Box basis={'1/2'} gap="medium" margin={{ bottom: 'medium' }}>
+    return <Box >
+      <Box direction="row" align="center">
+      <Box basis={'full'} gap="medium" alignSelf="center" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">
             <NumberDisplay value={baseToDisplay(availableFunds, 18)} suffix=" DAI" precision={18} />
         </DashboardMetric>
+      </Box>
       </Box>
       <LoanListData loans={filteredLoans} userAddress={ethFrom}> </LoanListData>
     </Box>;
