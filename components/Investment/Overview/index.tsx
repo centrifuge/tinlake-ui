@@ -12,6 +12,7 @@ interface Props {
 class InvestmentsOverview extends React.Component<Props> {
   render() {
     const { minJuniorRatio, currentJuniorRatio, senior} = this.props.data;
+    console.log("analytics" ,minJuniorRatio.toString())
     const seniorInterestRate = senior && senior.interestRate || new BN(0);
    
     return <Box> 
