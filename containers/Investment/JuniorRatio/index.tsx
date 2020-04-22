@@ -43,7 +43,6 @@ class JuniorRatio extends React.Component<Props, State> {
         const { tinlake, loadAnalyticsData, responseReceived, transactionSubmitted } = this.props;
         transactionSubmitted && transactionSubmitted(`Setting mininum junior ratio initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.`);
         try {
-         //  const normRatio = normalizeRatio(minJuniorRatio);
           const res = await setMinJuniorRatio(tinlake, normalizedRatio);
           if (res && res.errorMsg) {
             responseReceived && responseReceived(null, `Setting minimun junior ratio failed. ${res.errorMsg}`);
