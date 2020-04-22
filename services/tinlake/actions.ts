@@ -2,6 +2,8 @@ import BN from 'bn.js';
 import { Loan, NFT, interestRateToFee } from 'tinlake';
 import config from '../../config';
 
+export type TrancheType = "junior" | "senior";
+
 const { contractAddresses } = config;
 const SUCCESS_STATUS = '0x1';
 
@@ -192,20 +194,41 @@ export async function setInterest(tinlake: any, loanId: string, debt: string, ra
 }
 
 export async function getAnalytics(tinlake: any) {
+  const juniorReserve = await tinlake.getJuniorReserve();
+  const juniorTokenPrice = await tinlake.getTokenPriceJunior();
+  const seniorReserve = await tinlake.getSeniorReserve();
+  const seniorTokenPrice = await tinlake.getTokenPriceSenior();
+  const seniorInterestRate = await tinlake.getSeniorInterestRate();
+  const minJuniorRatio = await tinlake.getMinJuniorRatio();
+  const juniorAssetValue = await tinlake.getAssetValueJunior();
+  // temp fix: until solved on contract level
+  const currentJuniorRatio = (juniorAssetValue.toString() === '0') ? new BN(0) : await tinlake.getCurrentJuniorRatio();
+
   try {
     return {
       data: {
         junior: {
-          type: 'Junior',
-          availableFunds: await tinlake.getJuniorReserve(),
-          tokenPrice: await tinlake.getTokenPriceJunior(),
-          token: 'TIN'
-        }
+          type: "junior",
+          availableFunds: juniorReserve,
+          tokenPrice: juniorTokenPrice,
+          token: "TIN"
+        },
+        senior: {
+          type: "senior",
+          availableFunds: seniorReserve,
+          tokenPrice: seniorTokenPrice,
+          token: "DROP",
+          interestRate: seniorInterestRate
+        },
+        availableFunds: juniorReserve.add(seniorReserve),
+        minJuniorRatio: minJuniorRatio,
+        currentJuniorRatio: currentJuniorRatio
       }
-    };
+    }
   } catch (e) {
     return loggedError(e, 'Could not get analytics data', '');
   }
+
 
 }
 
@@ -275,64 +298,95 @@ export async function getInvestor(tinlake: any, address: string) {
   };
 }
 
-export async function setAllowanceJunior(tinlake: any, address: string, maxSupplyAmount: string, maxRedeemAmount: string) {
+export async function setAllowance(tinlake: any, address: string, maxSupplyAmount: string, maxRedeemAmount: string, trancheType: TrancheType) {
   let setRes;
   try {
-    setRes = await tinlake.approveAllowanceJunior(address, maxSupplyAmount, maxRedeemAmount);
+    if (trancheType === "junior") {
+      setRes = await tinlake.approveAllowanceJunior(address, maxSupplyAmount, maxRedeemAmount);
+    } else if (trancheType === "senior") {
+      setRes = await tinlake.approveAllowanceSenior(address, maxSupplyAmount, maxRedeemAmount);
+    }
   } catch (e) {
-    return loggedError(e, 'Could not set allowance.', address);
+    return loggedError(e, `Could not set allowance for ${trancheType}`, address);
   }
   if (setRes.status !== SUCCESS_STATUS) {
-    return loggedError(null, 'Could not set allowance.', address);
+    return loggedError(null, `Could not set allowance for ${trancheType}`, address);
   }
 }
 
-export async function supplyJunior(tinlake: any, supplyAmount: string) {
+export async function setMinJuniorRatio(tinlake: any, ratio: string) {
+  let setRes;
+  try {
+    setRes = await tinlake.setMinimumJuniorRatio(ratio);
+  } catch (e) {
+    return loggedError(e, 'Could not set min junior ratio', '');
+  }
 
+  if (setRes.status !== SUCCESS_STATUS) {
+    return loggedError({}, 'Could not set min junior ratio', '');
+  }
+}
+
+export async function supply(tinlake: any, supplyAmount: string, trancheType: TrancheType) {
   // approve currency
   let approveRes;
   try {
-    approveRes = await tinlake.approveCurrency(contractAddresses['JUNIOR'], supplyAmount);
+    if (trancheType === "junior") {
+      approveRes = await tinlake.approveCurrency(contractAddresses['JUNIOR'], supplyAmount);
+    } else if (trancheType === "senior") {
+      approveRes = await tinlake.approveCurrency(contractAddresses['SENIOR'], supplyAmount);
+    }
   } catch (e) {
-    return loggedError(e, 'Could not approve currency.', '');
+    return loggedError(e, `Could not approve currency for ${trancheType}.`, '');
   }
   if (approveRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not approve currency.', '');
+    return loggedError({}, `Could not approve currency for ${trancheType}.`, '');
   }
 
-  // repay
+  // supply
   let supplyRes;
   try {
-    supplyRes = await tinlake.supplyJunior(supplyAmount);
+    if (trancheType === "junior") {
+      supplyRes = await tinlake.supplyJunior(supplyAmount);
+    } else if (trancheType === "senior") {
+      supplyRes = await tinlake.supplySenior(supplyAmount);
+    }
   } catch (e) {
-    return loggedError(e, 'Could not supply junior.', '');
+    return loggedError(e, `Could not supply ${trancheType}`, '');
   }
   if (supplyRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not supply junior.', '');
+    return loggedError({}, `Could not supply ${trancheType}`, '');
   }
 }
 
-export async function redeemJunior(tinlake: any, redeemAmount: string) {
-  // approve junior token
+export async function redeem(tinlake: any, redeemAmount: string, trancheType: TrancheType) {
+  // approve junior token 
   let approveRes;
   try {
-    approveRes = await tinlake.approveJuniorToken(contractAddresses['JUNIOR'], redeemAmount);
+    if (trancheType === "junior") {
+      approveRes = await tinlake.approveJuniorToken(contractAddresses['JUNIOR'], redeemAmount)
+    } else if (trancheType === "senior")
+      approveRes = await tinlake.approveSeniorToken(contractAddresses['SENIOR'], redeemAmount);
   } catch (e) {
-    return loggedError(e, 'Could not approve juniorToken.', '');
+    return loggedError(e, `Could not approve ${trancheType} Token.`, '');
   }
   if (approveRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not approve juniorToken.', '');
+    return loggedError({}, `Could not approve ${trancheType} Token.`, '');
   }
 
   // repay
   let redeemRes;
   try {
-    redeemRes = await tinlake.redeemJunior(redeemAmount);
+    if (trancheType === "junior") {
+      redeemRes = await tinlake.redeemJunior(redeemAmount);
+    } else if (trancheType === "senior") {
+      redeemRes = await tinlake.redeemSenior(redeemAmount);
+    }
   } catch (e) {
-    return loggedError(e, 'Could not redeem junior.', '');
+    return loggedError(e, `Could not redeem ${trancheType}.`, '');
   }
   if (redeemRes.status !== SUCCESS_STATUS) {
-    return loggedError({}, 'Could not redeem junior.', '');
+    return loggedError({}, `Could not redeem ${trancheType}.`, '');
   }
 }
 

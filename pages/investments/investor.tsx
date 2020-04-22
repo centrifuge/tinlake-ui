@@ -1,28 +1,28 @@
 import * as React from 'react';
+import InvestorView from '../../containers/Investment/Investor';
 import WithTinlake from '../../components/WithTinlake';
-import IssueLoan from '../../containers/Loan/Issue';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import Header from '../../components/Header';
-import SecondaryHeader from '../../components/SecondaryHeader';
 import { menuItems } from '../../menuItems';
+import SecondaryHeader from '../../components/SecondaryHeader';
 import { BackLink } from '../../components/BackLink';
 import Auth from '../../components/Auth';
 import Alert from '../../components/Alert';
 
 interface Props {
-  tokenId: string;
-  registry: string;
+  investorAddress: string;
 }
 
-class LoanIssuePage extends React.Component<Props> {
+class InvestorPage extends React.Component<Props> {
   static async getInitialProps({ query }: any) {
-    return { tokenId: query.tokenId, registry: query.registry };
+    return { investorAddress: query.investorAddress };
   }
+
   render() {
-    const { tokenId, registry } = this.props;
-    return <Box align="center" pad={{horizontal: "small"}}>
+    const { investorAddress } = this.props;
+    return <Box align="center" pad={{ horizontal: "small" }}>
       <Header
-        selectedRoute={'/loans/issue'}
+        selectedRoute={'/investments/investor'}
         menuItems={menuItems}
       />
       <Box
@@ -36,21 +36,26 @@ class LoanIssuePage extends React.Component<Props> {
                 <Box>
                   <SecondaryHeader>
                     <Box direction="row" gap="small" align="center">
-                      <BackLink href={'/loans'} />
-                      <Heading level="3">Open Loan</Heading>
+                      <BackLink href={'/investments'} />
+                      <Box direction="row" gap="small" align="center">
+                        <Heading level="3">Investor Details </Heading>
+                      </Box>
+                      <Box align="end">
+                          <Text style={{ color: '#808080' }}> address: {investorAddress}</Text>
+                      </Box>
+
                     </Box>
                   </SecondaryHeader>
-                  <IssueLoan tinlake={tinlake} auth={auth} tokenId={tokenId} registry={registry}/>
+                  <InvestorView investorAddress={investorAddress} tinlake={tinlake} auth={auth} />
                 </Box>
                 :
                 <Alert margin="medium" type="error">
-                  Please authenticate to access this page</Alert>
+                  Please authenticate to access this page </Alert>
               } />
           } />
         </Box>
       </Box>
-    </Box>
+    </Box>;
   }
 }
-
-export default LoanIssuePage;
+export default InvestorPage;

@@ -11,12 +11,13 @@ import { AuthState } from '../../../ducks/auth';
 interface Props {
   tinlake: any;
   tokenId: string;
+  registry: string;
   auth: AuthState;
 }
 
 interface State {
   nft: NFT | null;
-  nftRegistryAddress: string;
+  registry: string;
   nftError: string;
   tokenId: string;
   loanId: string;
@@ -34,25 +35,27 @@ class IssueLoan extends React.Component<Props, State> {
       nft: null,
       nftError: ''
     });
-    await this.getNFT(currentTokenId);
+    await this.getNFT();
   }
 
   onRegistryAddressValueChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const currentRegistryAddress = event.currentTarget.value;
     await this.setState({
-      nftRegistryAddress: currentRegistryAddress,
+      registry: currentRegistryAddress,
       nft: null,
       nftError: ''
     });
+    await this.getNFT();
   }
 
-  getNFT = async (currentTokenId: string) => {
+  getNFT = async () => {
     const { tinlake } = this.props;
-    const { nftRegistryAddress } = this.state;
-    if (currentTokenId && currentTokenId.length > 0) {
-      const result = await getNFT(nftRegistryAddress, tinlake, currentTokenId);
+    const { registry } = this.state;
+    const currentTokenId = this.state.tokenId;
+    if (currentTokenId  && currentTokenId .length > 0) {
+      const result = await getNFT(registry, tinlake, currentTokenId );
       const { tokenId, nft, errorMessage } = result as Partial<{ tokenId: string, nft: NFT, errorMessage: string }>;
-      if (tokenId !== this.state.tokenId) {
+      if (tokenId !== currentTokenId) {
         return;
       }
       if (errorMessage) {
@@ -71,10 +74,10 @@ class IssueLoan extends React.Component<Props, State> {
     try {
       await authTinlake();
       // issue loan
-      const { nftRegistryAddress } = this.state;
-      const result: TinlakeResult = await issue(tinlake, tokenId, nftRegistryAddress);
+      const { registry } = this.state;
+      const result: TinlakeResult = await issue(tinlake, tokenId, registry);
       if (result.errorMsg) {
-        this.setState({ is: 'error', errorMsg });
+        this.setState({ is: 'error', errorMsg: result.errorMsg });
         return;
       }
       const loanId = result.data;
@@ -86,12 +89,16 @@ class IssueLoan extends React.Component<Props, State> {
   }
 
   componentWillMount() {
-    const { tokenId } = this.props;
-    this.setState({tokenId: tokenId || ''});
+    const { tokenId, registry } = this.props;
+    this.setState({tokenId: tokenId || '', registry: registry || '' });
+  }
+
+  componentDidMount() {
+   this.getNFT()
   }
 
   render() {
-    const { tokenId, nftRegistryAddress, is, nft, errorMsg, nftError, loanId } = this.state;
+    const { tokenId, registry, is, nft, errorMsg, nftError, loanId } = this.state;
     const { tinlake, auth } = this.props;
     return <Box>
       {is === 'loading' ?
@@ -116,13 +123,13 @@ class IssueLoan extends React.Component<Props, State> {
           <Box gap="medium">
             <FormField label="Collateral Token Registry Address">
               <TextInput
-                value={nftRegistryAddress || ''}
+                value={registry || ''}
                 onChange={this.onRegistryAddressValueChange}
                 disabled={is === 'success'}
               />
             </FormField>
           </Box>
-          {nftRegistryAddress &&
+          {registry &&
           <Box gap="medium">
             <FormField label="Token ID">
               <TextInput

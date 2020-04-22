@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Box } from 'grommet';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { LoansState, loadLoans } from '../../../ducks/loans';
 import { AnalyticsState, loadAnalyticsData } from '../../../ducks/analytics';
@@ -18,7 +17,7 @@ interface Props {
   loadLoans?: (tinlake: any) => Promise<void>;
   loadAnalyticsData?: (tinlake: any) => Promise<void>;
   auth: AuthState;
-  analytics: AnalyticsState
+  analytics?: AnalyticsState
 }
 
 class LoanList extends React.Component<Props> {
@@ -30,7 +29,7 @@ class LoanList extends React.Component<Props> {
 
   render() {
     const { loans, analytics, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const availableFunds = analytics && analytics.data && analytics.data.junior && analytics.data.junior.availableFunds || 0;
+    const availableFunds = analytics && analytics.data && analytics.data.availableFunds || 0;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
@@ -41,21 +40,17 @@ class LoanList extends React.Component<Props> {
       filteredLoans = hasAdminPermissions  ? loans.loans : loans.loans.filter(l => l.proxyOwner && (l.proxyOwner === auth.user.address));
     }
 
-    return <Box>
-      <InfoDataContainer basis={'1/2'} gap="medium" margin={{ bottom: "medium" }}>
+    return <Box >
+      <Box direction="row" align="center">
+      <Box basis={'full'} gap="medium" alignSelf="center" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">
             <NumberDisplay value={baseToDisplay(availableFunds, 18)} suffix=" DAI" precision={18} />
         </DashboardMetric>
-      </InfoDataContainer>
+      </Box>
+      </Box>
       <LoanListData loans={filteredLoans} userAddress={ethFrom}> </LoanListData>
-    </Box>
+    </Box>;
   }
 }
 
-const InfoDataContainer = styled(Box)`
-  padding: 20px;
-  border-radius: 3px;
-  background: #f7f7f7;
-`;
-
-export default connect(state => state, { loadLoans, loadAnalyticsData})(LoanList);
+export default connect(state => state, { loadLoans, loadAnalyticsData })(LoanList);
