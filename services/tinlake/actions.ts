@@ -63,7 +63,7 @@ export async function issue(tinlake: any, tokenId: string, nftRegistryAddress: s
   if (!proxyAddress) {
     try {
       proxyAddress = await tinlake.proxyCreateNew(address);
-      console.log('proxy not found found, new proxy address', proxyAddress);
+      console.log('proxy not found, new proxy address', proxyAddress);
     } catch (e) {
       return loggedError(e, 'Could not create Proxy.', address);
     }

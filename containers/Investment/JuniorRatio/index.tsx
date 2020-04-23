@@ -39,7 +39,6 @@ class JuniorRatio extends React.Component<Props, State> {
     setMinJuniorRatio = async () => {
         const { minJuniorRatio } = this.state;
         const normalizedRatio = new Decimal(minJuniorRatio).div(100).toString();
-        console.log("set ratio", normalizedRatio, minJuniorRatio)
         const { tinlake, loadAnalyticsData, responseReceived, transactionSubmitted } = this.props;
         transactionSubmitted && transactionSubmitted(`Setting mininum junior ratio initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.`);
         try {
