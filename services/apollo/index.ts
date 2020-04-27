@@ -89,7 +89,6 @@ function toTinlakeLoans(loans: Array<any>) : {data: Array<Loan>} {
         }
         tinlakeLoans.push(tinlakeLoan);
     })
-    console.log(tinlakeLoans);
     return {data: tinlakeLoans};
 }
 
