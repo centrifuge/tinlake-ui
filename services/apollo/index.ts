@@ -63,12 +63,40 @@ class Apollo {
         `
       });
     } catch (err) {
-      console.log(`error occured while fetching time series data from apollo ${err}`);
-      return [];
+      console.log(`error occured while fetching loans from apollo ${err}`);
+      return {
+        data:[]
+      };
     }
     //console.log("loans received", loans)
     const tinlakeLoans = toTinlakeLoans(result.data.loans);
     return tinlakeLoans;
+  }
+
+  async getProxies(user: string) {
+    let result;
+    try {
+      result = await this.client
+      .query({
+        query: gql`
+        {
+          proxys (filter: {
+              owner: ${user}
+          })
+            {
+              id
+              owner
+            }
+          }
+        `
+      });
+    } catch (err) {
+      console.log(`error occured while fetching proxies from apollo ${err}`);
+      return {
+        data:[]
+      };
+    }
+    return { data: result.data.proxys}
   }
 }
 

@@ -16,15 +16,17 @@ interface Props {
   loans?: LoansState;
   loadLoans?: (tinlake: any) => Promise<void>;
   loadAnalyticsData?: (tinlake: any) => Promise<void>;
+  loadUserProxies?: (address: string) => Promise<void>;
   auth: AuthState;
   analytics?: AnalyticsState
 }
 
 class LoanList extends React.Component<Props> {
   componentWillMount() {
-    const { loadLoans, loadAnalyticsData } = this.props
-    loadLoans && loadLoans(this.props.tinlake);
-    loadAnalyticsData && loadAnalyticsData(this.props.tinlake);
+    const { loadLoans, loadAnalyticsData, loadUserProxies, auth, tinlake } = this.props
+    loadLoans && loadLoans(tinlake);
+    loadAnalyticsData && loadAnalyticsData(tinlake);
+    loadUserProxies && auth && auth.user && loadUserProxies(auth.user.address);
   }
 
   render() {

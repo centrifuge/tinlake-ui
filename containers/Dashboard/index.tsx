@@ -1,24 +1,24 @@
 import * as React from 'react';
-import Tinlake from 'tinlake';
 import { connect } from 'react-redux';
 import { Box, Heading } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
-import { AlayticsState } from '../../ducks/analyics';
+import { AnalyticsState } from '../../ducks/analytics';
 import { LoansState, loadLoans } from '../../ducks/loans';
 import { Spinner } from '@centrifuge/axis-spinner';
 import LoanListData from  '../../components/Loan/List';
 
 interface Props {
   tinlake: any;
-  dashboard?: Analyticstate;
   loans?: LoansState;
   loadLoans?: (tinlake: any) => Promise<void>;
+  analytics?: AnalyticsState;
 }
 
 class Dashboard extends React.Component<Props> {
 
   componentWillMount() {
-    this.props.loadLoans(this.props.tinlake);
+    const { loadLoans } = this.props
+    loadLoans && loadLoans(this.props.tinlake);
   }
   
   render() {
