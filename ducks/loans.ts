@@ -42,12 +42,14 @@ export function loadLoans(tinlake: any, root: string = '0xde1b98d083db90a00dee65
   ThunkAction<Promise<void>, LoansState, undefined, Action>  {
   return async (dispatch) => {
     dispatch({ type: LOAD });
-    // await getLoans(tinlake)
-    const result =  await Apollo.getLoans(root);
+    // const result =  await Apollo.getLoans(root);
+    // const loans = result.data;
+    // for ( var i = 1; i < loans.length; i++) {
+    //   loans[i].proxyOwner = (await getProxyOwner(tinlake, loans[i].loanId)).data;
+    // }
+    const result = await getLoans(tinlake);
     const loans = result.data;
-    for ( var i = 1; i < loans.length; i++) {
-      loans[i].proxyOwner = (await getProxyOwner(tinlake, loans[i].loanId)).data;
-    }
+   
     dispatch({ type: RECEIVE, loans });
   };
 }
