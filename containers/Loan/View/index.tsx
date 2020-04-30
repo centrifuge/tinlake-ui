@@ -49,7 +49,7 @@ class LoanView extends React.Component<Props> {
     }
 
     const hasAdminPermissions = auth.user && (auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling);
-    const hasBorrowerPermissions = auth.user && loan && (auth.user.proxies.includes(loan.owner));
+    const hasBorrowerPermissions = auth.user && loan && (auth.user.proxies.includes(loan.ownerOf));
 
     if (transactions && transactions.transactionState && transactions.transactionState === 'processing') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={transactions.loadingMessage || 'Processing Transaction. This may take a few seconds. Please wait...'} />;

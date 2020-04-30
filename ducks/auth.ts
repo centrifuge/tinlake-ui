@@ -90,16 +90,19 @@ export function loadUser(tinlake: any, address: string):
 
     dispatch({ type: LOAD });
 
-    const ceilingPermission = await tinlake.canSetCeiling(address)
-    const interestRatePermission = await tinlake.canSetInterestRate(address)
-    const thresholdPermission = await tinlake.canSetThreshold(address)
-    const loanPricePermission = await tinlake.canSetLoanPrice(address)
-    const equityRatioPermission = await tinlake.canSetMinimumJuniorRatio(address)
-    const riskScorePermission = await tinlake.canSetRiskScore(address)
-    const investorAllowancePermissionJunior = await tinlake.canSetInvestorAllowanceJunior(address)
-    const investorAllowancePermissionSenior = await tinlake.canSetInvestorAllowanceSenior(address)
+    const ceilingPermission = await tinlake.canSetCeiling(address);
+    const interestRatePermission = await tinlake.canSetInterestRate(address);
+    const thresholdPermission = await tinlake.canSetThreshold(address);
+    const loanPricePermission = await tinlake.canSetLoanPrice(address);
+    const equityRatioPermission = await tinlake.canSetMinimumJuniorRatio(address);
+    const riskScorePermission = await tinlake.canSetRiskScore(address);
+    const investorAllowancePermissionJunior = await tinlake.canSetInvestorAllowanceJunior(address);
+    const investorAllowancePermissionSenior = await tinlake.canSetInvestorAllowanceSenior(address);
+    const result =  await Apollo.getProxies(address);
+    const proxies = result.data;
     const user = {
       address,
+      proxies,
       permissions: {
         canSetCeiling: ceilingPermission,
         canSetInterestRate: interestRatePermission,
@@ -119,13 +122,11 @@ export function loadUser(tinlake: any, address: string):
 export function loadUserProxies(address: string):
 ThunkAction<Promise<void>, { auth: AuthState }, undefined, Action> {
   return async (dispatch) => {
-
     // clear user if no address given
     if (!address) {
       dispatch({ type: CLEAR });
       return;
     }
-
     const result =  await Apollo.getProxies(address);
     const proxies = result.data;
 

@@ -68,11 +68,11 @@ class Apollo {
         data:[]
       };
     }
-    //console.log("loans received", loans)
     const tinlakeLoans = toTinlakeLoans(result.data.loans);
     return tinlakeLoans;
   }
 
+ 
   async getProxies(user: string) {
     let result;
     try {
@@ -80,9 +80,7 @@ class Apollo {
       .query({
         query: gql`
         {
-          proxys (filter: {
-              owner: ${user}
-          })
+          proxies (where: {owner:"${user}"}) 
             {
               id
               owner
@@ -91,12 +89,13 @@ class Apollo {
         `
       });
     } catch (err) {
-      console.log(`error occured while fetching proxies from apollo ${err}`);
+      console.log(`no proxies found for address ${user} ${err}`);
       return {
         data:[]
       };
     }
-    return { data: result.data.proxys}
+    const proxies = result.data.proxies.map( (e: {id: string, owner: string}) => e.id );
+    return { data: proxies }
   }
 }
 
@@ -106,7 +105,7 @@ function toTinlakeLoans(loans: Array<any>) : {data: Array<Loan>} {
         const tinlakeLoan = {
             loanId: loan.index,
             registry: loan.nftRegistry,
-            tokenId: loan.nftId,
+            tokenId: new BN(loan.nftId),
             principal: loan.ceiling ? new BN(loan.ceiling) : new BN(0),
             ownerOf: loan.owner,
             interestRate: loan.interestRatePerSecond ? new BN(loan.interestRatePerSecond) : new BN(0),
@@ -117,6 +116,7 @@ function toTinlakeLoans(loans: Array<any>) : {data: Array<Loan>} {
         }
         tinlakeLoans.push(tinlakeLoan);
     })
+
     return {data: tinlakeLoans};
 }
 
