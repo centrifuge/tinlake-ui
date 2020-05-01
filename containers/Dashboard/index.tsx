@@ -11,7 +11,7 @@ import LoanListData from  '../../components/Loan/List';
 interface Props {
   tinlake: any;
   loans?: LoansState;
-  loadLoans?: (tinlake: any) => Promise<void>;
+  loadLoans?: (root: string) => Promise<void>;
   analytics?: AnalyticsState;
   auth?: AuthState;
   loadUserProxies?: (address: string) => Promise<void>;
@@ -21,6 +21,7 @@ class Dashboard extends React.Component<Props> {
 
   componentWillMount() {
     const { loadLoans, tinlake, loadUserProxies } = this.props
+    console.log(tinlake.contractAddresses)
     loadLoans && loadLoans(tinlake);
     loadUserProxies && loadUserProxies(tinlake.ethConfig.from);
   }
