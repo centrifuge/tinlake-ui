@@ -48,7 +48,7 @@ class LoanView extends React.Component<Props> {
         Could not find loan {loanId}</Alert>;
     }
 
-    const hasAdminPermissions = auth.user && (auth.user.permissions.canSetInterestRate || auth.user.permissions.canSetCeiling);
+    const hasAdminPermissions = auth.user && (auth.user.permissions.canSetInterestRate;
     const hasBorrowerPermissions = auth.user && loan && (auth.user.proxies.includes(loan.ownerOf));
 
     if (transactions && transactions.transactionState && transactions.transactionState === 'processing') {
