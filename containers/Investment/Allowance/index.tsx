@@ -85,14 +85,14 @@ class InvestorAllowance extends React.Component<Props, State> {
             />
           </FormField>
         </Box>
-        <Box basis={'1/3'}>
+        {/* <Box basis={'1/3'}>
           <FormField label="Max redeem amount">
             <NumberInput value={baseToDisplay(redeemAmount, 18)} suffix=" TIN" precision={18}
               onValueChange={({ value }) =>
                 this.setState({ redeemAmount: displayToBase(value, 18) })}
             />
           </FormField>
-        </Box>
+        </Box> */}
         <Box >
           <Button onClick={this.setAllowance} primary label="Set Allowance" />
         </Box>
