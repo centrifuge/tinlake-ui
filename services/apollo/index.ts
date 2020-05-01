@@ -31,7 +31,6 @@ class Apollo {
 
   async getLoans(root: string) {
     let result;
-    console.log("", root);
     try {
       result = await this.client
       .query({
@@ -70,7 +69,7 @@ class Apollo {
       };
     }
     const pool = result.data.pools[0];
-    const tinlakeLoans = pool.loans && toTinlakeLoans(pool.loans) || [];
+    const tinlakeLoans = pool && toTinlakeLoans(pool.loans) || [];
     return tinlakeLoans;
   }
 
@@ -118,8 +117,6 @@ function toTinlakeLoans(loans: Array<any>) : {data: Array<Loan>} {
         }
         tinlakeLoans.push(tinlakeLoan);
     })
-
-    console.log("converted loans", tinlakeLoans.length);
     return {data: tinlakeLoans};
 }
 

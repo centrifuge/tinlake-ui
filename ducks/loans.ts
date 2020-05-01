@@ -43,8 +43,7 @@ export function loadLoans(tinlake: Tinlake):
   return async (dispatch) => {
     dispatch({ type: LOAD });
     const root = tinlake.contractAddresses["ROOT_CONTRACT"];
-    console.log("root", root);
-    const result = await Apollo.getLoans(tinlake.contractAddresses["ROOT_CONTRACT"]);
+    const result = await Apollo.getLoans(root);
     const loans = result.data;
    
     dispatch({ type: RECEIVE, loans });

@@ -21,7 +21,6 @@ class Dashboard extends React.Component<Props> {
 
   componentWillMount() {
     const { loadLoans, tinlake, loadUserProxies } = this.props
-    console.log(tinlake.contractAddresses)
     loadLoans && loadLoans(tinlake);
     loadUserProxies && loadUserProxies(tinlake.ethConfig.from);
   }

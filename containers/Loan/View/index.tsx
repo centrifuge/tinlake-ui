@@ -81,9 +81,6 @@ class LoanView extends React.Component<Props> {
                 {auth.user && auth.user.permissions.canSetInterestRate &&
                   <LoanInterest loan={loan!} tinlake={tinlake}> </LoanInterest>
                 }
-                {auth.user && auth.user.permissions.canSetCeiling &&
-                  <LoanCeiling loan={loan!} tinlake={tinlake}> </LoanCeiling>
-                }
               </Box>
             </Box>
           }
