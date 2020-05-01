@@ -191,9 +191,7 @@ export async function getAnalytics(tinlake: any) {
   const juniorReserve = await tinlake.getJuniorReserve();
   const juniorTokenPrice = await tinlake.getTokenPriceJunior();
   const seniorReserve = await tinlake.getSeniorReserve();
-  // will be commented in again after we have the contract fix ready. currently contract reverts, if there are no investments/repayments
-  // const seniorTokenPrice = await tinlake.getTokenPriceSenior(tinlake.ethConfig.from);
-  const seniorTokenPrice = new BN (0)
+  const seniorTokenPrice = await tinlake.getTokenPriceSenior(tinlake.ethConfig.from);
   const seniorInterestRate = await tinlake.getSeniorInterestRate();
   const minJuniorRatio = await tinlake.getMinJuniorRatio();
   const juniorAssetValue = await tinlake.getAssetValueJunior();
