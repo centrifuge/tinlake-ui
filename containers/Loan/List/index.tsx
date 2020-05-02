@@ -33,7 +33,6 @@ class LoanList extends React.Component<Props> {
     const { loans, analytics, auth, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
     const user = auth && auth.user
     const proxies =  user && user.proxies || [];
-    console.log("loanlist", proxies);
     const availableFunds = analytics && analytics.data && analytics.data.availableFunds || 0;
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
@@ -42,7 +41,7 @@ class LoanList extends React.Component<Props> {
     let filteredLoans: Array<Loan> = [];
     const hasAdminPermissions = user && user.permissions.canSetInterestRate;
     if (loans && loans.loans && loans.loansState === 'found' && user) {
-      filteredLoans = hasAdminPermissions  ? loans.loans : loans.loans.filter(l => user.proxies.includes(l.ownerOf));
+      filteredLoans = hasAdminPermissions  ? loans.loans : loans.loans.filter(l => proxies.includes(l.ownerOf));
     }
 
     return <Box >
