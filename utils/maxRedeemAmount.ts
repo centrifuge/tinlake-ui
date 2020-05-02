@@ -2,7 +2,7 @@ import { Decimal } from 'decimal.js-light';
 import BN from 'bn.js';
 
 Decimal.set({
-  precision: 18
+  precision: 27
 });
 
 
