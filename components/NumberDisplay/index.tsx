@@ -27,11 +27,3 @@ NumberDisplay.defaultProps = {
 };
 
 export default NumberDisplay;
-
-
-  // Decimal.set({
-  //   precision
-  // });
-
-  // const formatted = new Decimal(value);
-  // return <span>{prefix}{formatted}{suffix}</span>;
