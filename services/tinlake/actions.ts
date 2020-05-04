@@ -72,7 +72,7 @@ export async function issue(tinlake: any, tokenId: string, nftRegistryAddress: s
 
   // approve proxy to take nft
   try {
-    await tinlake.approveNFT(nftRegistryAddress, tokenId, proxyAddress);
+    await tinlake.approvthis.contracts.COLLATERAL_NFTeNFT(nftRegistryAddress, tokenId, proxyAddress);
   } catch (e) {
     return loggedError(e, 'Could not approve proxy to take NFT.', tokenId);
   }
