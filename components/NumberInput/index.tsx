@@ -13,7 +13,6 @@ interface Props {
 
 const NumberInput: FunctionComponent<Props> = ({
   value, precision, prefix, suffix, onValueChange, ...rest }: Props) => {
-    console.log("moin moin",value);
   return <NumberFormat
     thousandSeparator="," decimalScale={precision} fixedDecimalScale
     allowNegative={false} prefix={prefix} suffix={suffix} customInput={TextInput}

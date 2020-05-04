@@ -1,6 +1,5 @@
 import { FunctionComponent } from 'react';
 import { Decimal } from 'decimal.js-light';
-import BN from 'bn.js';
 
 interface Props {
   value: string;
