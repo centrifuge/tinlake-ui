@@ -111,6 +111,8 @@ class Apollo {
     return { data: proxies }
   }
 }
+28.000000000000000000
+ 1.000000000000000000
 
 function toTinlakeLoans(loans: Array<any>) : {data: Array<Loan>} {
     const tinlakeLoans : Array<Loan> = [];
