@@ -264,12 +264,12 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
           { /* Amount Display for Token Balance */}
           {value &&
-            <Box direction="row" style={{ borderBottom: "1px solid #EEEEEE", alignItems: "center" }} onClick={(event) => {
+            <Box flex="shrink" direction="row" style={{ borderBottom: "1px solid #EEEEEE", alignItems: "center" }} onClick={(event) => {
               if (event.detail == 2) {
                 copyAndHighlight("tokenValue");
               }
             }}>
-              <Text style={{ minWidth: "212px" }} 
+              <Text style={{ width: "212px" }} 
                 truncate={true} 
                 id="tokenValue">
                   {(precision) ? new bigNumber(value).toFormat(precision) + 
@@ -285,7 +285,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               side: 'bottom',
               color: (value) ? '#EEEEEE' : "black"
             }}
-            style={{ width: "72px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
+            style={{ width: "72", maxWidth: "100px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
             {renderToken(selectedToken)}
           </Box>}
 
