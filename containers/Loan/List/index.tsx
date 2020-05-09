@@ -10,6 +10,8 @@ import LoanListData from '../../../components/Loan/List';
 import NumberDisplay from '../../../components/NumberDisplay';
 import DashboardMetric from '../../../components/DashboardMetric';
 import { Loan } from '../../../services/tinlake/actions';
+import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20'
+import DAI from "../../../static/dai.json"
 
 interface Props {
   tinlake: any;
@@ -34,6 +36,7 @@ class LoanList extends React.Component<Props> {
     const user = auth && auth.user
     const proxies =  user && user.proxies || [];
     const availableFunds = analytics && analytics.data && analytics.data.availableFunds || 0;
+
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
@@ -45,13 +48,13 @@ class LoanList extends React.Component<Props> {
     }
 
     return <Box >
-      <Box direction="row" align="center">
-      <Box basis={'full'} gap="medium" alignSelf="center" margin={{ bottom: 'medium' }}>
+
+      <Box direction="row" basis={'full'} gap="medium" alignSelf="center" align="center" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">
-            <NumberDisplay value={baseToDisplay(availableFunds, 18)} suffix=" DAI" precision={18} />
+          <Erc20Widget value={availableFunds.toString()} tokenData={DAI} precision={12} />  
         </DashboardMetric>
       </Box>
-      </Box>
+      
       <LoanListData loans={filteredLoans} proxies={proxies} userAddress={ethFrom}> </LoanListData>
     </Box>;
   }

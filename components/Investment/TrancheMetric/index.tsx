@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Box, Heading } from 'grommet';
-import { baseToDisplay } from 'tinlake';
-import NumberDisplay from '../../NumberDisplay';
 import { Investor, Tranche, TrancheType } from '../../../services/tinlake/actions';
 import DashboardMetric from '../../DashboardMetric';
 import { calcMaxRedeemAmount } from '../../../utils/maxRedeemAmount';
+import { Erc20Widget } from './erc20';
+import DAI from "../../../static/dai.json"
+import DROP from "../../../static/drop.json"
 
 interface Props {
   investor: Investor;
@@ -19,14 +20,14 @@ class TrancheMetric extends React.Component<Props> {
     const { availableFunds, tokenPrice, token  } = tranche;
     const currencyLabel = ` ${token}`;
     const maxRedeemAmount = calcMaxRedeemAmount(availableFunds, tokenPrice);
-
+      
     return <Box margin="none">
       <Box>
         <Heading level="4" margin={{ bottom: 'medium' }}>Investment overview</Heading>
         <Box direction="row" >
           <Box basis={'1/3'} gap="medium">
-            <DashboardMetric label="Investor token balance">
-              <NumberDisplay value={baseToDisplay(tokenBalance, 18)} suffix={currencyLabel} precision={18} />
+            <DashboardMetric label="Investor token balance">    
+              <Erc20Widget value={tokenBalance.toString()} tokenData={DROP} precision={18} />
             </DashboardMetric>
           </Box>
         </Box>
@@ -37,12 +38,12 @@ class TrancheMetric extends React.Component<Props> {
         <Box direction="row" >
           <Box basis={'1/3'} gap="medium">
             <DashboardMetric label="Investment limit">
-              <NumberDisplay value={baseToDisplay(maxSupply, 18)} suffix=" DAI" precision={18} />
+              <Erc20Widget value={maxSupply.toString()} tokenData={DAI} precision={12} />
             </DashboardMetric>
           </Box>
           <Box basis={'1/3'} gap="medium">
             <DashboardMetric label="Redeem limit">
-              <NumberDisplay value={baseToDisplay(maxRedeem, 18)} suffix={currencyLabel} precision={18} />
+              <Erc20Widget value={maxRedeem.toString()} tokenData={DROP} precision={18} />
             </DashboardMetric>
           </Box>
           {/* <Box basis={'1/3'} gap="medium">
