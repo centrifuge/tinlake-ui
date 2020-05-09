@@ -6,6 +6,8 @@ import NumberDisplay from '../../../components/NumberDisplay';
 import Badge from '../../../components/Badge';
 import { DisplayField } from '@centrifuge/axis-display-field';
 import { getNFTLink, hexToInt } from '../../../utils/etherscanLinkGenerator';
+import { Erc20Widget } from '../../Investment/TrancheMetric/erc20';
+import DAI from "../../../static/dai.json";
 
 interface Props {
   loans: Loan[];
@@ -16,7 +18,9 @@ interface Props {
 class LoanList extends React.Component<Props> {
   render() {
     const { loans, proxies } =  this.props;
-    return <Box margin={{ bottom: 'xlarge' }}>
+
+
+    return <Box margin={{bottom: "xlarge"}}>
       <DataTable style={{ tableLayout: 'auto' }} data={loans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {
@@ -55,14 +59,12 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Debt (DAI)', property: 'debt', align: 'end',
           render: (l: Loan) =>
-            <NumberDisplay suffix="" precision={4}
-              value={baseToDisplay(l.debt, 18)} />
+          <Erc20Widget value={l.debt.toString()} tokenData={DAI} precision={4} />
         },
         {
           header: 'Max borrow amount (DAI)', property: 'principal', align: 'end',
           render: (l: Loan) =>
-            <NumberDisplay suffix="" precision={4}
-              value={baseToDisplay(l.principal, 18)} />
+          <Erc20Widget value={l.principal.toString()} tokenData={DAI} precision={4} />
         },
         {
           header: <HeaderCell text={'Interest rate'}></HeaderCell>, property: 'fee', align: 'end',

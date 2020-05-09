@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Box, FormField, TextInput } from 'grommet';
-import { baseToDisplay, feeToInterestRate, Loan } from 'tinlake';
+import { feeToInterestRate, Loan } from 'tinlake';
 import NumberInput from '../../NumberInput';
-
+import { Loan } from '../../../services/tinlake/actions';
+import { Erc20Widget } from '../../Investment/TrancheMetric/erc20'
+import DAI from "../../../static/dai.json"
 interface Props {
   loan: Loan;
 }
@@ -23,12 +25,12 @@ class LoanData extends React.Component<Props> {
       <Box direction="row" gap="medium" margin={{ bottom: 'medium', top: 'large' }}>
         <Box basis={'1/3'} gap="medium">
           <FormField label="Maximum borrow amount">
-            <NumberInput value={baseToDisplay(principal, 18)} suffix=" DAI" disabled precision={18} />
+            <Erc20Widget value={principal.toString()} tokenData={DAI} precision={12} />
           </FormField>
         </Box>
         <Box basis={'1/3'} gap="medium">
           <FormField label="Debt">
-            <NumberInput value={baseToDisplay(debt, 18)} suffix=" DAI" precision={18} disabled />
+            <Erc20Widget value={debt.toString()} tokenData={DAI} precision={12} />
           </FormField>
         </Box>
         <Box basis={'1/3'} gap="medium">
