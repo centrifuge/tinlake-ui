@@ -12,6 +12,8 @@ const DashboardMetric: FunctionComponent<Props> = ({ label, children }) => {
     elevation="small"
     gap="xsmall"
     margin="small"
+    flex="grow"
+    align="center"
   >
     <Text textAlign="center" truncate={true} weight="bold" style={{ fontSize: '1.2em', lineHeight: '40px', textOverflow: 'clip' }}>
       {children}</Text>
