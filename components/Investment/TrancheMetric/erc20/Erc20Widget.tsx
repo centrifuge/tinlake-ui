@@ -22,7 +22,10 @@ interface Props extends StyledThemeProps<ThemeProps> {
   precision?: number,
   fieldLabel?: string,
   account?: string,
-  onValueChanged?: (value: string) => void;
+  onValueChanged?: (value: string) => void,
+  errorMessage?: string,
+  inline? : boolean,
+  mainFont?: number | string
 }
 
 export interface TokenProps {
@@ -117,7 +120,10 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     precision,
     fieldLabel,
     account,
-    onValueChanged
+    onValueChanged,
+    errorMessage,
+    inline,
+    mainFont
   }
 ) => {
 
@@ -133,12 +139,12 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   
   const renderToken = (token) => {
     if (token) {
-      return <Box direction="row" align="center" gap="small" pad="xsmall">
+      return <Box direction="row" align="center" gap="small" pad={!inline ? "xsmall" : undefined}>
         <Box direction="row" align="center">
-          <img src={token.logo} style={{width:"32px", height:"32px"}} />
+          <img src={token.logo} style={!inline ? {width:"32px", height:"32px"} : {width:"16px", height:"16px"}} />
         </Box>
         <Box direction="row" align="start">
-          <Text>{token.symbol}</Text></Box>
+          <Text style={{fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text></Box>
       </Box>
     }
     else return undefined
@@ -153,6 +159,11 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   }
 
   const validateInput = () => {
+
+    if (onValueChanged != undefined) {
+      onValueChanged(amount?.toString());
+    }
+    
     // Check for invalid characters
     if (!(/^[0-9,.]*$/.test(displayAmount)))
     {
@@ -169,26 +180,27 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
     // Check if amount is greater than balance
     if (amount && balance && (new bigNumber(amount) > balance)) {
-      return "Invalid Amount"
-    }
+      if (errorMessage) {
+        return errorMessage;
+      }
+      else return "Invalid Amount"    }
 
     // Check if amount is greater than limit
     if (amount && limit && (new bigNumber(amount) > limit)) {
+      if (errorMessage) {
+        return errorMessage;
+      }
+      else return "Invalid Amount"
+    }
+
+    if (amount && amount.isNaN()) {
       return "Invalid Amount"
     }
 
-    if (amount.isNaN()) {
-      return "Invalid Amount"
-    }
-    if (onValueChanged != undefined) {
-      onValueChanged(amount?.toString());
-    }
   }
 
-  const copyAndHighlight = (id) => {
+  const copyAndHighlight = () => {
     copyToClipboard((amount) ? amount.toString() : "");
-    var ref = document.getElementById("tokenValue");
-
   }
 
   const updateSearchList = (text) => {
@@ -209,7 +221,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   }
 
   const renderDisplayAmount = (newAmount : string) => {
-    console.log(newAmount);    if (newAmount == "NaN" || newAmount == ""){
+    if (newAmount == "NaN" || newAmount == ""){
       setDisplayAmount("");
       setAmount(new bigNumber(0));
     }
@@ -231,7 +243,8 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     <AxisTheme theme={specialTheme}>
       <Box direction="column" align="start" style={{ width: tokens.length > 1 ? "336px" : "284px"}}>
         { /* Optional Field Label and Information Icon */}
-        <Box direction="row-responsive" justify="between" gap="xsmall" ref={dropRef} fill="horizontal">
+
+        {!inline && <Box direction="row-responsive" justify="between" gap="xsmall" ref={dropRef} fill="horizontal">
           <Text style={{fontSize:"small"}}>{fieldLabel}</Text>
             <Circleinfo onClick={() => (selectedToken ? setDrop(true) : undefined)}
             width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -252,7 +265,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               <Box direction="row"><Anchor href={"https://etherscan.io/token/" + selectedToken?.address} label="View Token" />&nbsp;on Etherscan</Box>
             </Box>
           </Drop>}
-        </Box>
+        </Box>}
 
 
         <Box direction="row-responsive" gap="xxsmall" justify="between" fill="horizontal">
@@ -273,12 +286,12 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
           { /* Amount Display for Token Balance */}
           {value &&
-            <Box flex="shrink" direction="row" style={{ borderBottom: "1px solid #EEEEEE", alignItems: "center" }} onClick={(event) => {
+            <Box flex="shrink" direction="row" style={{ borderBottom: (!inline) ? "1px solid #EEEEEE" : undefined, alignItems: "center" }} onClick={(event) => {
               if (event.detail == 2) {
-                copyAndHighlight("tokenValue");
+                copyAndHighlight();
               }
             }}>
-              <Text style={{ width: "212px" }} 
+              <Text style={{ width: "212px", fontSize: mainFont ? mainFont : undefined }} 
                 truncate={true} 
                 id="tokenValue">
                   {(precision) ? new bigNumber(value).toFormat(precision) + 
@@ -290,9 +303,9 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
           { /* Token Icon/Ticker Display */}
           {tokens.length == 1 && <Box fill="horizontal" direction="row" gap="small" align="center"
-            border={{
+            border={!inline && {
               side: 'bottom',
-              color: (value) ? '#EEEEEE' : "black"
+              color: value ? '#EEEEEE' : "black"
             }}
             style={{ width: "72", maxWidth: "100px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
             {renderToken(selectedToken)}
@@ -316,12 +329,13 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
         </Box>
 
         { /* Balance/Limit if specified */}
-        {(balance || limit) && <Box direction="row" alignSelf="end" gap="small" >
+
+        {(balance || limit) && !inline && <Box direction="row" alignSelf="end" gap="small" >
           {balance ? <Text size="small" alignSelf="end" truncate={true}>Balance : {new bigNumber(balance).toFormat()}</Text> :
             <Text size="small" alignSelf="end" truncate={true}>Limit : {new bigNumber(limit).toFormat()}</Text>}
           {balance ? setMax(balance) : setMax(limit)}
         </Box>}
-
+ 
       </Box>
     </AxisTheme>
   );
@@ -338,6 +352,7 @@ Erc20Widget.defaultProps = {
       decimals: 12
     }
   ],
+  inline: false,
   ...defaultProps
 };
 

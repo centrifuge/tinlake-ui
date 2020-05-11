@@ -10,7 +10,7 @@ import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
 import DROP from "../../../static/drop.json";
-
+import { Box, Button, Text } from 'grommet';
 interface Props {
   investor: Investor;
   tinlake: any;
@@ -64,23 +64,12 @@ class InvestorRedeem extends React.Component<Props, State> {
 
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
-        <FormField label="Redeem token">
-        <Erc20Widget limit={redeemAmount.toString()} tokenData={DROP} precision={18} onValueChanged={(value) =>
-                this.setState({ redeemAmount: displayToBase(value, 18) })} />  
-        </FormField>
+        <Erc20Widget fieldLabel="Redeem token" limit={redeemAmount.toString()} tokenData={DROP} precision={18} onValueChanged={(value) =>
+                this.setState({ redeemAmount: displayToBase(value, 18) })}
+                errorMessage="Max redeem amount exceeded" />  
       </Box>
       <Box align="start">
         <Button onClick={this.redeem} primary label="Redeem" disabled = {!redeemEnabled}/>
-
-        {limitOverflow && !availableTokensOverflow  &&
-          <Box margin={{ top: 'small' }}>
-            Max redeem amount exceeded.   <br />
-            Amount has to be lower then <br />
-            <Text weight="bold">
-              {`${baseToDisplay(maxRedeemAmount, 18)}`}
-            </Text>
-          </Box>
-        }
 
         {availableTokensOverflow  &&
           <Box margin={{ top: 'small' }}>
