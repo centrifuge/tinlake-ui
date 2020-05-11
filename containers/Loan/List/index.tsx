@@ -9,8 +9,8 @@ import { AuthState, loadUserProxies } from '../../../ducks/auth';
 import LoanListData from '../../../components/Loan/List';
 import DashboardMetric from '../../../components/DashboardMetric';
 import { Loan } from '../../../services/tinlake/actions';
-import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20'
-import DAI from "../../../static/dai.json"
+import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
+import DAI from '../../../static/dai.json';
 
 interface Props {
   tinlake: any;
@@ -49,10 +49,10 @@ class LoanList extends React.Component<Props> {
 
       <Box direction="row" basis={'full'} gap="medium" alignSelf="center" align="center" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">
-          <Erc20Widget value={availableFunds.toString()} tokenData={DAI} precision={12} />  
+          <Erc20Widget value={availableFunds.toString()} tokenData={DAI} precision={12} />
         </DashboardMetric>
       </Box>
-      
+
       <LoanListData loans={filteredLoans} proxies={proxies} userAddress={ethFrom}> </LoanListData>
     </Box>;
   }

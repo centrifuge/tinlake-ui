@@ -7,7 +7,7 @@ import Badge from '../../../components/Badge';
 import { DisplayField } from '@centrifuge/axis-display-field';
 import { getNFTLink, hexToInt } from '../../../utils/etherscanLinkGenerator';
 import { Erc20Widget } from '../../Investment/TrancheMetric/erc20';
-import DAI from "../../../static/dai.json";
+import DAI from '../../../static/dai.json';
 
 interface Props {
   loans: Loan[];
@@ -19,8 +19,7 @@ class LoanList extends React.Component<Props> {
   render() {
     const { loans, proxies } =  this.props;
 
-
-    return <Box margin={{bottom: "xlarge"}}>
+    return <Box margin={{ bottom: 'xlarge' }}>
       <DataTable style={{ tableLayout: 'auto' }} data={loans} sortable columns={[
         { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
         {

@@ -3,8 +3,8 @@ import { Box, FormField, TextInput } from 'grommet';
 import { feeToInterestRate, Loan } from 'tinlake';
 import NumberInput from '../../NumberInput';
 import { Loan } from '../../../services/tinlake/actions';
-import { Erc20Widget } from '../../Investment/TrancheMetric/erc20'
-import DAI from "../../../static/dai.json"
+import { Erc20Widget } from '../../Investment/TrancheMetric/erc20';
+import DAI from '../../../static/dai.json';
 interface Props {
   loan: Loan;
 }

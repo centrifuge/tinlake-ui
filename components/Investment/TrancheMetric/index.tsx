@@ -3,8 +3,8 @@ import { Box, Heading } from 'grommet';
 import { Investor, Tranche, TrancheType } from '../../../services/tinlake/actions';
 import DashboardMetric from '../../DashboardMetric';
 import { Erc20Widget } from './erc20';
-import DAI from "../../../static/dai.json"
-import DROP from "../../../static/drop.json"
+import DAI from '../../../static/dai.json';
+import DROP from '../../../static/drop.json';
 
 interface Props {
   investor: Investor;
@@ -18,13 +18,13 @@ class TrancheMetric extends React.Component<Props> {
     const { maxSupply, maxRedeem, tokenBalance } = investor[type];
     const { token  } = tranche;
     const currencyLabel = ` ${token}`;
-      
+
     return <Box margin="none">
       <Box>
         <Heading level="4" margin={{ bottom: 'medium' }}>Investment overview</Heading>
         <Box direction="row" >
           <Box basis={'1/3'} gap="medium">
-            <DashboardMetric label="Investor token balance">    
+            <DashboardMetric label="Investor token balance">
               <Erc20Widget value={tokenBalance.toString()} tokenData={DROP} precision={18} />
             </DashboardMetric>
           </Box>

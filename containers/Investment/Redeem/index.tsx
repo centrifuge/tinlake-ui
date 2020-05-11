@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
-import DROP from "../../../static/drop.json";
+import DROP from '../../../static/drop.json';
 
 interface Props {
   investor: Investor;
@@ -67,7 +67,7 @@ class InvestorRedeem extends React.Component<Props, State> {
       <Box gap="medium">
         <Erc20Widget fieldLabel="Redeem token" limit={redeemAmount.toString()} tokenData={DROP} precision={18} onValueChanged={(value) =>
                 this.setState({ redeemAmount: displayToBase(value, 18) })}
-                errorMessage="Max redeem amount exceeded" />  
+                errorMessage="Max redeem amount exceeded" />
       </Box>
       <Box align="start">
         <Button onClick={this.redeem} primary label="Redeem" disabled = {!redeemEnabled}/>

@@ -1,38 +1,38 @@
-import React, { useState, useRef } from "react";
-import styled, { ThemeProps as StyledThemeProps, withTheme } from "styled-components";
-import { MarginType } from "grommet/utils";
-import { defaultProps, extendDefaultTheme } from "grommet/default-props";
-import { Button, Box, Form, FormField, TextInput, Text, Select, Drop, Anchor } from "grommet";
-import { copyToClipboard } from "@centrifuge/axis-utils";
-import bigNumber from "bignumber.js";
-import { AxisTheme } from "@centrifuge/axis-theme";
+import React, { useState, useRef } from 'react';
+import styled, { ThemeProps as StyledThemeProps, withTheme } from 'styled-components';
+import { MarginType } from 'grommet/utils';
+import { defaultProps, extendDefaultTheme } from 'grommet/default-props';
+import { Button, Box, Form, FormField, TextInput, Text, Select, Drop, Anchor } from 'grommet';
+import { copyToClipboard } from '@centrifuge/axis-utils';
+import bigNumber from 'bignumber.js';
+import { AxisTheme } from '@centrifuge/axis-theme';
 
 interface ThemeProps {
   erc20Widget: {
     margin: MarginType
-  }
+  };
 }
 
 interface Props extends StyledThemeProps<ThemeProps> {
-  value?: bigNumber | string,
-  tokenData: TokenMetadata,
-  balance?: bigNumber | string,
-  limit?: bigNumber | string,
-  search?: boolean,
-  precision?: number,
-  fieldLabel?: string,
-  account?: string,
-  onValueChanged?: (value: string) => void,
-  errorMessage?: string,
-  inline? : boolean,
-  mainFont?: number | string
+  value?: bigNumber | string;
+  tokenData: TokenMetadata;
+  balance?: bigNumber | string;
+  limit?: bigNumber | string;
+  search?: boolean;
+  precision?: number;
+  fieldLabel?: string;
+  account?: string;
+  onValueChanged?: (value: string) => void;
+  errorMessage?: string;
+  inline? : boolean;
+  mainFont?: number | string;
 }
 
 export interface TokenProps {
-  symbol: string,
-  logo: string,
-  address: string,
-  decimals: Number
+  symbol: string;
+  logo: string;
+  address: string;
+  decimals: Number;
 }
 
 export interface TokenMetadata {
@@ -42,12 +42,12 @@ export interface TokenMetadata {
     symbol: string,
     decimals: number,
     erc20?: boolean
-  }
+  };
 }
 
 const defaultThemeProps: ThemeProps = {
   erc20Widget: {
-    margin: "small"
+    margin: 'small'
   }
 };
 
@@ -55,31 +55,31 @@ const overflowStyle = {
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  width: '200px',
+  width: '200px'
 };
 
 const specialTheme = ({
   select: {
     options: {
       text : {
-        weight:'normal',
+        weight:'normal'
       },
       container : {
-        align:"start"
+        align:'start'
       }
     },
     icons: {
-      color: "black",
-      margin: "xsmall",
-    },
+      color: 'black',
+      margin: 'xsmall'
+    }
   },
   formField: {
     border:  {
-      position: "outer",
-      color: "none"
-      }, 
+      position: 'outer',
+      color: 'none'
+    },
     margin: {
-      bottom: "none"
+      bottom: 'none'
     }
   },
   anchor :{
@@ -87,7 +87,7 @@ const specialTheme = ({
     textDecoration: 'underline',
     weight: 'normal',
     size: 'small'
-    }
+  }
 });
 
 const Circleinfo = styled.svg`
@@ -107,7 +107,7 @@ const copyIcon = () => {
       <path d="M3.84615 10H3.23077C2.55103 10 2 9.44897 2 8.76923V3.23077C2 2.55103 2.55103 2 3.23077 2H8.76923C9.44897 2 10 2.55103 10 3.23077V3.84615" stroke="#888888" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
   );
-}
+};
 
 export const Erc20Widget: React.FunctionComponent<Props> = (
   {
@@ -127,54 +127,54 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   }
 ) => {
 
-  var tokens: TokenProps[] = [];
-  for (var k in tokenData) { 
-    tokens.push({'address':k, 'logo':tokenData[k]['logo'], 'decimals':tokenData[k]['decimals'],'symbol':tokenData[k]['symbol']})}
+  let tokens: TokenProps[] = [];
+  for (let k in tokenData) {
+    tokens.push({ address:k, logo:tokenData[k]['logo'], decimals:tokenData[k]['decimals'], symbol:tokenData[k]['symbol'] });}
   const [amount, setAmount] = useState(value);
   const [displayAmount, setDisplayAmount] = useState('');
   const [selectedToken, setToken] = useState((search) ? undefined : tokens[0]);
   const [options, setOptions] = useState(tokens);
   const [showDrop, setDrop] = useState(false);
   const dropRef = useRef();
-  
+
   const renderToken = (token) => {
     if (token) {
-      return <Box direction="row" align="center" gap="small" pad={!inline ? "xsmall" : undefined}>
+      return <Box direction="row" align="center" gap="small" pad={!inline ? 'xsmall' : undefined}>
         <Box direction="row" align="center">
-          <img src={token.logo} style={!inline ? {width:"32px", height:"32px"} : {width:"16px", height:"16px"}} />
+          <img src={token.logo} style={!inline ? { width:'32px', height:'32px' } : { width:'16px', height:'16px' }} />
         </Box>
         {!inline && <Box direction="row" align="start">
-          <Text style={{fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text>
+          <Text style={{ fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text>
         </Box>}
-      </Box>
+      </Box>;
     }
-    else return undefined
-  }
+    return undefined;
+  };
 
   const setMax = (value) => {
     return (
       <Button plain onClick={() => {
         setAmount(new bigNumber(value));
-        setDisplayAmount((new bigNumber(value)).toFormat())}}><Text size="small" weight="bold">Set Max</Text></Button>
+        setDisplayAmount((new bigNumber(value)).toFormat());}}><Text size="small" weight="bold">Set Max</Text></Button>
     );
-  }
+  };
 
   const validateInput = () => {
 
     if (onValueChanged != undefined) {
       onValueChanged(amount?.toString());
     }
-    
+
     // Check for invalid characters
     if (!(/^[0-9,.]*$/.test(displayAmount)))
     {
-      return "Invalid Amount"
+      return 'Invalid Amount';
     }
 
     // Check for amount with too many decimals of precisions for specified token
     try {
-      if (amount?.toString().replace(/\.?0+$/, "").split('.')[1].length > selectedToken?.decimals) {
-        return "Invalid Amount"
+      if (amount?.toString().replace(/\.?0+$/, '').split('.')[1].length > selectedToken?.decimals) {
+        return 'Invalid Amount';
       }
     }
     catch {}
@@ -184,33 +184,33 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
       if (errorMessage) {
         return errorMessage;
       }
-      else return "Invalid Amount"    }
+      return 'Invalid Amount';    }
 
     // Check if amount is greater than limit
     if (amount && limit && (new bigNumber(amount) > limit)) {
       if (errorMessage) {
         return errorMessage;
       }
-      else return "Invalid Amount"
+      return 'Invalid Amount';
     }
 
     if (amount && amount.isNaN()) {
-      return "Invalid Amount"
+      return 'Invalid Amount';
     }
 
-  }
+  };
 
   const copyAndHighlight = () => {
-    copyToClipboard((amount) ? amount.toString() : "");
-  }
+    copyToClipboard((amount) ? amount.toString() : '');
+  };
 
   const updateSearchList = (text) => {
     // The line below escapes regular expression special characters:
     // [ \ ^ $ . | ? * + ( )
-    const escapedText = text.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
-    const exp = new RegExp(escapedText, "i");
+    const escapedText = text.replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+    const exp = new RegExp(escapedText, 'i');
     setOptions(options.filter(o => exp.test(o.symbol)));
-  }
+  };
 
   const renderAddress = () => {
     return (
@@ -218,35 +218,34 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
         <Text style={overflowStyle}>Account: {account}</Text>
         <Box onClick={() => copyToClipboard(account)}>{copyIcon()}</Box>
       </Box>
-    )
-  }
+    );
+  };
 
   const renderDisplayAmount = (newAmount : string) => {
-    if (newAmount == "NaN" || newAmount == ""){
-      setDisplayAmount("");
+    if (newAmount == 'NaN' || newAmount == '') {
+      setDisplayAmount('');
       setAmount(new bigNumber(0));
     }
-    else if (!(/^[0-9,.]*$/.test(newAmount))){
+    else if (!(/^[0-9,.]*$/.test(newAmount))) {
       setDisplayAmount(newAmount);
     }
-    else if ((newAmount[newAmount.length-1] == '.') || (newAmount[newAmount.length-1] == '0')){
+    else if ((newAmount[newAmount.length - 1] == '.') || (newAmount[newAmount.length - 1] == '0')) {
       setDisplayAmount(newAmount);
     }
     else {
-      var newValue = newAmount.replace(/,/g,'');
+      let newValue = newAmount.replace(/,/g, '');
       setAmount(new bigNumber(newValue));
       setDisplayAmount((new bigNumber(newValue)).toFormat());
     }
-  }  
-  
+  };
 
   return (
     <AxisTheme theme={specialTheme}>
-      <Box direction="column" align="start" style={{ width: tokens.length > 1 ? "336px" : "284px"}}>
+      <Box direction="column" align="start" style={{ width: tokens.length > 1 ? '336px' : '284px' }}>
         { /* Optional Field Label and Information Icon */}
 
         {!inline && <Box direction="row-responsive" justify="between" gap="xsmall" ref={dropRef} fill="horizontal">
-          <Text style={{fontSize:"small"}}>{fieldLabel}</Text>
+          <Text style={{ fontSize:'small' }}>{fieldLabel}</Text>
             <Circleinfo onClick={() => (selectedToken ? setDrop(true) : undefined)}
             width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.00008 15.3333C3.93341 15.3333 0.666748 12.0666 0.666748 7.99996C0.666748 3.93329 3.93341 0.666626 8.00008 0.666626C12.0667 0.666626 15.3334 3.93329 15.3334 7.99996C15.3334 12.0666 12.0667 15.3333 8.00008 15.3333ZM8.00008 1.99996C4.66675 1.99996 2.00008 4.66663 2.00008 7.99996C2.00008 11.3333 4.66675 14 8.00008 14C11.3334 14 14.0001 11.3333 14.0001 7.99996C14.0001 4.66663 11.3334 1.99996 8.00008 1.99996Z" fill="#EEEEEE"/>
@@ -258,25 +257,24 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
             pad="small"
             onClickOutside={() => setDrop(false)}
             target={dropRef.current}
-            align={{ right: "right" }}
+            align={{ right: 'right' }}
           ><Box direction="column">
               {account && <Text>ERC20 Token Balance</Text>}
               {account && renderAddress()}
               <Text>Token: {selectedToken?.symbol}</Text>
-              <Box direction="row"><Anchor href={"https://etherscan.io/token/" + selectedToken?.address} label="View Token" />&nbsp;on Etherscan</Box>
+              <Box direction="row"><Anchor href={'https://etherscan.io/token/' + selectedToken?.address} label="View Token" />&nbsp;on Etherscan</Box>
             </Box>
           </Drop>}
         </Box>}
 
-
         <Box direction="row-responsive" gap="xxsmall" justify="between" fill="horizontal">
 
           { /* Input Field for Token Balance */}
-          {!value && <Box direction="row" style={{ borderBottom: "1px solid black"}}><Form>
+          {!value && <Box direction="row" style={{ borderBottom: '1px solid black' }}><Form>
             <FormField
               validate={() => validateInput()}>
               <TextInput
-                style={{ minWidth: "212px" }}
+                style={{ minWidth: '212px' }}
                 placeholder="100,000,000.000"
                 value={displayAmount}
                 onChange={event => renderDisplayAmount(event.target.value)
@@ -287,35 +285,34 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
           { /* Amount Display for Token Balance */}
           {value &&
-            <Box flex="shrink" direction="row" style={{ borderBottom: (!inline) ? "1px solid #EEEEEE" : undefined, alignItems: "center" }} onClick={(event) => {
+            <Box flex="shrink" direction="row" style={{ borderBottom: (!inline) ? '1px solid #EEEEEE' : undefined, alignItems: 'center' }} onClick={(event) => {
               if (event.detail == 2) {
                 copyAndHighlight();
               }
             }}>
-              <Text style={{ width: "212px", fontSize: mainFont ? mainFont : undefined }} 
-                truncate={true} 
+              <Text style={{ width: '212px', fontSize: mainFont ? mainFont : undefined }}
+                truncate={true}
                 id="tokenValue">
-                  {(precision) ? new bigNumber(value).toFormat(precision) + 
+                  {(precision) ? new bigNumber(value).toFormat(precision) +
                   ((value.toString().includes('.') && (value.toString().split('.')[1].length > precision)) ? '…' : '')
                   : new bigNumber(value).toFormat()}
               </Text>
             </Box>}
 
-
           { /* Token Icon/Ticker Display */}
           {tokens.length == 1 && <Box fill="horizontal" direction="row" gap="small" align="center"
             border={!inline && {
               side: 'bottom',
-              color: value ? '#EEEEEE' : "black"
+              color: value ? '#EEEEEE' : 'black'
             }}
-            style={{ minWidth: "72", maxWidth: !inline ? "100px" : "32px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
+            style={{ minWidth: '72', maxWidth: !inline ? '100px' : '32px', borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
             {renderToken(selectedToken)}
           </Box>}
 
           { /* Token Drop-down if multiple tokens specified */}
           {tokens.length > 1 && <Box direction="row" gap="small" align="end"
             fill="horizontal"
-            style={{ width: "120px", alignContent: "end", borderLeft: '1px solid #EEEEEE', borderBottom: '1px solid black' }}>
+            style={{ width: '120px', alignContent: 'end', borderLeft: '1px solid #EEEEEE', borderBottom: '1px solid black' }}>
             <Select plain
               children={renderToken}
               options={tokens}
@@ -324,7 +321,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               onChange={({ option }) => setToken(option)}
               valueLabel={renderToken(selectedToken)}
               onClose={() => (search ? setOptions(tokens) : undefined)}
-              searchPlaceholder={(search ? "Search" : undefined)}
+              searchPlaceholder={(search ? 'Search' : undefined)}
               onSearch={search ? text => updateSearchList(text) : undefined}
             /></Box>}
         </Box>
@@ -336,7 +333,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
             <Text size="small" alignSelf="end" truncate={true}>Limit : {new bigNumber(limit).toFormat()}</Text>}
           {balance ? setMax(balance) : setMax(limit)}
         </Box>}
- 
+
       </Box>
     </AxisTheme>
   );
@@ -347,9 +344,9 @@ extendDefaultTheme(defaultThemeProps);
 Erc20Widget.defaultProps = {
   tokens: [
     {
-      symbol: "DAI",
-      logo: "",
-      address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+      symbol: 'DAI',
+      logo: '',
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
       decimals: 12
     }
   ],
@@ -357,4 +354,4 @@ Erc20Widget.defaultProps = {
   ...defaultProps
 };
 
-export default withTheme(Erc20Widget)
+export default withTheme(Erc20Widget);

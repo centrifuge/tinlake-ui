@@ -7,7 +7,7 @@ import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
-import DAI from "../../../static/dai.json";
+import DAI from '../../../static/dai.json';
 
 interface Props {
   loan: Loan;
@@ -57,7 +57,7 @@ class LoanRepay extends React.Component<Props, State> {
       <Box gap="medium">
         <FormField label="Repay amount">
         <Erc20Widget limit={repayAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
-                this.setState({ repayAmount: displayToBase(value, 18) })} />  
+                this.setState({ repayAmount: displayToBase(value, 18) })} />
         </FormField>
       </Box>
       <Box align="start">

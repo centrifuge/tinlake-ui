@@ -7,8 +7,8 @@ import { loadInvestor } from '../../../ducks/investments';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
-import DAI from "../../../static/dai.json";
-import DROP from "../../../static/drop.json";
+import DAI from '../../../static/dai.json';
+import DROP from '../../../static/drop.json';
 
 interface Props {
   investor: Investor;
@@ -87,13 +87,13 @@ class InvestorAllowance extends React.Component<Props, State> {
         <Box basis={'1/3'}>
           <FormField label="Max investment amount">
           <Erc20Widget limit={supplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
-                this.setState({ supplyAmount: displayToBase(value, 18) })} />  
+                this.setState({ supplyAmount: displayToBase(value, 18) })} />
           </FormField>
         </Box>
         <Box basis={'1/3'}>
           <FormField label="Max redeem amount">
           <Erc20Widget limit={redeemAmount.toString()} tokenData={DROP} precision={18} onValueChanged={(value) =>
-                this.setState({ redeemAmount: displayToBase(value, 18) })} />  
+                this.setState({ redeemAmount: displayToBase(value, 18) })} />
           </FormField>
         </Box>
         <Box >

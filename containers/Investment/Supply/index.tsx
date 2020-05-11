@@ -12,8 +12,7 @@ import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
-import DAI from "../../../static/dai.json";
-
+import DAI from '../../../static/dai.json';
 
 interface Props {
   investor: Investor;
@@ -69,8 +68,8 @@ class InvestorSupply extends React.Component<Props, State> {
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
         <Erc20Widget fieldLabel="Investment amount" limit={maxSupplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
-                this.setState({ supplyAmount: displayToBase(value, 18) })} 
-                errorMessage="Max investment amount exceeded."/>  
+                this.setState({ supplyAmount: displayToBase(value, 18) })}
+                errorMessage="Max investment amount exceeded."/>
       </Box>
     </Box>;
   }
