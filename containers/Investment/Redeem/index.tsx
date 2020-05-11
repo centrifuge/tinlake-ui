@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { redeem, TrancheType } from '../../../services/tinlake/actions';
+import { Box, Button, Text } from 'grommet';
 import { Investor, Tranche, redeem } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { baseToDisplay, displayToBase, Investor, Tranche } from 'tinlake';
@@ -10,7 +11,7 @@ import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
 import DROP from "../../../static/drop.json";
-import { Box, Button, Text } from 'grommet';
+
 interface Props {
   investor: Investor;
   tinlake: any;

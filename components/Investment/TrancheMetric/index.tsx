@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box, Heading } from 'grommet';
 import { Investor, Tranche, TrancheType } from '../../../services/tinlake/actions';
 import DashboardMetric from '../../DashboardMetric';
-import { calcMaxRedeemAmount } from '../../../utils/maxRedeemAmount';
 import { Erc20Widget } from './erc20';
 import DAI from "../../../static/dai.json"
 import DROP from "../../../static/drop.json"

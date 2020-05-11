@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, FormField, Button, Text } from 'grommet';
+import { Box } from 'grommet';
 import { TrancheType, supply } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { displayToBase, Investor } from 'tinlake';

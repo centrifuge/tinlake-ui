@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { Box, FormField, Button } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
 import { repay } from '../../../services/tinlake/actions';
-import { baseToDisplay, displayToBase, Loan } from 'tinlake';
-import { Loan, repay } from '../../../services/tinlake/actions';
-import { displayToBase } from 'tinlake';
+import { Loan, displayToBase } from 'tinlake';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
