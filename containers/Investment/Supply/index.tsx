@@ -65,22 +65,9 @@ class InvestorSupply extends React.Component<Props, State> {
     const canSupply = maxSupplyAmount.toString() != '0' && !maxSupplyOverflow;
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
-        <FormField label="Investment amount">
-        <Erc20Widget limit={supplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
-                this.setState({ supplyAmount: displayToBase(value, 18) })} />  
-        </FormField>
-      </Box>
-      <Box align="start">
-        <Button onClick={this.supply} primary label="Invest" disabled={!canSupply }  />
-        {maxSupplyOverflow &&
-         <Box margin={{top: "small"}}>
-             Max investment amount exceeded. <br /> 
-             Amount has to be lower then <br />
-             <Text weight="bold">
-              {`${maxSupplyAmount.toString()}`}
-             </Text>
-           </Box>
-        }
+        <Erc20Widget fieldLabel="Investment amount" limit={maxSupplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
+                this.setState({ supplyAmount: displayToBase(value, 18) })} 
+                errorMessage="Max investment amount exceeded."/>  
       </Box>
     </Box>;
   }

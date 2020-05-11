@@ -65,12 +65,12 @@ class LoanList extends React.Component<Props> {
         {
           header: 'Debt (DAI)', property: 'debt', align: 'end',
           render: (l: Loan) =>
-          <Erc20Widget value={l.debt.toString()} tokenData={DAI} precision={4} />
+          <Erc20Widget value={l.debt.toString()} tokenData={DAI} precision={4} inline={true} mainFont={14}/>
         },
         {
           header: 'Max borrow amount (DAI)', property: 'principal', align: 'end',
           render: (l: Loan) =>
-          <Erc20Widget value={l.principal.toString()} tokenData={DAI} precision={4} />
+          <Erc20Widget value={l.principal.toString()} tokenData={DAI} precision={4} inline={true} mainFont={14}/>
         },
         {
           header: <HeaderCell text={'Interest rate'}></HeaderCell>, property: 'fee', align: 'end',
