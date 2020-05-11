@@ -143,8 +143,9 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
         <Box direction="row" align="center">
           <img src={token.logo} style={!inline ? {width:"32px", height:"32px"} : {width:"16px", height:"16px"}} />
         </Box>
-        <Box direction="row" align="start">
-          <Text style={{fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text></Box>
+        {!inline && <Box direction="row" align="start">
+          <Text style={{fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text>
+        </Box>}
       </Box>
     }
     else return undefined
@@ -307,7 +308,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               side: 'bottom',
               color: value ? '#EEEEEE' : "black"
             }}
-            style={{ width: "72", maxWidth: "100px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
+            style={{ minWidth: "72", maxWidth: !inline ? "100px" : "32px", borderLeft: (!value ? '1px solid #EEEEEE' : undefined) }}>
             {renderToken(selectedToken)}
           </Box>}
 
