@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { Box, FormField, Button, Text } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
 import { Investor, TrancheType, supply } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
-import { baseToDisplay, displayToBase } from 'tinlake';
+import { displayToBase } from 'tinlake';
 import { loadInvestor } from '../../../ducks/investments';
 import { loadAnalyticsData } from '../../../ducks/analytics';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
+import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
+import DAI from "../../../static/dai.json";
+
 
 interface Props {
   investor: Investor;
@@ -64,10 +66,8 @@ class InvestorSupply extends React.Component<Props, State> {
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
         <FormField label="Investment amount">
-          <NumberInput value={baseToDisplay(supplyAmount, 18)} suffix=" DAI" precision={18}
-            onValueChange={({ value }) =>
-              this.setState({ supplyAmount: displayToBase(value, 18) })}
-          />
+        <Erc20Widget limit={supplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
+                this.setState({ supplyAmount: displayToBase(value, 18) })} />  
         </FormField>
       </Box>
       <Box align="start">

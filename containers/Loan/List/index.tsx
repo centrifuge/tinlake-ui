@@ -3,11 +3,9 @@ import { Box } from 'grommet';
 import { connect } from 'react-redux';
 import { LoansState, loadLoans } from '../../../ducks/loans';
 import { AnalyticsState, loadAnalyticsData } from '../../../ducks/analytics';
-import { baseToDisplay } from 'tinlake';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { AuthState, loadUserProxies } from '../../../ducks/auth';
 import LoanListData from '../../../components/Loan/List';
-import NumberDisplay from '../../../components/NumberDisplay';
 import DashboardMetric from '../../../components/DashboardMetric';
 import { Loan } from '../../../services/tinlake/actions';
 import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20'

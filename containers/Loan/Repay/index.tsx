@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Box, FormField, Button } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
 import { Loan, repay } from '../../../services/tinlake/actions';
-import { baseToDisplay, displayToBase } from 'tinlake';
+import { displayToBase } from 'tinlake';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
+import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
+import DAI from "../../../static/dai.json";
 
 interface Props {
   loan: Loan;
@@ -55,11 +56,8 @@ class LoanRepay extends React.Component<Props, State> {
     return <Box basis={'1/4'} gap="medium" margin={{ right: "large" }}>
       <Box gap="medium">
         <FormField label="Repay amount">
-          <NumberInput value={baseToDisplay(repayAmount, 18)} suffix=" DAI" precision={18}
-            onValueChange={({ value }) =>
-              this.setState({ repayAmount: displayToBase(value) })}
-            disabled
-          />
+        <Erc20Widget limit={repayAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value) =>
+                this.setState({ repayAmount: displayToBase(value, 18) })} />  
         </FormField>
       </Box>
       <Box align="start">
