@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { Box, FormField, Button, Text } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
 import { redeem, TrancheType } from '../../../services/tinlake/actions';
+import { Investor, Tranche, redeem } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { baseToDisplay, displayToBase, Investor, Tranche } from 'tinlake';
 import { loadInvestor } from '../../../ducks/investments';
@@ -9,6 +8,8 @@ import { loadAnalyticsData } from '../../../ducks/analytics';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
+import { Erc20Widget } from '../../../components/Investment/TrancheMetric/erc20';
+import DROP from "../../../static/drop.json";
 
 interface Props {
   investor: Investor;
@@ -64,10 +65,8 @@ class InvestorRedeem extends React.Component<Props, State> {
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
         <FormField label="Redeem token">
-          <NumberInput value={baseToDisplay(redeemAmount, 18)} suffix={` ${tranche.token}`} precision={18}
-            onValueChange={({ value }) =>
-              this.setState({ redeemAmount: displayToBase(value, 18) })}
-          />
+        <Erc20Widget limit={redeemAmount.toString()} tokenData={DROP} precision={18} onValueChanged={(value) =>
+                this.setState({ redeemAmount: displayToBase(value, 18) })} />  
         </FormField>
       </Box>
       <Box align="start">

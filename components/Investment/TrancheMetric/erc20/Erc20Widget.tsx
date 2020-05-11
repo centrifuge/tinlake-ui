@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import styled, { ThemeProps as StyledThemeProps, withTheme } from "styled-components";
-import { MarginType, deepMerge} from "grommet/utils";
+import { MarginType } from "grommet/utils";
 import { defaultProps, extendDefaultTheme } from "grommet/default-props";
-import { Button, Box, Form, FormField, TextInput, Image, Text, Select, Drop, Anchor } from "grommet";
+import { Button, Box, Form, FormField, TextInput, Text, Select, Drop, Anchor } from "grommet";
 import { copyToClipboard } from "@centrifuge/axis-utils";
 import bigNumber from "bignumber.js";
 import { AxisTheme } from "@centrifuge/axis-theme";
@@ -16,12 +16,13 @@ interface ThemeProps {
 interface Props extends StyledThemeProps<ThemeProps> {
   value?: bigNumber | string,
   tokenData: TokenMetadata,
-  balance?: bigNumber,
-  limit?: bigNumber,
+  balance?: bigNumber | string,
+  limit?: bigNumber | string,
   search?: boolean,
   precision?: number,
   fieldLabel?: string,
-  account?: string
+  account?: string,
+  onValueChanged?: (value: string) => void;
 }
 
 export interface TokenProps {
@@ -115,7 +116,8 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     theme,
     precision,
     fieldLabel,
-    account
+    account,
+    onValueChanged
   }
 ) => {
 
@@ -133,7 +135,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     if (token) {
       return <Box direction="row" align="center" gap="small" pad="xsmall">
         <Box direction="row" align="center">
-          <Image fit="contain" src={token.logo} />
+          <img src={token.logo} style={{width:"32px", height:"32px"}} />
         </Box>
         <Box direction="row" align="start">
           <Text>{token.symbol}</Text></Box>
@@ -178,6 +180,9 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     if (amount.isNaN()) {
       return "Invalid Amount"
     }
+    if (onValueChanged != undefined) {
+      onValueChanged(amount?.toString());
+    }
   }
 
   const copyAndHighlight = (id) => {
@@ -203,8 +208,12 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     )
   }
 
-  const renderDisplayAmount = (newAmount) => {
-    if (!(/^[0-9,.]*$/.test(newAmount))){
+  const renderDisplayAmount = (newAmount : string) => {
+    console.log(newAmount);    if (newAmount == "NaN" || newAmount == ""){
+      setDisplayAmount("");
+      setAmount(new bigNumber(0));
+    }
+    else if (!(/^[0-9,.]*$/.test(newAmount))){
       setDisplayAmount(newAmount);
     }
     else if ((newAmount[newAmount.length-1] == '.') || (newAmount[newAmount.length-1] == '0')){
