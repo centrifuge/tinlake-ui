@@ -12,14 +12,6 @@ module.exports = {
       }
     }
   },
-  publicRuntimeConfig: {
-    RPC_URL: process.env.RPC_URL,
-    TRANSACTION_TIMEOUT: process.env.TRANSACTION_TIMEOUT,
-    ENV: process.env.ENV,
-    ETHERSCAN_URL: process.env.ETHERSCAN_URL,
-    POOLS: process.env.POOLS,
-    TINLAKE_DATA_BACKEND_URL: process.env.TINLAKE_DATA_BACKEND_URL
-  },
   experimental: {
     exportTrailingSlash: false,
   },

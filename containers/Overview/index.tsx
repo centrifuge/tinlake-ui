@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Table, TableCell, TableRow, TableHeader, TableBody } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { PoolState, loadPool } from '../../ducks/pool';
 import { LoansState, loadLoans } from '../../ducks/loans';
@@ -12,7 +12,7 @@ import { Pool } from '../../config';
 
 interface Props {
   tinlake: any;
-  loans?: LoansState;
+  loansState?: LoansState;
   loadLoans?: (tinlake: Tinlake) => Promise<void>;
   pool?: PoolState;
   auth?: AuthState;
@@ -35,6 +35,10 @@ class Overview extends React.Component<Props> {
     const userAddress = auth && auth.user && auth.user.address || tinlake.ethConfig.from;
 
     const { name } = selectedPool;
+    
+    const loans = loans && loans.loans || [];
+    const outstandingDebt = loans.filter((loans.status))
+    const availableFunds = 
 
     return <Box >
       <SecondaryHeader>
@@ -44,11 +48,37 @@ class Overview extends React.Component<Props> {
       <Box direction="row">
         <Box basis={"1/2"}>
 
-        { (loans!.loansState !== 'loading') && 
           <Box>
                <Heading level="5">Loans</Heading>
+               <Table>
+                <TableBody>
+
+                  { (loans!.loansState !== 'loading') && 
+                    <TableRow>
+                      <TableCell scope="row">
+                        <strong>Oustanding Loans</strong>
+                      </TableCell>
+                      <TableCell>Coconut</TableCell>
+                    </TableRow>
+                  }
+
+                  <TableRow>
+                    <TableCell scope="row">
+                      <strong>Outstanding Debt</strong>
+                    </TableCell>
+                    <TableCell>Watermelon</TableCell>
+                  </TableRow>
+
+                  <TableRow>
+                    <TableCell scope="row">
+                      <strong>DAI available to borrow</strong>
+                    </TableCell>
+                    <TableCell>Watermelon</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
           </Box>
-        }
+        
 
 
 
