@@ -3,21 +3,21 @@ import * as yup from 'yup';
 
 export type Pool = {
   addresses: {
-    "ROOT_CONTRACT": string, 
-    "ACTIONS": string,
-    "PROXY_REGISTRY": string,
-    "COLLATERAL_NFT": string
+    'ROOT_CONTRACT': string,
+    'ACTIONS': string,
+    'PROXY_REGISTRY': string,
+    'COLLATERAL_NFT': string
   },
-  graph: string, 
+  graph: string,
   contractConfig: {
-    "JUNIOR_OPERATOR": "ALLOWANCE_OPERATOR" | "PROPORTIONAL_OPERATOR",
-    "SENIOR_OPERATOR": "ALLOWANCE_OPERATOR" | "PROPORTIONAL_OPERATOR"
+    'JUNIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR',
+    'SENIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR'
   }
   name: string
   description: string
   slug: string
   asset: string
-}
+};
 
 export interface DisplayedField {
   key:        string;
@@ -35,7 +35,7 @@ interface Config {
   tinlakeDataBackendUrl: string;
   isDemo: boolean;
   network: 'Mainnet' | 'Kovan';
-  pools: Array<Pool>;
+  pools: Pool[];
 }
 
 const contractAddressesSchema = yup.object().required().shape({

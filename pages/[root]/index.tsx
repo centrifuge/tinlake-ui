@@ -14,14 +14,14 @@ interface Props {
 }
 
 class Pool extends React.Component <Props> {
-  
+
   render() {
     const { root } = this.props;
-    const selectedPool = pools.find( pool => pool.addresses.ROOT_CONTRACT === root);
+    const selectedPool = pools.find(pool => pool.addresses.ROOT_CONTRACT === root);
     return (
       <Box align="center" pad={{ horizontal: 'small' }}>
         <Header selectedRoute={'/'} menuItems={menuItems} />
-        { selectedPool && 
+        { selectedPool &&
           <Box justify="center" direction="row">
             <Box width="xlarge">
               <WithTinlake render={tinlake => <Overview tinlake={tinlake} selectedPool={selectedPool}  />} />

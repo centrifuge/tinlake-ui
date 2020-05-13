@@ -21,7 +21,7 @@ export async function getTinlake() {
     const injectedProvider = await Web3Connect.ConnectToInjected();
     const accounts = await injectedProvider.enable();
     const account = accounts[0];
-    
+
     tinlake = new Tinlake({ transactionTimeout, contractConfig, contractAddresses: addresses, provider: injectedProvider });
     await tinlake.setContractAddresses();
     tinlake!.setEthConfig({ from: account, gasLimit: `0x${config.gasLimit.toString(16)}` });

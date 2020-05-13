@@ -33,7 +33,6 @@ class LoanList extends React.Component<Props> {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
-
     return <Box margin={{ bottom: 'large' }}>
       <Box direction="row" align="center">
       <Box basis={'full'} gap="medium" alignSelf="center" margin={{ bottom: 'medium' }}>
