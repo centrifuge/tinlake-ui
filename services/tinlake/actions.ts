@@ -209,14 +209,14 @@ export async function getPool(tinlake: any) {
           type: 'junior',
           availableFunds: juniorReserve,
           tokenPrice: juniorTokenPrice,
-          tokenSupply: juniorTokenSupply,
+          totalSupply: juniorTokenSupply,
           token: 'TIN'
         },
         senior: {
           type: 'senior',
           availableFunds: seniorReserve,
           tokenPrice: seniorTokenPrice,
-          tokenSupply: seniorTokenSupply,
+          totalSupply: seniorTokenSupply,
           token: 'DROP',
           interestRate: seniorInterestRate
         },
@@ -224,7 +224,7 @@ export async function getPool(tinlake: any) {
       }
     };
   } catch (e) {
-    return loggedError(e, 'Could not get analytics data', '');
+    return loggedError(e, 'Could not get pool data', '');
   }
 }
 

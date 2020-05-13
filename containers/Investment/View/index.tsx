@@ -15,7 +15,7 @@ interface Props {
   auth: AuthState;
   loadPool?: (tinlake: any) => Promise<void>;
   resetTransactionState?: () => void;
-  analytics?: PoolState;
+  pool?: PoolState;
   transactions?: TransactionState;
 }
 
@@ -44,12 +44,12 @@ class InvestmentsView extends React.Component<Props, State> {
 
   render() {
     const { investorAddress, is } = this.state;
-    const { analytics, auth, tinlake, transactions } = this.props;
+    const { pool, auth, tinlake, transactions } = this.props;
     const canLoadInvestor = (is !== 'loading') && (investorAddress !== '') && isValidAddress(investorAddress);
 
     return <Box>
 
-      {analytics && analytics.data && <Box margin={{ bottom: 'medium' }}> <InvestmentsOverview data={analytics && analytics.data} /> </Box>}
+      {pool && pool.data && <Box margin={{ bottom: 'medium' }}> <InvestmentsOverview data={pool && pool.data} /> </Box>}
 
       {transactions && transactions.errorMessage &&
         <Box pad={{ horizontal: 'medium' }} margin={{ bottom: 'small' }}>
@@ -58,8 +58,8 @@ class InvestmentsView extends React.Component<Props, State> {
           </Alert>
         </Box>}
 
-      {analytics && analytics.data && auth && auth.user && auth.user.permissions.canSetMinimumJuniorRatio &&
-        <JuniorRatio tinlake={tinlake} minJuniorRatio={analytics.data.minJuniorRatio} />
+      {pool && pool.data && auth && auth.user && auth.user.permissions.canSetMinimumJuniorRatio &&
+        <JuniorRatio tinlake={tinlake} minJuniorRatio={pool.data.minJuniorRatio} />
       }
 
       <Box margin={{ top: 'large' }} pad={{ horizontal: 'medium' }}>

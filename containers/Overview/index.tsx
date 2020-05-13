@@ -1,18 +1,22 @@
 import * as React from 'react';
+import BN from 'bn.js';
 import { connect } from 'react-redux';
-import { Box, Heading, Table, TableCell, TableRow, TableHeader, TableBody } from 'grommet';
+import { baseToDisplay, feeToInterestRate } from 'tinlake';
+import { Box, Heading, Table, TableCell, TableRow, TableBody, Text, Button, Anchor } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { PoolState, loadPool } from '../../ducks/pool';
 import { LoansState, loadLoans } from '../../ducks/loans';
 import { AuthState } from '../../ducks/auth';
 import { Spinner } from '@centrifuge/axis-spinner';
-import LoanListData from  '../../components/Loan/List';
+import LoanListData from '../../components/Loan/List';
 import Tinlake from 'tinlake/dist/Tinlake';
 import { Pool } from '../../config';
+import { PoolLink } from '../../components/PoolLink';
+
 
 interface Props {
   tinlake: any;
-  loansState?: LoansState;
+  loans?: LoansState;
   loadLoans?: (tinlake: Tinlake) => Promise<void>;
   pool?: PoolState;
   auth?: AuthState;
@@ -23,75 +27,125 @@ interface Props {
 class Overview extends React.Component<Props> {
 
   componentDidMount() {
-    const { loadLoans, loadPool, tinlake, selectedPool} = this.props;
-    console.log(selectedPool);
+    const { loadLoans, loadPool, tinlake } = this.props;
     loadLoans && loadLoans(tinlake);
     loadPool && loadPool(tinlake);
 
   }
 
   render() {
-    const { tinlake, loans, auth, selectedPool } = this.props;
+    const { tinlake, loans, auth, selectedPool, pool } = this.props;
     const userAddress = auth && auth.user && auth.user.address || tinlake.ethConfig.from;
 
-    const { name } = selectedPool;
-    
-    const loans = loans && loans.loans || [];
-    const outstandingDebt = loans.filter((loans.status))
-    const availableFunds = 
+    const { name, description } = selectedPool;
+    const allLoans = loans && loans.loans || [];
+    const poolData = pool && pool.data;
 
-    return <Box >
+    const outstandingLoans = allLoans.filter(loan => loan.status && loan.status === "ongoing").length;
+    const outstandingDebt = allLoans.map(loan => loan.debt).reduce((sum, debt) => sum.add(debt), new BN('0'));
+    const availableFunds = poolData?.availableFunds || '0';
+    const minJuniorRatio = poolData?.minJuniorRatio || '0';
+    const currentJuniorRatio = poolData?.currentJuniorRatio || '0';
+    const dropRate = poolData && poolData.senior && poolData.senior.interestRate || '0';
+    const seniorTokenSupply = poolData && poolData.senior && poolData.senior.totalSupply || '0';
+    const juniorTokenSupply = poolData && poolData.junior.totalSupply || '0';
+
+    // show just recent 10 loans
+    const startIndex = (allLoans.length >= 10) ? (allLoans.length - 10) : 0;
+    const latestLoans = allLoans.slice(startIndex, allLoans.length);
+
+    return <Box margin={{ bottom: 'large' }}>
       <SecondaryHeader>
-          <Heading level="3">Pool Overview: {name} </Heading>
+        <Heading level="3">Pool Overview: {name} </Heading>
       </SecondaryHeader>
 
-      <Box direction="row">
+      <Box direction="row" margin={{ bottom: "large" }}>
         <Box basis={"1/2"}>
-
           <Box>
-               <Heading level="5">Loans</Heading>
-               <Table>
-                <TableBody>
-
-                  { (loans!.loansState !== 'loading') && 
-                    <TableRow>
-                      <TableCell scope="row">
-                        <strong>Oustanding Loans</strong>
-                      </TableCell>
-                      <TableCell>Coconut</TableCell>
-                    </TableRow>
-                  }
-
-                  <TableRow>
-                    <TableCell scope="row">
-                      <strong>Outstanding Debt</strong>
+            <Heading level="4" margin={{ top: "small", bottom: "small" }}>Loans</Heading>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell scope="row">
+                    Oustanding Loans
                     </TableCell>
-                    <TableCell>Watermelon</TableCell>
-                  </TableRow>
+                  <TableCell style={{ textAlign: "end" }}> {outstandingLoans} </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    Outstanding Debt
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>DAI {baseToDisplay(outstandingDebt, 18)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    DAI available to borrow
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>DAI {baseToDisplay(availableFunds, 18)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
 
-                  <TableRow>
-                    <TableCell scope="row">
-                      <strong>DAI available to borrow</strong>
+            <Heading level="4" margin={{ top: "large", bottom: "small" }}>Investments</Heading>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell scope="row">
+                    Current TIN ratio
                     </TableCell>
-                    <TableCell>Watermelon</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+                  <TableCell style={{ textAlign: "end" }}>{baseToDisplay(currentJuniorRatio, 25)} %</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    Minimum TIN ratio
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>{baseToDisplay(minJuniorRatio, 25)} %</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    DROP APY
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>{feeToInterestRate(dropRate)} %</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    DROP Supply
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>{baseToDisplay(seniorTokenSupply, 18)}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell scope="row">
+                    TIN Supply
+                  </TableCell>
+                  <TableCell style={{ textAlign: "end" }}>{baseToDisplay(juniorTokenSupply, 18)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
           </Box>
-        
+        </Box>
+        <Box basis={"1/2"} margin={{ left: "large" }}>
+          <Box>
+            <Heading level="4" margin={{ top: "small", bottom: "small" }}>Asset Originator Details</Heading>
 
-
-
-
+            <Text margin={{ top: "xsmall" }}> {name} </Text>
+            <Text margin={{ top: "medium" }}> The following information is provided by the Asset Originator: </Text>
+            <Text margin={{ top: "small" }}> {description} </Text>
+          </Box>
         </Box>
       </Box>
 
 
-      { (loans!.loansState === 'loading') ?
-        <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />  :
-        <LoanListData loans={loans!.loans} userAddress={userAddress}> </LoanListData>
+      <Heading level="4" margin={{ top: "xsmall" }}>Latest loans</Heading>
+      {(loans!.loansState === 'loading') ?
+        <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} /> :
+        <LoanListData loans={latestLoans} userAddress={userAddress}> </LoanListData>
       }
-      <Box pad={{ vertical: 'medium' }}>
+      <Box margin={{top:'medium', bottom:"large"}} align="center">
+        <PoolLink href={{ pathname: '/loans' }}>
+          <Anchor>
+            <Button  label="View all loans" />
+          </Anchor>
+        </PoolLink>
       </Box>
     </Box>;
   }

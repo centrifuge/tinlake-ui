@@ -2,10 +2,6 @@ import { Box } from 'grommet';
 import Header from '../components/Header';
 import Dashboard from '../containers/Dashboard';
 
-// TODO: refactor pass through path
-import config from './../config';
-const { pools } = config;
-
 function Home() {
   return (
     <Box align="center" pad={{ horizontal: 'small' }}>

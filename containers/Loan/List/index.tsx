@@ -16,7 +16,7 @@ interface Props {
   loadLoans?: (tinlake: any) => Promise<void>;
   loadPool?: (tinlake: any) => Promise<void>;
   auth?: AuthState;
-  analytics?: PoolState;
+  pool?: PoolState;
 }
 
 class LoanList extends React.Component<Props> {
@@ -27,14 +27,14 @@ class LoanList extends React.Component<Props> {
   }
 
   render() {
-    const { loans, analytics, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
-    const availableFunds = analytics && analytics.data && analytics.data.availableFunds || '0';
+    const { loans, pool, tinlake: { ethConfig: { from: ethFrom } } } = this.props;
+    const availableFunds = pool && pool.data && pool.data.availableFunds || '0';
     if (loans!.loansState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading...'} />;
     }
 
 
-    return <Box >
+    return <Box margin={{ bottom: 'large' }}>
       <Box direction="row" align="center">
       <Box basis={'full'} gap="medium" alignSelf="center" margin={{ bottom: 'medium' }}>
         <DashboardMetric label="Total funds available for borrowing">

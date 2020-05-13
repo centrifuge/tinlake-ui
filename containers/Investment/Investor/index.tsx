@@ -18,7 +18,7 @@ interface Props {
   transactions?: TransactionState;
   resetTransactionState?: () => void;
   loadPool?: (tinlake: any) => Promise<void>;
-  analytics?: PoolState;
+  pool?: PoolState;
   investorAddress: string;
 }
 
@@ -74,7 +74,7 @@ class InvestorView extends React.Component<Props, State> {
 
   render() {
     const { is, errorMsg, selectedTab } = this.state;
-    const { tinlake, investments, auth, analytics, transactions } = this.props;
+    const { tinlake, investments, auth, pool, transactions } = this.props;
     const investor = investments && investments.investor;
     const investorState = investments && investments.investorState;
 
@@ -89,7 +89,7 @@ class InvestorView extends React.Component<Props, State> {
           {errorMsg && <div>{errorMsg}</div>}
         </Alert>}
       </Box>
-      { analytics && analytics.data  &&
+      { pool && pool.data  &&
       <Box pad={{ horizontal: 'medium', top: 'large' }} >
         <Tabs justify="center" activeIndex={selectedTab} flex="grow" onActive={i => this.selectTab(i)}>
           <Tab title="Senior tranche / DROP token" style={{
@@ -97,14 +97,14 @@ class InvestorView extends React.Component<Props, State> {
             fontWeight: 900
           }}>
             <TrancheView tinlake={tinlake} transactions={transactions} auth={auth} investor={investor}
-              tranche={analytics.data.senior as any} />
+              tranche={pool.data.senior as any} />
           </Tab>
           <Tab title="Junior tranche / TIN token" style={{
             flex: 1,
             fontWeight: 900
           }}
           >
-            <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} tranche={analytics.data.junior} />
+            <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} tranche={pool.data.junior} />
           </Tab>
         </Tabs>
       </Box>

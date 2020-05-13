@@ -3,10 +3,11 @@ import { ThunkAction } from 'redux-thunk';
 import { getPool, TinlakeResult } from '../services/tinlake/actions';
 import { Tranche } from 'tinlake';
 import BN from 'bn.js';
+import { HYDRATE } from 'next-redux-wrapper';
 
 // Actions
-const LOAD_POOL = 'tinlake-ui/analytics/LOAD_POOL';
-const RECEIVE_POOL = 'tinlake-ui/analytics/RECEIVE_POOL';
+const LOAD_POOL = 'tinlake-ui/pool/LOAD_POOL';
+const RECEIVE_POOL = 'tinlake-ui/pool/RECEIVE_POOL';
 
 export interface PoolData {
   junior: Tranche;
@@ -29,6 +30,7 @@ const initialState: PoolState = {
 export default function reducer(state: PoolState = initialState,
                                 action: AnyAction = { type: '' }): PoolState {
   switch (action.type) {
+    case HYDRATE: return { ...state, ...(action.payload.pool || {}) };
     case LOAD_POOL: return { ...state, state: 'loading' };
     case RECEIVE_POOL: return { ...state, state: 'found', data: action.data };
     default: return state;

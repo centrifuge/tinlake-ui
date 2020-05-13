@@ -17,7 +17,7 @@ interface Props {
   loadPool?: (tinlake: any) => Promise<void>;
   transactionSubmitted?: (loadingMessage: string) => Promise<void>;
   responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
-  analytics?: PoolState;
+  pool?: PoolState;
 }
 
 interface State {
@@ -54,10 +54,10 @@ class LoanBorrow extends React.Component<Props, State> {
 
   render() {
     const { borrowAmount } = this.state;
-    const { loan, analytics } = this.props;
+    const { loan, pool } = this.props;
 
     const ceilingSet = loan.principal.toString() !== '0';
-    const availableFunds = analytics && analytics.data && analytics.data.availableFunds || '0';
+    const availableFunds = pool && pool.data && pool.data.availableFunds || '0';
     const ceilingOverflow = new BN(borrowAmount).cmp(new BN(loan.principal)) > 0;
     const availableFundsOverflow = (new BN(borrowAmount).cmp(new BN(availableFunds)) > 0);
     const borrowEnabled = !ceilingOverflow && !availableFundsOverflow && ceilingSet;
