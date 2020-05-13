@@ -4,7 +4,7 @@ import NumberInput from '../../../components/NumberInput';
 import { borrow } from '../../../services/tinlake/actions';
 import { baseToDisplay, displayToBase, Loan } from 'tinlake';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
-import { AnalyticsState, loadAnalyticsData } from '../../../ducks/analytics';
+import { PoolState, loadPool } from '../../../ducks/pool';
 import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
@@ -14,10 +14,10 @@ interface Props {
   loan: Loan;
   tinlake: any;
   loadLoan?: (tinlake: any, loanId: string, refresh?: boolean) => Promise<void>;
-  loadAnalyticsData?: (tinlake: any) => Promise<void>;
+  loadPool?: (tinlake: any) => Promise<void>;
   transactionSubmitted?: (loadingMessage: string) => Promise<void>;
   responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
-  analytics?: AnalyticsState;
+  analytics?: PoolState;
 }
 
 interface State {
@@ -27,9 +27,9 @@ interface State {
 class LoanBorrow extends React.Component<Props, State> {
 
   componentDidMount() {
-    const { loan, tinlake, loadAnalyticsData } = this.props;
+    const { loan, tinlake, loadPool } = this.props;
     this.setState({ borrowAmount: (loan.principal && loan.principal.toString()) || '0' });
-    loadAnalyticsData && loadAnalyticsData(tinlake);
+    loadPool && loadPool(tinlake);
   }
 
   borrow = async () => {
@@ -94,4 +94,4 @@ class LoanBorrow extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadLoan, transactionSubmitted, responseReceived, loadAnalyticsData })(LoanBorrow);
+export default connect(state => state, { loadLoan, transactionSubmitted, responseReceived, loadPool })(LoanBorrow);

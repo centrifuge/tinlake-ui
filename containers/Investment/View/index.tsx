@@ -6,16 +6,16 @@ import { Box, FormField, TextInput, Button, Heading, Anchor } from 'grommet';
 import { isValidAddress } from '../../../utils/address';
 import JuniorRatio from '../JuniorRatio';
 import InvestmentsOverview from '../../../components/Investment/Overview';
-import { AnalyticsState, loadAnalyticsData } from '../../../ducks/analytics';
+import { PoolState, loadPool } from '../../../ducks/pool';
 import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
 import Alert from '../../../components/Alert';
 
 interface Props {
   tinlake: any;
   auth: AuthState;
-  loadAnalyticsData?: (tinlake: any) => Promise<void>;
+  loadPool?: (tinlake: any) => Promise<void>;
   resetTransactionState?: () => void;
-  analytics?: AnalyticsState;
+  analytics?: PoolState;
   transactions?: TransactionState;
 }
 
@@ -28,11 +28,11 @@ interface State {
 class InvestmentsView extends React.Component<Props, State> {
 
   componentDidMount() {
-    const { loadAnalyticsData, tinlake } = this.props;
+    const { loadPool, tinlake } = this.props;
     this.setState({
       investorAddress: ''
     });
-    loadAnalyticsData && loadAnalyticsData(tinlake);
+    loadPool && loadPool(tinlake);
   }
 
   componentWillUnmount() {
@@ -90,4 +90,4 @@ class InvestmentsView extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadAnalyticsData, resetTransactionState })(InvestmentsView);
+export default connect(state => state, { loadPool, resetTransactionState })(InvestmentsView);

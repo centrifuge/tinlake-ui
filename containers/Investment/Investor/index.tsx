@@ -8,7 +8,7 @@ import { Spinner } from '@centrifuge/axis-spinner';
 import { isValidAddress } from '../../../utils/address';
 import TrancheView from '../Tranche';
 import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
-import { AnalyticsState, loadAnalyticsData } from '../../../ducks/analytics';
+import { PoolState, loadPool } from '../../../ducks/pool';
 
 interface Props {
   tinlake: any;
@@ -17,8 +17,8 @@ interface Props {
   investments?: InvestorState;
   transactions?: TransactionState;
   resetTransactionState?: () => void;
-  loadAnalyticsData?: (tinlake: any) => Promise<void>;
-  analytics?: AnalyticsState;
+  loadPool?: (tinlake: any) => Promise<void>;
+  analytics?: PoolState;
   investorAddress: string;
 }
 
@@ -43,9 +43,9 @@ class InvestorView extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { loadAnalyticsData, tinlake } = this.props;
+    const { loadPool, tinlake } = this.props;
     resetTransactionState();
-    loadAnalyticsData && loadAnalyticsData(tinlake);
+    loadPool && loadPool(tinlake);
     this.showInvestor();
     this.setState({ selectedTab: 0 });
   }
@@ -108,4 +108,4 @@ class InvestorView extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadInvestor, loadAnalyticsData, resetTransactionState })(InvestorView);
+export default connect(state => state, { loadInvestor, loadPool, resetTransactionState })(InvestorView);

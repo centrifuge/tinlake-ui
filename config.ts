@@ -5,22 +5,31 @@ const { publicRuntimeConfig } = getConfig();
 const config = {
   rpcUrl: publicRuntimeConfig.RPC_URL,
   etherscanUrl: publicRuntimeConfig.ETHERSCAN_URL,
-  // TODO: make this into publicRuntimeConfig
-  gasLimit: 1000000000000000000,
-  contractAddresses: publicRuntimeConfig.TINLAKE_ADDRESSES && JSON.parse(publicRuntimeConfig.TINLAKE_ADDRESSES),
-  nftDataDefinition: publicRuntimeConfig.NFT_DATA_DEFINITION && JSON.parse(publicRuntimeConfig.NFT_DATA_DEFINITION),
   transactionTimeout: publicRuntimeConfig.TRANSACTION_TIMEOUT,
-  tinlakeDataBackendUrl: publicRuntimeConfig.TINLAKE_DATA_BACKEND_URL,
   isDemo: publicRuntimeConfig.ENV && (publicRuntimeConfig.ENV === 'demo'),
   network: publicRuntimeConfig.RPC_URL && networkUrlToName(publicRuntimeConfig.RPC_URL),
-  contractConfig:  JSON.parse(publicRuntimeConfig.CONTRACT_CONFIG) || {}
+  tinlakeDataBackendUrl:  publicRuntimeConfig.TINLAKE_DATA_BACKEND_URL,
+  // TODO: make this into publicRuntimeConfig
+  gasLimit: 1000000000000000000,
+  pools: publicRuntimeConfig.POOLS && JSON.parse(publicRuntimeConfig.POOLS) as Array<Pool>
 };
-if (!config.nftDataDefinition) {
-  throw new Error('Missing env NFT_DATA_DEFINITION');
-}
 
-if (!config.contractAddresses) {
-  throw new Error('Missing env TINLAKE_ADDRESSES');
+export type Pool = {
+  addresses: {
+    "ROOT_CONTRACT": string, 
+    "ACTIONS": string,
+    "PROXY_REGISTRY": string,
+    "COLLATERAL_NFT": string
+  },
+  graph: string, 
+  contractConfig: {
+    "JUNIOR_OPERATOR": "ALLOWANCE_OPERATOR" | "PROPORTIONAL_OPERATOR",
+    "SENIOR_OPERATOR": "ALLOWANCE_OPERATOR" | "PROPORTIONAL_OPERATOR"
+  }
+  name: string
+  description: string
+  slug: string
+  asset: string
 }
 
 export default config;

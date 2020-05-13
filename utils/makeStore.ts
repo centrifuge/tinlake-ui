@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import loansReducer from '../ducks/loans';
 import investmentsReducer from '../ducks/investments';
-import analyticsReducer from '../ducks/analytics';
+import poolReducer from '../ducks/pool';
 import authReducer from '../ducks/auth';
 import transactionReducer from '../ducks/transactions';
 import thunk from 'redux-thunk';
@@ -19,7 +19,7 @@ const makeStore = (initialState: any) => {
       {
         loans: loansReducer,
         investments: investmentsReducer,
-        analytics: analyticsReducer,
+        pool: poolReducer,
         auth: authReducer,
         transactions: transactionReducer
       }
