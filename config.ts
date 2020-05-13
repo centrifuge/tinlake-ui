@@ -10,7 +10,7 @@ export type Pool = {
   },
   graph: string,
   contractConfig: {
-    'JUNIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR',
+    'JUNIOR_OPERATOR': 'ALLOWANCE_OPERATOR',
     'SENIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR'
   }
   name: string
