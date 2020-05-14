@@ -46,7 +46,7 @@ const contractAddressesSchema = yup.object().required().shape({
 
 const contractConfigSchema = yup.object().required().shape({
   JUNIOR_OPERATOR: yup.mixed<'ALLOWANCE_OPERATOR'>().required().oneOf(['ALLOWANCE_OPERATOR']),
-  SENIOR_OPERATOR: yup.mixed<'PROPORTIONAL_OPERATOR'>().required().oneOf(['PROPORTIONAL_OPERATOR'])
+  SENIOR_OPERATOR: yup.mixed<'PROPORTIONAL_OPERATOR' | 'ALLOWANCE_OPERATOR'>().required().oneOf(['PROPORTIONAL_OPERATOR', 'ALLOWANCE_OPERATOR'])
 });
 
 const poolSchema = yup.object().required().shape({
