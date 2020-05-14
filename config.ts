@@ -15,7 +15,6 @@ export type Pool = {
   }
   name: string
   description: string
-  slug: string
   asset: string
 };
 
@@ -42,8 +41,7 @@ const contractAddressesSchema = yup.object().required().shape({
   ROOT_CONTRACT: yup.string().length(42).matches(/0x[0-9a-fA-F]{40}/).required(),
   ACTIONS: yup.string().length(42).matches(/0x[0-9a-fA-F]{40}/).required(),
   PROXY_REGISTRY: yup.string().length(42).matches(/0x[0-9a-fA-F]{40}/).required(),
-  COLLATERAL_NFT: yup.string().length(42).matches(/0x[0-9a-fA-F]{40}/),
-  DEPLOYMENT_NAME: yup.string().required()
+  COLLATERAL_NFT: yup.string().length(42).matches(/0x[0-9a-fA-F]{40}/)
 });
 
 const contractConfigSchema = yup.object().required().shape({
@@ -57,7 +55,6 @@ const poolSchema = yup.object().required().shape({
   contractConfig: contractConfigSchema,
   name: yup.string().required(),
   description: yup.string().required(),
-  slug: yup.string().required(),
   asset: yup.string().required()
 });
 
