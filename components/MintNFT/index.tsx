@@ -9,7 +9,7 @@ import { Spinner } from '@centrifuge/axis-spinner';
 import NumberInput from '../NumberInput';
 import { PoolLink } from '../PoolLink';
 
-const NFT_REGISTRY = "0xac0c1ef395290288028a0a9fdfc8fdebebe54a24";
+const NFT_REGISTRY = '0xac0c1ef395290288028a0a9fdfc8fdebebe54a24';
 
 interface Props {
   tinlake: any;
