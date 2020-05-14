@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { Box, FormField, Button, Text } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
+import { Box, Button } from 'grommet';
 import { TrancheType, supply } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
-import { baseToDisplay, displayToBase, Investor } from 'tinlake';
+import { displayToBase, Investor } from 'tinlake';
 import { loadInvestor } from '../../../ducks/investments';
 import { loadPool } from '../../../ducks/pool';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
+import { Erc20Widget } from '../../../components/erc20-widget';
+import DAI from '../../../static/dai.json';
 
 interface Props {
   investor: Investor;
@@ -62,24 +63,12 @@ class InvestorSupply extends React.Component<Props, State> {
     const canSupply = maxSupplyAmount.toString() !== '0' && !maxSupplyOverflow;
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
-        <FormField label="Investment amount">
-          <NumberInput value={baseToDisplay(supplyAmount, 18)} suffix=" DAI" precision={18}
-            onValueChange={({ value }) =>
-              this.setState({ supplyAmount: displayToBase(value, 18) })}
-          />
-        </FormField>
+        <Erc20Widget fieldLabel="Redeem token" limit={maxSupplyAmount.toString()} tokenData={DAI} precision={18} onValueChanged={(value : string) =>
+                this.setState({ supplyAmount: displayToBase(value, 18) })}
+                errorMessage="Max investment amount exceeded" />
       </Box>
       <Box align="start">
         <Button onClick={this.supply} primary label="Invest" disabled={!canSupply }  />
-        {maxSupplyOverflow &&
-         <Box margin={{ top: 'small' }}>
-             Max investment amount exceeded. <br />
-             Amount has to be lower then <br />
-             <Text weight="bold">
-              {`${maxSupplyAmount.toString()}`}
-             </Text>
-           </Box>
-        }
       </Box>
     </Box>;
   }

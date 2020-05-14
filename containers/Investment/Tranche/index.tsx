@@ -50,7 +50,7 @@ class TrancheView extends React.Component<Props> {
         <Box>
           <Box margin={{ top: 'medium', bottom: 'large' }} >
             <Box>
-              <TrancheMetric tranche={tranche} investor={investor} type={tranche.type as any as TrancheType} />
+              <TrancheMetric tinlake={tinlake} tranche={tranche} investor={investor} type={tranche.type as any as TrancheType} />
             </Box>
           </Box>
 

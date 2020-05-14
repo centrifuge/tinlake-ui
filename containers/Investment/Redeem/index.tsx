@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Box, FormField, Button, Text } from 'grommet';
-import NumberInput from '../../../components/NumberInput';
+import { Box, Button, Text } from 'grommet';
 import { redeem, TrancheType } from '../../../services/tinlake/actions';
 import { transactionSubmitted, responseReceived } from '../../../ducks/transactions';
 import { baseToDisplay, displayToBase, Investor, Tranche } from 'tinlake';
@@ -9,7 +8,7 @@ import { loadPool } from '../../../ducks/pool';
 import { connect } from 'react-redux';
 import { authTinlake } from '../../../services/tinlake';
 import BN from 'bn.js';
-
+import { Erc20Widget } from '../../../components/erc20-widget';
 interface Props {
   investor: Investor;
   tinlake: any;
@@ -60,27 +59,35 @@ class InvestorRedeem extends React.Component<Props, State> {
     const availableTokensOverflow = (new BN(redeemAmount).cmp(new BN(tokenBalance)) > 0);
     const redeemEnabled = redeemLimitSet && !limitOverflow && !availableTokensOverflow;
 
+    const dropAddress = this.props.tinlake.contractAddresses.SENIOR_TOKEN as string;
+    const tinAddress = this.props.tinlake.contractAddresses.JUNIOR_TOKEN as string;
+    const dropToken = {
+      [dropAddress] : {
+        symbol: 'DROP',
+        logo: '../../static/DROP_final.svg',
+        decimals: 18,
+        name: 'DROP'
+      }
+    };
+    const tinToken = {
+      [tinAddress] : {
+        symbol: 'TIN',
+        logo: '../../static/TIN_final.svg',
+        decimals: 18,
+        name: 'TIN'
+      }
+    };
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
-        <FormField label="Redeem token">
-          <NumberInput value={baseToDisplay(redeemAmount, 18)} suffix={` ${tranche.token}`} precision={18}
-            onValueChange={({ value }) =>
-              this.setState({ redeemAmount: displayToBase(value, 18) })}
-          />
-        </FormField>
+        {tranche.type === 'senior' && <Erc20Widget fieldLabel="Redeem token" limit={maxRedeemAmount.toString()} tokenData={dropToken} precision={18} onValueChanged={(value : string) =>
+                this.setState({ redeemAmount: displayToBase(value, 18) })}
+                errorMessage="Max redeem amount exceeded" />}
+        {tranche.type === 'junior' && <Erc20Widget fieldLabel="Redeem token" limit={maxRedeemAmount.toString()} tokenData={tinToken} precision={18} onValueChanged={(value : string) =>
+                this.setState({ redeemAmount: displayToBase(value, 18) })}
+                errorMessage="Max redeem amount exceeded" />}
       </Box>
       <Box align="start">
         <Button onClick={this.redeem} primary label="Redeem" disabled = {!redeemEnabled}/>
-
-        {limitOverflow && !availableTokensOverflow  &&
-          <Box margin={{ top: 'small' }}>
-            Max redeem amount exceeded.   <br />
-            Amount has to be lower then <br />
-            <Text weight="bold">
-              {`${baseToDisplay(maxRedeemAmount, 18)}`}
-            </Text>
-          </Box>
-        }
 
         {availableTokensOverflow  &&
           <Box margin={{ top: 'small' }}>
