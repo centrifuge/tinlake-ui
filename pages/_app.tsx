@@ -36,6 +36,6 @@ class MyApp extends App {
   }
 }
 
-const wrapper = createWrapper(makeStore, { debug: true });
+const wrapper = createWrapper(makeStore, { debug: false });
 
 export default wrapper.withRedux(MyApp);
