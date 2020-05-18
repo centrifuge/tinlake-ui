@@ -16,12 +16,12 @@ interface Props {
 class Pool extends React.Component <Props> {
 
   render() {
-    const { root } = useRouter().query
+    const { root } = useRouter().query;
 
     const selectedPool = pools.find(pool => pool.addresses.ROOT_CONTRACT === root);
 
     if (!selectedPool) {
-      return <div>404</div>
+      return <div>404</div>;
     }
 
     return (
