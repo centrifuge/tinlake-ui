@@ -21,7 +21,7 @@ class Pool extends React.Component <Props> {
     const selectedPool = pools.find(pool => pool.addresses.ROOT_CONTRACT === root);
 
     if (!selectedPool) {
-      return <div>404</div>;
+      return <div>404 - Not found</div>;
     }
 
     return (
