@@ -5,7 +5,6 @@ import { Spinner } from '@centrifuge/axis-spinner';
 import { loadPools, PoolsState } from '../../ducks/pools';
 import PoolList from '../../components/PoolList';
 import PoolsMetrics from '../../components/PoolsMetrics';
-import Footer from '../../components/Footer';
 
 interface Props {
   loadPools?: () => Promise<void>;
