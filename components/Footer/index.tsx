@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Button, Image, Text, Anchor, ResponsiveContext } from 'grommet';
-import config from '../../config';
+import { Box, Text, Anchor} from 'grommet';
 
 interface FooterProps {
 }
