@@ -25,7 +25,7 @@ class InvestorPage extends React.Component<Props> {
       <Box
         justify="center"
         direction="row"
-        style={{flex: 1}}
+        style={{ flex: 1 }}
       >
         <Box width="xlarge" >
           <WithTinlake render={tinlake =>

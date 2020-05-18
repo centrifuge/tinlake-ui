@@ -17,7 +17,7 @@ class LoanListPage extends React.Component {
       />
       <Box
         justify="evenly"
-        direction="row" 
+        direction="row"
       >
         <Box width="xlarge" gap="medium" >
           <WithTinlake render={tinlake =>

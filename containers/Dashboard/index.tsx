@@ -30,16 +30,20 @@ class Dashboard extends React.Component<Props> {
           />
         ) : (
           pools.data &&
-            <Box basis={'full'}> 
-              <Box margin={{ top: "large", bottom: "medium" }} direction="row">
+            <Box basis={'full'}>
+              <Box margin={{ top: 'large', bottom: 'medium' }} direction="row">
                 <Box gap="large" style={{ minWidth: 130 }}>
                   <Image src="/static/tinlake-logo.svg" style={{ width: 130 }} />
                 </Box>
-                <Box margin={{ left: "medium" }} >
-                  <Text>Tinlake is an open market place of asset pools bringing together Asset Originators and Investors that seek to utilize the full potential of Decentralized Finance (DeFi). Asset Originators can responsibly bridge real-world assets into DeFi and access bankless liquidity. Investors can earn attractive yields on different tokenized real-world assets such as invoices, mortgages or streaming royalties. Tinlake’s smart contract platform coordinates the different parties required to structure, administer and finance collateralized pools of these real-world assets.
+                <Box margin={{ left: 'medium' }} >
+                  <Text>Tinlake is an open market place of asset pools bringing together Asset Originators
+                    and Investors that seek to utilize the full potential of Decentralized Finance (DeFi).
+                    Asset Originators can responsibly bridge real-world assets into DeFi and access bankless liquidity.
+                    Investors can earn attractive yields on different tokenized real-world assets such as invoices, mortgages or streaming royalties.
+                    Tinlake’s smart contract platform coordinates the different parties required to structure, administer and finance collateralized pools of these real-world assets.
                   </Text>
-                  <Anchor margin={{ top: "small" }} href="https://centrifuge.io/products/tinlake/" target="blank" label="Learn More" />
-            
+                  <Anchor margin={{ top: 'small' }} href="https://centrifuge.io/products/tinlake/" target="blank" label="Learn More" />
+
                 </Box>
               </Box>
               <Box direction="row" gap="large" margin={{ bottom: 'medium' }} justify="evenly">

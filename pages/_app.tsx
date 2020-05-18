@@ -22,8 +22,8 @@ class MyApp extends App {
       <AxisTheme full={true}>
         <StyledApp
         style={{
-          minHeight: "calc(100vh - 150px)"
-         }}>
+          minHeight: 'calc(100vh - 150px)'
+        }}>
           <WithTinlake render={tinlake =>
             <Auth tinlake={tinlake} render={() =>
               <Component {...pageProps} />
