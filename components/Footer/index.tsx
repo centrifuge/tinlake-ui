@@ -19,7 +19,7 @@ class Footer extends React.Component<FooterProps> {
         direction="row"
         >
 
-      <Box direction="row" width="xlarge" justify="between" margin={{ top:'medium', bottom:'medium' }} >
+      <Box direction="row" width="xlarge" justify="between" margin={{ top:'medium', bottom:'medium' }} pad={{horizontal:"small"}}>
       <Box basis={'1/5'}>
         <Text> Centrifuge Tinlake </Text>
       </Box>
