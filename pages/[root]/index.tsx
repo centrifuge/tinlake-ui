@@ -5,7 +5,7 @@ import Overview from '../../containers/Overview';
 import WithTinlake from '../../components/WithTinlake';
 import { menuItems } from '../../menuItems';
 import config from '../../config';
-import { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 
 const pools = config.pools;
 
@@ -16,8 +16,14 @@ interface Props {
 class Pool extends React.Component <Props> {
 
   render() {
-    const { root } = this.props;
+    const { root } = useRouter().query
+
     const selectedPool = pools.find(pool => pool.addresses.ROOT_CONTRACT === root);
+
+    if (!selectedPool) {
+      return <div>404</div>
+    }
+
     return (
       <Box align="center" pad={{ horizontal: 'small' }}>
         <Header selectedRoute={'/'} menuItems={menuItems} />
@@ -32,17 +38,5 @@ class Pool extends React.Component <Props> {
     );
   }
 }
-
-export async function getStaticPaths() {
-  // We'll pre-render only these paths at build time.
-  const paths = config.pools.map(pool => ({ params: { root: pool.addresses.ROOT_CONTRACT } }));
-
-  // { fallback: false } means other routes should 404.
-  return { paths, fallback: false };
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return { props: { root: params?.root } };
-};
 
 export default Pool;
