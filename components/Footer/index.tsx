@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Anchor} from 'grommet';
+import { Box, Text, Anchor } from 'grommet';
 
 interface FooterProps {
 }
