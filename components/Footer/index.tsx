@@ -25,9 +25,9 @@ class Footer extends React.Component<FooterProps> {
       </Box>
       <Box basis={'1/5'}>
         <Text> Learn More </Text>
-        <Anchor  margin={{ top: 'xsmall' }} href="https://centrifuge.io/products/tinlake/" target="blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="Website" />
-        <Anchor  margin={{ top: 'xsmall' }} href="https://developer.centrifuge.io/" target="blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="Documentation" />
-        <Anchor  margin={{ top: 'xsmall' }} href="https://github.com/centrifuge" target="blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="GitHub" />
+        <Anchor  margin={{ top: 'xsmall' }} href="https://centrifuge.io/products/tinlake/" target="_blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="Website" />
+        <Anchor  margin={{ top: 'xsmall' }} href="https://developer.centrifuge.io/" target="_blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="Documentation" />
+        <Anchor  margin={{ top: 'xsmall' }} href="https://github.com/centrifuge" target="_blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="GitHub" />
       </Box>
       </Box>
     </Box>;
