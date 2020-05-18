@@ -19,7 +19,7 @@ class LoanIssuePage extends React.Component<Props> {
   }
   render() {
     const { tokenId, registry } = this.props;
-    return <Box align="center" pad={{ horizontal: 'small' }}>
+    return <Box align="center" pad={{ horizontal: 'small' }}  style={{flex: 1}}>
       <Header
         selectedRoute={'/loans/issue'}
         menuItems={menuItems}

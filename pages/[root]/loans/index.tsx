@@ -10,15 +10,14 @@ import { PoolLink } from '../../../components/PoolLink';
 
 class LoanListPage extends React.Component {
   render() {
-    return <Box pad={{ horizontal: 'small' }}>
+    return <Box pad={{ horizontal: 'small' }} >
       <Header
         selectedRoute={'/loans'}
         menuItems={menuItems}
       />
       <Box
         justify="evenly"
-        direction="row"
-
+        direction="row" 
       >
         <Box width="xlarge" gap="medium" >
           <WithTinlake render={tinlake =>

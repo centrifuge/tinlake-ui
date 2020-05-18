@@ -19,7 +19,7 @@ class InvestorPage extends React.Component<Props> {
 
   render() {
     const { investorAddress } = this.props;
-    return <Box align="center" pad={{ horizontal: 'small' }}>
+    return <Box align="center" pad={{ horizontal: 'small' }} style={{flex: 1}}>
       <Header
         selectedRoute={'/investments/investor'}
         menuItems={menuItems}
@@ -27,6 +27,7 @@ class InvestorPage extends React.Component<Props> {
       <Box
         justify="center"
         direction="row"
+        style={{flex: 1}}
       >
         <Box width="xlarge" >
           <WithTinlake render={tinlake =>
