@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Text, Anchor } from 'grommet';
+import { Box, Text, Anchor, ThemeContext } from 'grommet';
 
 interface FooterProps {
 }
@@ -7,7 +7,14 @@ interface FooterProps {
 class Footer extends React.Component<FooterProps> {
 
   render() {
-    return <Box
+    return <ThemeContext.Extend value={
+      {
+        global:
+        {
+          focus: { border: { color: "none" } }
+        }
+      }
+    }><Box
         style={{ height:'150px' }}
         border={{
           color: '#f5f5f5',
@@ -30,7 +37,7 @@ class Footer extends React.Component<FooterProps> {
         <Anchor  margin={{ top: 'xsmall' }} href="https://github.com/centrifuge" target="_blank" style={{ textDecoration: 'none', color: '#2762FF' }} label="GitHub" />
       </Box>
       </Box>
-    </Box>;
+    </Box></ThemeContext.Extend>;
   }
 }
 

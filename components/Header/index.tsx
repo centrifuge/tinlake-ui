@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Image, Text, Anchor, ResponsiveContext } from 'grommet';
+import { Box, Button, Image, Text, Anchor, ResponsiveContext, ThemeContext } from 'grommet';
 import { Menu as MenuIcon, User as UserIcon, Close as CloseIcon } from 'grommet-icons';
 import { connect } from 'react-redux';
 import Link from 'next/link';
@@ -80,7 +80,14 @@ class Header extends React.Component<HeaderProps, State> {
       }
     };
 
-    return <Box
+    return <ThemeContext.Extend value={
+      {
+        global:
+        {
+          focus: { border: { color: "none" } }
+        }
+      }
+    }><Box
       style={{ position: 'sticky', top: 0, height: '90px', zIndex: 1 }}
       background="white"
       border={{ side: 'bottom', color: 'light-4' }}
@@ -90,79 +97,14 @@ class Header extends React.Component<HeaderProps, State> {
       fill="horizontal"
       pad={{ horizontal: 'small' }}
     >
-      <ResponsiveContext.Consumer>{size => size === 'large' ? (
+        <ResponsiveContext.Consumer>{size => size === 'large' ? (
 
-        <Box direction="row" width="xlarge" align="center" >
-          <Box align="center" direction="row" basis="full" >
-            <Link href="/">
-              <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
-            </Link>
-            <Box fill={false} basis="full">
-              <NavBar
-                border={false}
-                theme={theme}
-                menuItems={menuItems.filter((item) => {
-                  return (
-                    (isDemo && item.env === 'demo' || item.env === '')
-                    && !item.secondary
-                  );
-                }
-                )}
-                overlayWidth="100vw"
-                selectedRoute={selectedRoute}
-                onRouteClick={this.onRouteClick}
-              />
-            </Box>
-          </Box>
-          <Box direction="row" basis="full">
-            {!user &&
-              <Box direction="column" align="end" basis="full" alignSelf="center">
-                <Button onClick={this.connectAccount} label="Connect" />
-              </Box>
-            }
-            {user &&
-              <Box direction="column" align="end" basis="full">
-                <Box direction="row" gap={itemGap} align="center" justify="start">
-                  <Text> {formatAddress(address || '')} </Text>
-                </Box>
-                <Box direction="row" justify="start" >
-                  {network && <Text style={{ color: '#808080', lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text>}
-                </Box>
-              </Box>
-            }
-            {isDemo &&
-              <Box pad={{ left: 'small' }} alignSelf="center"> <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="_blank" label="Help" style={{ textDecoration: 'none', fontWeight: 900 }} /> </Box>
-            }</Box>
-        </Box>
-      )
-        : (
-          <Box direction="row" width="xlarge" align="center">
+          <Box direction="row" width="xlarge" align="center" >
             <Box align="center" direction="row" basis="full" >
               <Link href="/">
                 <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
               </Link>
-            </Box>
-            <Box direction="row" basis="full" >
-            {!user &&
-              <Box direction="column" align="end" basis="full" alignSelf="center">
-                <Button onClick={this.connectAccount} label="Connect" />
-              </Box>
-            }
-            {user &&
-            <Box direction="column" align="end" basis="full" alignSelf="center">
-              <Box direction="row" gap={itemGap} align="center" justify="start">
-                <Text> {formatAddress(address || '')} </Text>
-              </Box>
-              <Box direction="row" justify="start" >
-                {network && <Text style={{ color: '#808080', lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text>}
-              </Box>
-            </Box>
-            }
-            {isDemo &&
-              <Box margin={{ horizontal: 'small' }} alignSelf="center"> <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="_blank" label="Help" style={{ textDecoration: 'none', fontWeight: 900 }} /> </Box>
-            }
-
-              <Box fill={false}>
+              <Box fill={false} basis="full">
                 <NavBar
                   border={false}
                   theme={theme}
@@ -179,9 +121,74 @@ class Header extends React.Component<HeaderProps, State> {
                 />
               </Box>
             </Box>
-
+            <Box direction="row" basis="full">
+              {!user &&
+                <Box direction="column" align="end" basis="full" alignSelf="center">
+                  <Button onClick={this.connectAccount} label="Connect" />
+                </Box>
+              }
+              {user &&
+                <Box direction="column" align="end" basis="full">
+                  <Box direction="row" gap={itemGap} align="center" justify="start">
+                    <Text> {formatAddress(address || '')} </Text>
+                  </Box>
+                  <Box direction="row" justify="start" >
+                    {network && <Text style={{ color: '#808080', lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text>}
+                  </Box>
+                </Box>
+              }
+              {isDemo &&
+                <Box pad={{ left: 'small' }} alignSelf="center"> <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="_blank" label="Help" style={{ textDecoration: 'none', fontWeight: 900 }} /> </Box>
+              }</Box>
           </Box>
-        )}</ResponsiveContext.Consumer> </Box>;
+        )
+          : (
+            <Box direction="row" width="xlarge" align="center">
+              <Box align="center" direction="row" basis="full" >
+                <Link href="/">
+                  <a title="Tinlake"><Image src={logoUrl} style={{ width: 130 }} /></a>
+                </Link>
+              </Box>
+              <Box direction="row" basis="full" >
+                {!user &&
+                  <Box direction="column" align="end" basis="full" alignSelf="center">
+                    <Button onClick={this.connectAccount} label="Connect" />
+                  </Box>
+                }
+                {user &&
+                  <Box direction="column" align="end" basis="full" alignSelf="center">
+                    <Box direction="row" gap={itemGap} align="center" justify="start">
+                      <Text> {formatAddress(address || '')} </Text>
+                    </Box>
+                    <Box direction="row" justify="start" >
+                      {network && <Text style={{ color: '#808080', lineHeight: '12px', fontSize: '12px' }}> Connected to {network} </Text>}
+                    </Box>
+                  </Box>
+                }
+                {isDemo &&
+                  <Box margin={{ horizontal: 'small' }} alignSelf="center"> <Anchor href="https://centrifuge.hackmd.io/zRnaoPqfS7mTm9XL0dDRtQ?view" target="_blank" label="Help" style={{ textDecoration: 'none', fontWeight: 900 }} /> </Box>
+                }
+
+                <Box fill={false}>
+                  <NavBar
+                    border={false}
+                    theme={theme}
+                    menuItems={menuItems.filter((item) => {
+                      return (
+                        (isDemo && item.env === 'demo' || item.env === '')
+                        && !item.secondary
+                      );
+                    }
+                    )}
+                    overlayWidth="100vw"
+                    selectedRoute={selectedRoute}
+                    onRouteClick={this.onRouteClick}
+                  />
+                </Box>
+              </Box>
+
+            </Box>
+          )}</ResponsiveContext.Consumer> </Box></ThemeContext.Extend>;
   }
 }
 

@@ -19,13 +19,17 @@ class MyApp extends App {
 
     return (
       <AxisTheme full={true}>
-        <StyledApp>
-          <WithTinlake render={tinlake =>
-            <Auth tinlake={tinlake} render={() =>
-              <Component {...pageProps} />
+          <StyledApp
+            style={{
+              minHeight: 'calc(100vh - 150px)'
+            }}>
+
+            <WithTinlake render={tinlake =>
+              <Auth tinlake={tinlake} render={() =>
+                <Component {...pageProps} />
+              } />
             } />
-          } />
-        </StyledApp>
+          </StyledApp>
       </AxisTheme >
     );
   }

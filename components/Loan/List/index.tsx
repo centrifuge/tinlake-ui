@@ -1,6 +1,6 @@
 import * as React from 'react';
 import{ bnToHex, baseToDisplay, feeToInterestRate, Loan } from 'tinlake';
-import { Box, DataTable, Text } from 'grommet';
+import { Box, DataTable, Text, ThemeContext } from 'grommet';
 import NumberDisplay from '../../../components/NumberDisplay';
 import { DisplayField } from '@centrifuge/axis-display-field';
 import { hexToInt } from '../../../utils/etherscanLinkGenerator';
@@ -23,7 +23,14 @@ class LoanList extends React.Component<Props> {
 
   render() {
     const { loans } =  this.props;
-    return <Box>
+    return <ThemeContext.Extend value={
+      {
+        global:
+        {
+          focus: { border: { color: "none" } }
+        }
+      }
+    }><Box>
       <DataTable style={{ tableLayout: 'auto' }} data={loans} sort={{ direction: 'desc', property: 'loanId' }} sortable
         onClickRow={this.clickRow as any} columns={[
           { header: <HeaderCell text={'Loan ID'}></HeaderCell>, property: 'loanId', align: 'end' },
@@ -65,7 +72,7 @@ class LoanList extends React.Component<Props> {
             }
           }
         ]} />
-    </Box>;
+    </Box></ThemeContext.Extend>;
   }
 }
 const HeaderCell = (props: { text: string }) => (
