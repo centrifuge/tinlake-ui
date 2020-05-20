@@ -6,7 +6,6 @@ import { AxisTheme } from '@centrifuge/axis-theme';
 import Auth from '../components/Auth';
 import WithTinlake from '../components/WithTinlake';
 import { StyledApp } from '../components/StyledApp';
-import Footer from '../components/Footer';
 import { ThemeContext } from 'grommet';
 
 class MyApp extends App {
@@ -21,11 +20,7 @@ class MyApp extends App {
 
     return (
       <AxisTheme full={true}>
-        <StyledApp 
-        style={{
-          minHeight: 'calc(100vh - 150px)'
-        }}>
-          <ThemeContext.Extend
+        <ThemeContext.Extend
           value={{
             global: {
               focus: {
@@ -35,14 +30,19 @@ class MyApp extends App {
               }
             }
           }}
-          >
-          <WithTinlake render={tinlake =>
-            <Auth tinlake={tinlake} render={() =>
-              <Component {...pageProps} />
+        >
+          <StyledApp
+            style={{
+              minHeight: 'calc(100vh - 150px)'
+            }}>
+
+            <WithTinlake render={tinlake =>
+              <Auth tinlake={tinlake} render={() =>
+                <Component {...pageProps} />
+              } />
             } />
-          } /></ThemeContext.Extend>
-        </StyledApp>
-        <Footer/>
+          </StyledApp>
+        </ThemeContext.Extend>
       </AxisTheme >
     );
   }
