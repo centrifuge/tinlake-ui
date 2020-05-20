@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import styled, { css, createGlobalStyle, ThemeProvider, withTheme } from 'styled-components';
 import { extendDefaultTheme, defaultProps as defaultProps$1 } from 'grommet/default-props';
-import { Grommet, ThemeContext, Box, Text, Drop, Anchor, Form, FormField, TextInput, Select, Button } from 'grommet';
+import { Grommet, ThemeContext, Box, Text, Drop, Form, FormField, TextInput, Select, Button } from 'grommet';
 import { generate } from 'grommet/themes';
 import { deepMerge } from 'grommet/utils/object';
 
@@ -3426,6 +3426,11 @@ var overflowStyle = {
   width: '200px'
 };
 var specialTheme = {
+  global: {
+    font: {
+      weight: 'normal'
+    }
+  },
   select: {
     options: {
       text: {
@@ -3452,11 +3457,26 @@ var specialTheme = {
   anchor: {
     color: 'black',
     textDecoration: 'underline',
-    weight: 'normal',
     size: 'small'
   }
 };
 var Circleinfo = styled.svg(_templateObject$1());
+
+var Tooltip = function Tooltip(_ref) {
+  var children = _ref.children,
+      target = _ref.target;
+  return /*#__PURE__*/React.createElement(Drop, {
+    align: {
+      top: "bottom",
+      left: "left"
+    },
+    target: target
+  }, /*#__PURE__*/React.createElement(Box, {
+    align: "center",
+    round: "large",
+    background: "dark-2"
+  }, children));
+};
 
 var copyIcon = function copyIcon() {
   return /*#__PURE__*/React.createElement("svg", {
@@ -3482,20 +3502,20 @@ var copyIcon = function copyIcon() {
   }));
 };
 
-var Erc20Widget = function Erc20Widget(_ref) {
-  var value = _ref.value,
-      tokenData = _ref.tokenData,
-      search = _ref.search,
-      balance = _ref.balance,
-      limit = _ref.limit,
-      theme = _ref.theme,
-      precision = _ref.precision,
-      fieldLabel = _ref.fieldLabel,
-      account = _ref.account,
-      onValueChanged = _ref.onValueChanged,
-      errorMessage = _ref.errorMessage,
-      inline = _ref.inline,
-      mainFont = _ref.mainFont;
+var Erc20Widget = function Erc20Widget(_ref2) {
+  var value = _ref2.value,
+      tokenData = _ref2.tokenData,
+      search = _ref2.search,
+      balance = _ref2.balance,
+      limit = _ref2.limit,
+      theme = _ref2.theme,
+      precision = _ref2.precision,
+      fieldLabel = _ref2.fieldLabel,
+      account = _ref2.account,
+      onValueChanged = _ref2.onValueChanged,
+      errorMessage = _ref2.errorMessage,
+      inline = _ref2.inline,
+      mainFont = _ref2.mainFont;
   var tokens = [];
 
   for (var k in tokenData) {
@@ -3537,6 +3557,12 @@ var Erc20Widget = function Erc20Widget(_ref) {
       ellipsis = _useState12[0],
       setEllipsis = _useState12[1];
 
+  var _useState13 = useState(false),
+      _useState14 = _slicedToArray(_useState13, 2),
+      showToolTip = _useState14[0],
+      setToolTip = _useState14[1];
+
+  var toolRef = useRef();
   var dropRef = useRef();
 
   if (amount && precision && amount.toString().includes('.')) {
@@ -3559,10 +3585,7 @@ var Erc20Widget = function Erc20Widget(_ref) {
         align: "center"
       }, /*#__PURE__*/React.createElement("img", {
         src: token.logo,
-        style: !inline ? {
-          width: "32px",
-          height: "32px"
-        } : {
+        style: {
           width: "16px",
           height: "16px"
         }
@@ -3717,10 +3740,10 @@ var Erc20Widget = function Erc20Widget(_ref) {
     direction: "column"
   }, account && /*#__PURE__*/React.createElement(Text, null, "ERC20 Token Balance"), account && renderAddress(), /*#__PURE__*/React.createElement(Text, null, "Token: ", selectedToken === null || selectedToken === void 0 ? void 0 : selectedToken.symbol), /*#__PURE__*/React.createElement(Box, {
     direction: "row"
-  }, /*#__PURE__*/React.createElement(Anchor, {
+  }, /*#__PURE__*/React.createElement("a", {
     href: "https://etherscan.io/token/" + (selectedToken === null || selectedToken === void 0 ? void 0 : selectedToken.address),
-    label: "View Token"
-  }), "\xA0on Etherscan")))), /*#__PURE__*/React.createElement(Box, {
+    target: "_blank"
+  }, "View Token"), "\xA0on Etherscan")))), /*#__PURE__*/React.createElement(Box, {
     direction: "row-responsive",
     gap: "xxsmall",
     justify: "between",
@@ -3736,7 +3759,8 @@ var Erc20Widget = function Erc20Widget(_ref) {
     }
   }, /*#__PURE__*/React.createElement(TextInput, {
     style: {
-      minWidth: "212px"
+      maxWidth: "212px",
+      fontWeight: 'normal'
     },
     placeholder: "100,000,000.000",
     value: displayAmount,
@@ -3744,6 +3768,7 @@ var Erc20Widget = function Erc20Widget(_ref) {
       return renderDisplayAmount(event.target.value);
     }
   })))), value && /*#__PURE__*/React.createElement(Box, {
+    ref: toolRef,
     flex: "shrink",
     direction: "row",
     style: {
@@ -3754,15 +3779,24 @@ var Erc20Widget = function Erc20Widget(_ref) {
       if (event.detail == 2) {
         copyAndHighlight();
       }
+    },
+    onMouseOver: function onMouseOver() {
+      return setToolTip(true);
+    },
+    onMouseOut: function onMouseOut() {
+      return setToolTip(false);
     }
   }, /*#__PURE__*/React.createElement(Text, {
     style: {
-      width: "212px",
-      fontSize: mainFont ? mainFont : undefined
+      width: "212px"
     },
     truncate: true,
     id: "tokenValue"
-  }, precision ? new BigNumber(value).toFormat(precision) + (ellipsis == true ? '…' : '') : new BigNumber(value).toFormat())), tokens.length == 1 && /*#__PURE__*/React.createElement(Box, {
+  }, precision ? new BigNumber(value).toFormat(precision) + (ellipsis == true ? '…' : '') : new BigNumber(value).toFormat())), showToolTip && /*#__PURE__*/React.createElement(Tooltip, {
+    target: toolRef.current
+  }, /*#__PURE__*/React.createElement(Text, {
+    size: "small"
+  }, "Copy amount to clipboard")), tokens.length == 1 && /*#__PURE__*/React.createElement(Box, {
     fill: "horizontal",
     direction: "row",
     gap: "small",
@@ -3793,8 +3827,8 @@ var Erc20Widget = function Erc20Widget(_ref) {
     options: tokens,
     value: value,
     labelKey: "label",
-    onChange: function onChange(_ref2) {
-      var option = _ref2.option;
+    onChange: function onChange(_ref3) {
+      var option = _ref3.option;
       return setToken(option);
     },
     valueLabel: renderToken(selectedToken),
@@ -3825,7 +3859,7 @@ Erc20Widget.defaultProps = _objectSpread2({
     symbol: "DAI",
     logo: "",
     address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-    decimals: 12
+    decimals: 18
   }],
   inline: false
 }, defaultProps$1);

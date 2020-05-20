@@ -59,6 +59,14 @@ const overflowStyle = {
 };
 
 const specialTheme = ({
+  global: {
+    font : {
+      weight: 'normal',
+    },
+    colors : {
+      focus:
+    }
+  },
   select: {
     options: {
       text : {
@@ -80,12 +88,11 @@ const specialTheme = ({
       }, 
     margin: {
       bottom: "none"
-    }
+    },
   },
   anchor :{
     color: 'black',
     textDecoration: 'underline',
-    weight: 'normal',
     size: 'small'
     }
 });
@@ -99,6 +106,22 @@ const Circleinfo = styled.svg`
     cursor: pointer;
   }
 `;
+
+
+const Tooltip = ({ children, target }) => (
+  <Drop
+    align={{ top: "bottom", left: "left" }}
+    target={target}
+  >
+    <Box
+      align="center"
+      round="large"
+      background="dark-2"
+    >
+      {children}
+    </Box>
+  </Drop>
+);
 
 const copyIcon = () => {
   return (
@@ -136,6 +159,8 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   const [options, setOptions] = useState(tokens);
   const [showDrop, setDrop] = useState(false);
   const [ellipsis, setEllipsis] = useState(false);
+  const [showToolTip, setToolTip] = useState(false);
+  const toolRef = useRef();
   const dropRef = useRef();
   
   if (amount && precision && amount.toString().includes('.')) {
@@ -150,7 +175,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     if (token) {
       return <Box direction="row" align="center" gap="small" pad={!inline ? "xsmall" : undefined}>
         <Box direction="row" align="center">
-          <img src={token.logo} style={!inline ? {width:"32px", height:"32px"} : {width:"16px", height:"16px"}} />
+          <img src={token.logo} style={{width:"16px", height:"16px"}} />
         </Box>
         <Box direction="row" align="start">
           <Text style={{fontSize: mainFont ? mainFont : undefined }}>{token.symbol}</Text></Box>
@@ -271,7 +296,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               {account && <Text>ERC20 Token Balance</Text>}
               {account && renderAddress()}
               <Text>Token: {selectedToken?.symbol}</Text>
-              <Box direction="row"><Anchor href={"https://etherscan.io/token/" + selectedToken?.address} label="View Token" />&nbsp;on Etherscan</Box>
+              <Box direction="row"><a href={"https://etherscan.io/token/" + selectedToken?.address} target="_blank">View Token</a>&nbsp;on Etherscan</Box>
             </Box>
           </Drop>}
         </Box>}
@@ -284,7 +309,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
             <FormField
               validate={() => validateInput()}>
               <TextInput
-                style={{ minWidth: "212px" }}
+                style={{ maxWidth: "212px", fontWeight: 'normal' }}
                 placeholder="100,000,000.000"
                 value={displayAmount}
                 onChange={event => renderDisplayAmount(event.target.value)
@@ -295,12 +320,15 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
 
           { /* Amount Display for Token Balance */}
           {value &&
-            <Box flex="shrink" direction="row" style={{ borderBottom: (!inline) ? "1px solid #EEEEEE" : undefined, alignItems: "center" }} onClick={(event) => {
+            <Box ref={toolRef}
+            flex="shrink" direction="row" style={{ borderBottom: (!inline) ? "1px solid #EEEEEE" : undefined, alignItems: "center" }} onClick={(event) => {
               if (event.detail == 2) {
                 copyAndHighlight();
               }
-            }}>
-              <Text style={{ width: "212px", fontSize: mainFont ? mainFont : undefined }} 
+            }}
+            onMouseOver={() => setToolTip(true)}
+            onMouseOut={() => setToolTip(false)}>
+              <Text style={{ width: "212px" }} 
                 truncate={true} 
                 id="tokenValue">
                   {(precision) ? new bigNumber(value).toFormat(precision) + 
@@ -308,6 +336,13 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
                   : new bigNumber(value).toFormat()}
               </Text>
             </Box>}
+            {showToolTip &&
+          <Tooltip target={toolRef.current}>
+            <Text size="small">
+              Copy amount to clipboard
+            </Text>
+          </Tooltip>
+        }
 
 
           { /* Token Icon/Ticker Display */}
