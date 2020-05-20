@@ -15,7 +15,6 @@ class Dashboard extends React.Component<Props> {
   componentDidMount() {
     const { loadPools } = this.props;
     loadPools && loadPools();
-
   }
 
   render() {
@@ -28,7 +27,7 @@ class Dashboard extends React.Component<Props> {
             message={'Loading...'}
           />
         ) : (
-          pools.data &&
+          pools.data && 
             <Box basis={'full'}>
               <Box margin={{ top: 'large', bottom: 'medium' }} direction="row">
                 <Box gap="large" style={{ minWidth: 130 }}>
