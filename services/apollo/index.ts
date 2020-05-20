@@ -57,7 +57,7 @@ class Apollo {
         weightedInterestRate: pool && new BN(pool.weightedInterestRate) || new BN('0'),
         weightedInterestRateDrop: new BN('0') // TODO how to get this value?
       };
-    })
+    });
     return tinlakePools;
   }
 
