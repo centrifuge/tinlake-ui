@@ -3429,6 +3429,13 @@ var specialTheme = {
   global: {
     font: {
       weight: 'normal'
+    },
+    colors: {
+      focus: {
+        border: {
+          color: "none"
+        }
+      }
     }
   },
   select: {
@@ -3515,7 +3522,8 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       onValueChanged = _ref2.onValueChanged,
       errorMessage = _ref2.errorMessage,
       inline = _ref2.inline,
-      mainFont = _ref2.mainFont;
+      input = _ref2.input,
+      placeholderValue = _ref2.placeholderValue;
   var tokens = [];
 
   for (var k in tokenData) {
@@ -3592,11 +3600,7 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       })), /*#__PURE__*/React.createElement(Box, {
         direction: "row",
         align: "start"
-      }, /*#__PURE__*/React.createElement(Text, {
-        style: {
-          fontSize: mainFont ? mainFont : undefined
-        }
-      }, token.symbol)));
+      }, /*#__PURE__*/React.createElement(Text, null, token.symbol)));
     } else return undefined;
   };
 
@@ -3615,7 +3619,7 @@ var Erc20Widget = function Erc20Widget(_ref2) {
 
   var validateInput = function validateInput() {
     if (onValueChanged != undefined) {
-      onValueChanged(amount === null || amount === void 0 ? void 0 : amount.toString());
+      onValueChanged(amount ? amount.toString() : '');
     } // Check for invalid characters
 
 
@@ -3748,26 +3752,25 @@ var Erc20Widget = function Erc20Widget(_ref2) {
     gap: "xxsmall",
     justify: "between",
     fill: "horizontal"
-  }, !value && /*#__PURE__*/React.createElement(Box, {
+  }, input && /*#__PURE__*/React.createElement(Box, {
     direction: "row",
     style: {
       borderBottom: "1px solid black"
     }
   }, /*#__PURE__*/React.createElement(Form, null, /*#__PURE__*/React.createElement(FormField, {
-    validate: function validate() {
-      return validateInput();
-    }
+    validate: validateInput
   }, /*#__PURE__*/React.createElement(TextInput, {
     style: {
       maxWidth: "212px",
       fontWeight: 'normal'
     },
-    placeholder: "100,000,000.000",
+    placeholder: placeholderValue ? placeholderValue : "100,000,000.000",
     value: displayAmount,
     onChange: function onChange(event) {
-      return renderDisplayAmount(event.target.value);
+      var newValue = event.target.value.replace(/[^\d.-]/g, '');
+      renderDisplayAmount(newValue);
     }
-  })))), value && /*#__PURE__*/React.createElement(Box, {
+  })))), !input && /*#__PURE__*/React.createElement(Box, {
     ref: toolRef,
     flex: "shrink",
     direction: "row",
@@ -3841,9 +3844,16 @@ var Erc20Widget = function Erc20Widget(_ref2) {
     } : undefined
   }))), (balance || limit) && !inline && /*#__PURE__*/React.createElement(Box, {
     direction: "row",
+    justify: "end",
     alignSelf: "end",
     gap: "small"
   }, balance ? /*#__PURE__*/React.createElement(Text, {
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      width: '150px'
+    },
     size: "small",
     alignSelf: "end",
     truncate: true
@@ -3855,12 +3865,14 @@ var Erc20Widget = function Erc20Widget(_ref2) {
 };
 extendDefaultTheme(defaultThemeProps);
 Erc20Widget.defaultProps = _objectSpread2({
-  tokens: [{
-    symbol: "DAI",
-    logo: "",
-    address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-    decimals: 18
-  }],
+  tokenData: {
+    "0x6b175474e89094c44da98b954eedeac495271d0f": {
+      symbol: "DAI",
+      logo: "",
+      decimals: 18,
+      name: "DAI"
+    }
+  },
   inline: false
 }, defaultProps$1);
 var Erc20Widget$1 = withTheme(Erc20Widget);

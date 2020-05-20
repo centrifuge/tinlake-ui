@@ -79,10 +79,10 @@ class InvestorRedeem extends React.Component<Props, State> {
     };
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
-        {tranche.type === 'senior' && <Erc20Widget fieldLabel="Redeem token" limit={maxRedeemAmount.toString()} tokenData={dropToken} precision={18} onValueChanged={(value : string) =>
+        {tranche.type === 'senior' && <Erc20Widget input={true} fieldLabel="Redeem token" limit={300000000000000000} tokenData={dropToken} precision={18} onValueChanged={(value : string) =>
                 this.setState({ redeemAmount: displayToBase(value, 18) })}
                 errorMessage="Max redeem amount exceeded" />}
-        {tranche.type === 'junior' && <Erc20Widget fieldLabel="Redeem token" limit={maxRedeemAmount.toString()} tokenData={tinToken} precision={18} onValueChanged={(value : string) =>
+        {tranche.type === 'junior' && <Erc20Widget input={true} fieldLabel="Redeem token" limit={maxRedeemAmount.toString()} tokenData={tinToken} precision={18} onValueChanged={(value : string) =>
                 this.setState({ redeemAmount: displayToBase(value, 18) })}
                 errorMessage="Max redeem amount exceeded" />}
       </Box>
