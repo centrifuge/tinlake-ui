@@ -321,7 +321,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
                 style={{ maxWidth: "212px", fontWeight: 'normal' }}
                 placeholder={placeholderValue ? placeholderValue : "100,000,000.000"}
                 value={displayAmount}
-                onChange={event => {
+                onChange={(event) => {
                   const newValue = event.target.value.replace(/[^\d.-]/g, '');
                   renderDisplayAmount(newValue);
                 }}
