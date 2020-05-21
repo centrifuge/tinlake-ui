@@ -390,9 +390,14 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            width: '150px',
+            maxWidth: '150px',
           }} size="small" alignSelf="end" truncate={true}>Balance : {new bigNumber(balance).toFormat()}</Text> :
-            <Text size="small" alignSelf="end" truncate={true}>Limit : {new bigNumber(limit).toFormat()}</Text>}
+            <Text style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '150px',
+            }} size="small" alignSelf="end" truncate={true}>Limit : {new bigNumber(limit).toFormat()}</Text>}
           {balance ? setMax(balance) : setMax(limit)}
         </Box>}
 

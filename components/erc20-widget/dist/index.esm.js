@@ -3852,12 +3852,18 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      width: '150px'
+      maxWidth: '150px'
     },
     size: "small",
     alignSelf: "end",
     truncate: true
   }, "Balance : ", new BigNumber(balance).toFormat()) : /*#__PURE__*/React.createElement(Text, {
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      maxWidth: '150px'
+    },
     size: "small",
     alignSelf: "end",
     truncate: true
