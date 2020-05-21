@@ -3693,7 +3693,7 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       setAmount(new BigNumber(0));
     } else if (!/^[0-9,.]*$/.test(newAmount)) {
       setDisplayAmount(newAmount);
-    } else if (newAmount[newAmount.length - 1] == '.' || newAmount[newAmount.length - 1] == '0') {
+    } else if (newAmount[newAmount.length - 1] == '.' || newAmount[newAmount.length - 2] == '.' && newAmount[newAmount.length - 1] == '0') {
       setDisplayAmount(newAmount);
     } else {
       var newValue = newAmount.replace(/,/g, '');

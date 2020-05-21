@@ -270,13 +270,13 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
     else if (!(/^[0-9,.]*$/.test(newAmount))) {
       setDisplayAmount(newAmount);
     }
-    else if ((newAmount[newAmount.length - 1] == '.') || (newAmount[newAmount.length - 1] == '0')) {
+    else if ((newAmount[newAmount.length - 1] == '.') || ((newAmount[newAmount.length - 2] == '.') && newAmount[newAmount.length - 1] == '0')) {
       setDisplayAmount(newAmount);
     }
     else {
       var newValue = newAmount.replace(/,/g, '');
       setAmount(new bigNumber(newValue));
-      setDisplayAmount((new bigNumber(newValue)).toFormat());
+      setDisplayAmount(new bigNumber(newValue).toFormat());
     }
   }
 
