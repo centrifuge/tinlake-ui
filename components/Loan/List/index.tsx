@@ -27,7 +27,7 @@ class LoanList extends React.Component<Props> {
       {
         global:
         {
-          focus: { border: { color: "none" } }
+          focus: { border: { color: 'none' } }
         }
       }
     }><Box>

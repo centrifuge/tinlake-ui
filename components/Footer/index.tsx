@@ -11,7 +11,7 @@ class Footer extends React.Component<FooterProps> {
       {
         global:
         {
-          focus: { border: { color: "none" } }
+          focus: { border: { color: 'none' } }
         }
       }
     }><Box

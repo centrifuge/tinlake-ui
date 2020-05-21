@@ -84,7 +84,7 @@ class Header extends React.Component<HeaderProps, State> {
       {
         global:
         {
-          focus: { border: { color: "none" } }
+          focus: { border: { color: 'none' } }
         }
       }
     }><Box
