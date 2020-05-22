@@ -51,10 +51,11 @@ class InvestorAllowance extends React.Component<Props, State> {
 
     }
   }
-  componentDidMount() {
+
+  componentWillMount() {
     this.updateLimits();
   }
-
+  
   setAllowance = async () => {
     this.props.transactionSubmitted && this.props.transactionSubmitted('Allowance initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.');
     try {
