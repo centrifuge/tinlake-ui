@@ -81,7 +81,6 @@ class InvestorAllowance extends React.Component<Props, State> {
     const { tranche } = this.props;
 
     this.updateLimits();
-    console.log('render supply, redeem', supplyAmount, redeemAmount);
     return <Box>
       <Box gap="medium" align="start" margin={{ bottom: 'medium' }} >
         <Heading level="4" margin="none"> Set allowance </Heading>
