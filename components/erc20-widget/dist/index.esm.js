@@ -3690,6 +3690,7 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       fontSize: "small"
     }
   }, fieldLabel), /*#__PURE__*/React.createElement(Box, {
+    pad: "xxxsmall",
     ref: dropRef,
     onMouseOver: function onMouseOver() {
       return selectedToken ? setDrop(true) : undefined;

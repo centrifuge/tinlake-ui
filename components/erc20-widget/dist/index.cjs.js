@@ -3698,6 +3698,7 @@ var Erc20Widget = function Erc20Widget(_ref2) {
       fontSize: "small"
     }
   }, fieldLabel), /*#__PURE__*/React__default.createElement(grommet.Box, {
+    pad: "xxxsmall",
     ref: dropRef,
     onMouseOver: function onMouseOver() {
       return selectedToken ? setDrop(true) : undefined;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { AuthState } from '../../../ducks/auth';
 import { InvestorState, loadInvestor } from '../../../ducks/investments';
 import { connect } from 'react-redux';
-import { Box, Tab, Tabs } from 'grommet';
+import { Box, Tab, Tabs, Text } from 'grommet';
 import Alert from '../../../components/Alert';
 import { Spinner } from '@centrifuge/axis-spinner';
 import { isValidAddress } from '../../../utils/address';
@@ -126,7 +126,7 @@ class InvestorView extends React.Component<Props, State> {
             flex: 1,
             fontWeight: 900
           }}
-          >
+          ><span></span> {/* Hack to get tabs to work right */}
             <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} tranche={{...juniorTranche}} />
           </Tab>
         </Tabs>
