@@ -46,9 +46,9 @@ class InvestorAllowance extends React.Component<Props, State> {
         currentSupplyLimit: (tranche.maxSupply && tranche.maxSupply.toString()) || '0',
         currentRedeemLimit: (tranche.maxRedeem && tranche.maxRedeem.toString()) || '0',
         supplyAmount: (tranche.maxSupply && tranche.maxSupply.toString()) || '0',
-        redeemAmount: (tranche.maxRedeem && tranche.maxRedeem.toString()) || '0',
+        redeemAmount: (tranche.maxRedeem && tranche.maxRedeem.toString()) || '0'
       });
-      
+
     }
   }
   componentDidMount() {
@@ -81,7 +81,7 @@ class InvestorAllowance extends React.Component<Props, State> {
     const { tranche } = this.props;
 
     this.updateLimits();
-    console.log("render supply, redeem", supplyAmount, redeemAmount);
+    console.log('render supply, redeem', supplyAmount, redeemAmount);
     return <Box>
       <Box gap="medium" align="start" margin={{ bottom: 'medium' }} >
         <Heading level="4" margin="none"> Set allowance </Heading>
