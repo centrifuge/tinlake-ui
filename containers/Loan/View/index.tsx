@@ -39,8 +39,6 @@ class LoanView extends React.Component<Props> {
   render() {
     const { loans, loanId, tinlake, auth, transactions } = this.props;
     const { loan, loanState } = loans!;
-
-    console.log('hi hi', auth);
     if (loanState === null || loanState === 'loading') { return null; }
     if (loanState === 'not found') {
       return <Alert margin="medium" type="error">
