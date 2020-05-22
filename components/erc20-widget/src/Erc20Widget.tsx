@@ -102,17 +102,6 @@ const specialTheme = ({
   }
 });
 
-const Circleinfo = styled.svg`
-  fill: black;
-  & :hover {
-    path {
-      fill: black;
-    }
-    cursor: pointer;
-  }
-`;
-
-
 const Tooltip = ({ children, target }) => (
   <Drop
     align={{ top: "bottom", left: "left" }}
@@ -286,20 +275,21 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
       <Box direction="column" align="start" style={{ width: tokens.length > 1 ? "336px" : "284px" }}>
         { /* Optional Field Label and Information Icon */}
 
-        {!inline && <Box direction="row-responsive" justify="between" gap="xsmall" ref={dropRef} fill="horizontal">
+        {!inline && <Box direction="row-responsive" justify="between" gap="xsmall" fill="horizontal" >
           <Text style={{ fontSize: "small" }}>{fieldLabel}</Text>
-          <Circleinfo onClick={() => (selectedToken ? setDrop(true) : undefined)}
+            <Box ref={dropRef} onMouseOver={() => (selectedToken ? setDrop(true) : undefined)}
+              onMouseOut={() => (selectedToken ? setDrop(false) : undefined)}><svg 
             width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.00008 15.3333C3.93341 15.3333 0.666748 12.0666 0.666748 7.99996C0.666748 3.93329 3.93341 0.666626 8.00008 0.666626C12.0667 0.666626 15.3334 3.93329 15.3334 7.99996C15.3334 12.0666 12.0667 15.3333 8.00008 15.3333ZM8.00008 1.99996C4.66675 1.99996 2.00008 4.66663 2.00008 7.99996C2.00008 11.3333 4.66675 14 8.00008 14C11.3334 14 14.0001 11.3333 14.0001 7.99996C14.0001 4.66663 11.3334 1.99996 8.00008 1.99996Z" fill="#EEEEEE" />
             <path d="M7.99992 11.3334C7.59992 11.3334 7.33325 11.0667 7.33325 10.6667V8.00004C7.33325 7.60004 7.59992 7.33337 7.99992 7.33337C8.39992 7.33337 8.66659 7.60004 8.66659 8.00004V10.6667C8.66659 11.0667 8.39992 11.3334 7.99992 11.3334Z" fill="#EEEEEE" />
             <path d="M7.99992 5.99996C7.79992 5.99996 7.66659 5.93329 7.53325 5.79996C7.39992 5.66663 7.33325 5.53329 7.33325 5.33329C7.33325 5.13329 7.39992 4.99996 7.53325 4.86663C7.79992 4.59996 8.19992 4.59996 8.46659 4.86663C8.59992 4.99996 8.66659 5.13329 8.66659 5.33329C8.66659 5.53329 8.59992 5.66663 8.46659 5.79996C8.33325 5.93329 8.19992 5.99996 7.99992 5.99996Z" fill="#EEEEEE" />
-          </Circleinfo>
+          </svg></Box>
           {showDrop && <Drop
             stretch={false}
             pad="small"
             onClickOutside={() => setDrop(false)}
             target={dropRef.current}
-            align={{ right: "right" }}
+            align={{ bottom: "top", left: "right" }}
           ><Box direction="column">
               {account && <Text>ERC20 Token Balance</Text>}
               {account && renderAddress()}
