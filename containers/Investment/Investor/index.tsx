@@ -10,6 +10,7 @@ import TrancheView from '../Tranche';
 import { TransactionState, resetTransactionState } from '../../../ducks/transactions';
 import { PoolState, loadPool } from '../../../ducks/pool';
 
+
 interface Props {
   tinlake: any;
   auth: AuthState;
@@ -26,15 +27,18 @@ interface State {
   errorMsg: string;
   is: string | null;
   selectedTab: number;
+  tranche: any;
 }
 
 class InvestorView extends React.Component<Props, State> {
   state: State = {
     errorMsg: '',
     is: null,
-    selectedTab: 0
+    selectedTab: 0,
+    tranche: null
   };
 
+  
   showInvestor = async () => {
     const { investorAddress } = this.props;
     const { loadInvestor, tinlake } = this.props;
@@ -77,7 +81,26 @@ class InvestorView extends React.Component<Props, State> {
     const { tinlake, investments, auth, pool, transactions } = this.props;
     const investor = investments && investments.investor;
     const investorState = investments && investments.investorState;
-
+    const dropAddress = this.props.tinlake.contractAddresses.SENIOR_TOKEN as string;
+    const tinAddress = this.props.tinlake.contractAddresses.JUNIOR_TOKEN as string;
+    const dropToken = {
+      [dropAddress] : {
+        symbol: 'DROP',
+        logo: '../../static/DROP_final.svg',
+        decimals: 18,
+        name: 'DROP'
+      }
+    };
+    const tinToken = {
+      [tinAddress] : {
+        symbol: 'TIN',
+        logo: '../../static/TIN_final.svg',
+        decimals: 18,
+        name: 'TIN'
+      }
+    };
+    var seniorTranche = pool?.data ? {...pool.data.senior,...{"tokenData":{...dropToken}}} : null;
+    var juniorTranche = pool?.data ? {...pool.data.junior,...{"tokenData":{...tinToken}}} : null;
     if (investorState && investorState === 'loading') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={'Loading Investor information...'} />;
     }
@@ -97,14 +120,14 @@ class InvestorView extends React.Component<Props, State> {
             fontWeight: 900
           }}>
             <TrancheView tinlake={tinlake} transactions={transactions} auth={auth} investor={investor}
-              tranche={pool.data.senior as any} />
+              tranche={{...seniorTranche}}/>
           </Tab>
           <Tab title="Junior tranche / TIN token" style={{
             flex: 1,
             fontWeight: 900
           }}
           >
-            <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} tranche={pool.data.junior} />
+            <TrancheView transactions={transactions} tinlake={tinlake} auth={auth} investor={investor} tranche={{...juniorTranche}} />
           </Tab>
         </Tabs>
       </Box>

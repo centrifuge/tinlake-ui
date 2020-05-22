@@ -8,8 +8,9 @@ import InvestorRedeem from '../Redeem';
 import InvestorAllowance from '../Allowance';
 import TrancheMetric from '../../../components/Investment/TrancheMetric';
 import { TransactionState } from '../../../ducks/transactions';
-import { Tranche, Investor } from 'tinlake';
+import { Investor } from 'tinlake';
 import { TrancheType } from '../../../services/tinlake/actions';
+
 
 interface Props {
   tinlake: any;
@@ -17,8 +18,9 @@ interface Props {
   investor: Investor;
   transactions?: TransactionState;
   resetTransactionState?: () => void;
-  tranche: Tranche;
+  tranche: any;
 }
+
 
 class TrancheView extends React.Component<Props> {
 
@@ -50,7 +52,7 @@ class TrancheView extends React.Component<Props> {
         <Box>
           <Box margin={{ top: 'medium', bottom: 'large' }} >
             <Box>
-              <TrancheMetric tinlake={tinlake} tranche={tranche} investor={investor} type={tranche.type as any as TrancheType} />
+              <TrancheMetric tranche={tranche} investor={investor} type={tranche.type as any as TrancheType}/>
             </Box>
           </Box>
 
