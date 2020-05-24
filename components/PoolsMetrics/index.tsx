@@ -14,16 +14,16 @@ class PoolsMetrics extends React.Component<Props> {
     const { pools } = this.props;
     return <Box direction="row" gap="large" margin={{ bottom: 'medium' }} justify="evenly">
       <PoolsMetric label="Ongoing Pools" >
-        <Box direction="row" style={{  alignItems: "center" }} >
-            <Text style={{ fontSize: '0.8em', width: "212px" }} >
+        <Box direction="row" style={{  alignItems: 'center' }} >
+            <Text style={{ fontSize: '0.8em', width: '212px' }} >
                {pools.ongoingPools}
             </Text>
         </Box>
 
       </PoolsMetric>
       <PoolsMetric label="Total Ongoing Loans">
-      <Box direction="row" style={{ alignItems: "center" }} >
-            <Text style={{ width: "212px", fontSize: '0.8em'}} >
+      <Box direction="row" style={{ alignItems: 'center' }} >
+            <Text style={{ width: '212px', fontSize: '0.8em' }} >
                {pools.ongoingLoans}
             </Text>
         </Box>
