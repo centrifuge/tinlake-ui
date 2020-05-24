@@ -129,9 +129,9 @@ class Overview extends React.Component<Props> {
 
             <Text margin={{ top: 'xsmall' }}> {name} </Text>
             <Text margin={{ top: 'medium' }}> The following information is provided by the Asset Originator: </Text>
-            
-            <div dangerouslySetInnerHTML={{__html: description}} />
-            
+
+            <div dangerouslySetInnerHTML={{ __html: description }} />
+
           </Box>
         </Box>
       </Box>

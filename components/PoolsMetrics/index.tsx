@@ -34,8 +34,6 @@ class PoolsMetrics extends React.Component<Props> {
       </PoolsMetric>
       <PoolsMetric label="Total Repaid Debt (DAI)">
         <Erc20Widget value={pools.totalRepaysAggregatedAmount.toString()} tokenData={DAI} precision={2} />
-        {/* <NumberDisplay suffix="" precision={2}
-                       value={baseToDisplay(pools.totalRepaysAggregatedAmount, 18)} /> */}
       </PoolsMetric>
     </Box>;
   }
