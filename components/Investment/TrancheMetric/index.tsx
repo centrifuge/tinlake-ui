@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Heading } from 'grommet';
-import { Investor } from 'tinlake';
+import {baseToDisplay, Investor} from 'tinlake';
 import { TrancheType } from '../../../services/tinlake/actions';
 import DashboardMetric from '../../DashboardMetric';
 import { Erc20Widget } from '../../../components/erc20-widget';
@@ -18,6 +18,9 @@ class TrancheMetric extends React.Component<Props> {
     const { type, investor, tokenData } = this.props;
     console.log('tokenDATA', tokenData);
     const { maxSupply, maxRedeem, tokenBalance } = investor[type];
+    const tokenPriceLabel = type === 'senior' ? 'Current DROP Price' : 'Current TIN Price';
+    const investmentValueLabel = type === 'senior' ? 'My DROP Investment Value' : 'My TIN Investment Value';
+    console.log(maxRedeem ? baseToDisplay(maxRedeem, 18) : '');
     return <Box margin="none">
       <Box>
         <Heading level="4" margin={{ bottom: 'medium' }}>Investment overview</Heading>
@@ -26,6 +29,10 @@ class TrancheMetric extends React.Component<Props> {
             <DashboardMetric label="Investor token balance">
               <Erc20Widget value={tokenBalance ? tokenBalance.toString() : '0'} tokenData={tokenData} precision={18}  />
             </DashboardMetric>
+          <DashboardMetric label={tokenPriceLabel}>
+          </DashboardMetric>
+          <DashboardMetric label={investmentValueLabel}>
+          </DashboardMetric>
 
         </Box>
       </Box>
