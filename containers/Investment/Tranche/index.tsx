@@ -17,7 +17,7 @@ interface Props {
   investor: Investor;
   transactions?: TransactionState;
   resetTransactionState?: () => void;
-  // todo: extend tranchetype by tokendata
+  // TODO: correctly type tranche
   tranche: any;
 }
 
@@ -26,8 +26,8 @@ class TrancheView extends React.Component<Props> {
   render() {
     const { auth, investor, transactions, tranche, tinlake } = this.props;
     // TODO: add isAdmin to investor type
-    const isAdmin = (tranche.type === 'junior') && auth.permissions?.canSetInvestorAllowanceJunior
-      || (tranche.type === 'senior') && auth.permissions?.canSetInvestorAllowanceSenior;
+    const isAdmin = (tranche?.type === 'junior') && auth.permissions?.canSetInvestorAllowanceJunior
+      || (tranche?.type === 'senior') && auth.permissions?.canSetInvestorAllowanceSenior;
     const isInvestor = investor && (auth.address?.toLowerCase() === investor.address.toLowerCase());
     if (transactions && transactions.transactionState && transactions.transactionState === 'processing') {
       return <Spinner height={'calc(100vh - 89px - 84px)'} message={transactions.loadingMessage ||
@@ -72,7 +72,7 @@ class TrancheView extends React.Component<Props> {
               </Box>
 
               <Box direction="row">
-                <InvestorSupply trancheType={tranche.type as any as TrancheType} investor={investor!} tinlake={tinlake}
+                <InvestorSupply trancheType={tranche.type as TrancheType} investor={investor!} tinlake={tinlake}
                   />
                 <InvestorRedeem tranche={tranche} investor={investor!} tinlake={tinlake} />
               </Box>
