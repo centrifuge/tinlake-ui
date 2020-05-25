@@ -34,7 +34,7 @@ class TrancheMetric extends React.Component<Props> {
         <Heading level="4" margin={{ bottom: 'medium' }}>Invest / Redeem allowance</Heading>
         <Box direction="row" >
             <DashboardMetric label="Investment limit">
-            <Erc20Widget value={maxSupply ? maxSupply.toString() : '0'} tokenData={DAI} precision={18} />
+            <Erc20Widget value={"1235.12351325"} tokenData={DAI} precision={18} />
             </DashboardMetric>
             <DashboardMetric label="Redeem limit">
               <Erc20Widget value={maxRedeem ? maxRedeem.toString() : '0'} tokenData={tranche.tokenData} precision={18} />

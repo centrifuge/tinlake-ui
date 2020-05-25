@@ -109,8 +109,9 @@ const Tooltip = ({ children, target }) => (
   >
     <Box
       align="center"
-      round="large"
+      round="small"
       background="dark-2"
+      overflow="hidden"
     >
       {children}
     </Box>
@@ -156,6 +157,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
   const [showDrop, setDrop] = useState(false);
   const [ellipsis, setEllipsis] = useState(false);
   const [showToolTip, setToolTip] = useState(false);
+  const [copied, setCopied] = useState("Copy to clipboard");
   const toolRef = useRef();
   const dropRef = useRef();
 
@@ -323,12 +325,16 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
           {!input &&
             <Box ref={toolRef}
               flex="shrink" direction="row" style={{ borderBottom: (!inline) ? "1px solid #EEEEEE" : undefined, alignItems: "center" }} onClick={(event) => {
-                if (event.detail == 2) {
+                if (event.detail == 1) {
+                  setCopied("Copied")
                   copyAndHighlight();
                 }
               }}
               onMouseOver={() => setToolTip(true)}
-              onMouseOut={() => setToolTip(false)}>
+              onMouseOut={() => {
+                setToolTip(false);
+                setCopied("Copy to clipboard");
+              }}>
               <Text style={{ width: "212px" }}
                 truncate={true}
                 id="tokenValue">
@@ -339,9 +345,7 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
             </Box>}
           {showToolTip &&
             <Tooltip target={toolRef.current}>
-              <Text size="small">
-                Copy amount to clipboard
-            </Text>
+              <Text size="small">{copied}</Text>
             </Tooltip>
           }
 
