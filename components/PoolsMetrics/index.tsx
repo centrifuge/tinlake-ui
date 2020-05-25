@@ -28,14 +28,12 @@ class PoolsMetrics extends React.Component<Props> {
             </Text>
         </Box>
       </PoolsMetric>
-      <PoolsMetric label="Total Outstanding Debt (DAI)">
+      <PoolsMetric label="Total Outstanding Debt">
         <Erc20Widget value={pools.totalDebt.toString()} tokenData={DAI} precision={2} />
 
       </PoolsMetric>
-      <PoolsMetric label="Total Repaid Debt (DAI)">
+      <PoolsMetric label="Total Repaid Debt">
         <Erc20Widget value={pools.totalRepaysAggregatedAmount.toString()} tokenData={DAI} precision={2} />
-        {/* <NumberDisplay suffix="" precision={2}
-                       value={baseToDisplay(pools.totalRepaysAggregatedAmount, 18)} /> */}
       </PoolsMetric>
     </Box>;
   }
