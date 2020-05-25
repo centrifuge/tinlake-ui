@@ -16,7 +16,7 @@ interface Props {
 class TrancheMetric extends React.Component<Props> {
   render() {
     const { type, investor, tokenData } = this.props;
-    console.log('tokenDATA', tokenData)
+    console.log('tokenDATA', tokenData);
     const { maxSupply, maxRedeem, tokenBalance } = investor[type];
     return <Box margin="none">
       <Box>
