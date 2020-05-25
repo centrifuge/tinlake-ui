@@ -1,53 +1,65 @@
 import * as React from 'react';
 import { Box, Heading } from 'grommet';
-import {baseToDisplay, Investor} from 'tinlake';
-import { TrancheType } from '../../../services/tinlake/actions';
+import { baseToDisplay, Investor } from 'tinlake';
 import DashboardMetric from '../../DashboardMetric';
 import { Erc20Widget } from '../../../components/erc20-widget';
 import DAI from '../../../static/dai.json';
+import BN from 'bn.js';
+import { Tranche } from '../../../services/tinlake/actions';
 
 interface Props {
   investor: Investor;
-  // todo: fix extend tranchetype by tokenData
-  tokenData: any;
-  type: TrancheType;
+  isAdmin: boolean;
+  tranche: Tranche;
 }
 
 class TrancheMetric extends React.Component<Props> {
+
+  checkInvestorRedeemLimit(tokenBalance: BN, maxRedeem: BN) {
+    if (tokenBalance > maxRedeem) {
+      return baseToDisplay(maxRedeem, 18);
+    }
+    return baseToDisplay(tokenBalance, 18);
+  }
+
   render() {
-    const { type, investor, tokenData } = this.props;
-    console.log('tokenDATA', tokenData);
-    const { maxSupply, maxRedeem, tokenBalance } = investor[type];
-    const tokenPriceLabel = type === 'senior' ? 'Current DROP Price' : 'Current TIN Price';
-    const investmentValueLabel = type === 'senior' ? 'My DROP Investment Value' : 'My TIN Investment Value';
-    console.log(maxRedeem ? baseToDisplay(maxRedeem, 18) : '');
+    const {  investor, tranche, isAdmin } = this.props;
+    const { maxSupply, maxRedeem, tokenBalance } = investor[tranche.type];
+
     return <Box margin="none">
       <Box>
-        <Heading level="4" margin={{ bottom: 'medium' }}>Investment overview</Heading>
+        <Heading level="4" margin={{ bottom: 'medium' }}>Investment Overview</Heading>
         <Box direction="row" >
 
-            <DashboardMetric label="Investor token balance">
-              <Erc20Widget value={tokenBalance ? tokenBalance.toString() : '0'} tokenData={tokenData} precision={18}  />
+            <DashboardMetric label={isAdmin ? 'Connected Address Token Balance' : 'Investor Address Token Balance'}>
+              <Erc20Widget value={tokenBalance ? baseToDisplay(tokenBalance, 18) : '0'} tokenData={tranche.tokenData} precision={18}  />
             </DashboardMetric>
-          <DashboardMetric label={tokenPriceLabel}>
+
+          <DashboardMetric label={tranche.type === 'senior' ? 'Current DROP Price' : 'Current TIN Price'}>
+            <Erc20Widget value={tranche.tokenPrice ? baseToDisplay(tranche.tokenPrice, 27) : '0'} tokenData={DAI} precision={27} />
           </DashboardMetric>
-          <DashboardMetric label={investmentValueLabel}>
+          <DashboardMetric label={tranche.type === 'senior' ? 'DROP Investment Value' : 'TIN Investment Value'}>
+            <Erc20Widget value={tokenBalance && tranche.tokenPrice ? (Number(baseToDisplay(tranche.tokenPrice, 27)) * Number(baseToDisplay(tokenBalance, 18))).toString() : '0'} tokenData={DAI} precision={18} />
           </DashboardMetric>
 
         </Box>
       </Box>
 
       <Box margin={{ top: 'medium' }}>
-        <Heading level="4" margin={{ bottom: 'medium' }}>Invest / Redeem allowance</Heading>
+        <Heading level="4" margin={{ bottom: 'medium' }}>Current Invest / Redeem allowance</Heading>
         <Box direction="row" >
 
-            <DashboardMetric label="Investment limit">
-              <Erc20Widget value={maxSupply ? maxSupply.toString() : '0'} tokenData={DAI} precision={18} />
+            <DashboardMetric label={isAdmin ? 'Admin set Investment Limit' : 'Investment Limit'}>
+              <Erc20Widget value={maxSupply ? baseToDisplay(maxSupply, 18) : '0'} tokenData={DAI} precision={18} />
             </DashboardMetric>
 
-            <DashboardMetric label="Redeem limit">
-             <Erc20Widget value={maxRedeem ? maxRedeem.toString() : '0'} tokenData={tokenData} precision={18} />
+            <DashboardMetric label={isAdmin ? 'Admin set Redeem Limit' : 'Redeem Limit'}>
+             <Erc20Widget value={ isAdmin ? maxRedeem && baseToDisplay(maxRedeem, 18) : tokenBalance && maxRedeem && this.checkInvestorRedeemLimit(tokenBalance, maxRedeem)} tokenData={tranche.tokenData} precision={18} />
             </DashboardMetric>
+
+          { isAdmin && <DashboardMetric label={tranche.type === 'senior' ? 'DROP available to redeem in tranche' : 'TIN available to redeem in tranche'}>
+            <Erc20Widget value={ tranche.availableFunds ? tranche.availableFunds && baseToDisplay(tranche.availableFunds, 18) : '0'} tokenData={tranche.tokenData} precision={18} />
+          </DashboardMetric>}
 
         </Box>
       </Box>

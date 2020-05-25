@@ -17,7 +17,7 @@ interface Props {
   investor: Investor;
   transactions?: TransactionState;
   resetTransactionState?: () => void;
-  // todo: extedn tranchetype by tokendat
+  // todo: extend tranchetype by tokendata
   tranche: any;
 }
 
@@ -25,6 +25,7 @@ class TrancheView extends React.Component<Props> {
 
   render() {
     const { auth, investor, transactions, tranche, tinlake } = this.props;
+    // TODO: add isAdmin to investor type
     const isAdmin = (tranche.type === 'junior') && auth.permissions?.canSetInvestorAllowanceJunior
       || (tranche.type === 'senior') && auth.permissions?.canSetInvestorAllowanceSenior;
     const isInvestor = investor && (auth.address?.toLowerCase() === investor.address.toLowerCase());
@@ -51,7 +52,7 @@ class TrancheView extends React.Component<Props> {
         <Box>
           <Box margin={{ top: 'medium', bottom: 'large' }} >
             <Box>
-              <TrancheMetric tokenData={tranche.tokenData} investor={investor} type={tranche.type as any as TrancheType} />
+              <TrancheMetric tranche= {tranche} isAdmin={isAdmin && isAdmin || false} investor={investor} />
             </Box>
           </Box>
 

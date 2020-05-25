@@ -5,6 +5,25 @@ export type TrancheType = 'junior' | 'senior';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const SUCCESS_STATUS = '0x1';
 
+export interface Tranche {
+  availableFunds: BN;
+  interestRate: BN;
+  token: string;
+  tokenData: TokenData;
+  tokenPrice: BN;
+  totalSupply: BN;
+  type: TrancheType;
+}
+
+export interface TokenData {
+  [address: string]: {
+    decimals: number,
+    logo: string,
+    name: string,
+    symbol: string
+  };
+}
+
 export interface TinlakeResult {
   data?: any;
   errorMsg?: string;
