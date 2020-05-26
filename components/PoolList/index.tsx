@@ -14,7 +14,7 @@ interface Props {
 class PoolList extends React.Component<Props> {
 
   clickRow = ({ datum }: { datum?: PoolData, index?: number}) => {
-    Router.push('/[root]', `/${datum!.id}`, { shallow: true });
+    Router.push('/[root]', `/${datum!.id}`);
   }
 
   render() {
@@ -55,15 +55,13 @@ class PoolList extends React.Component<Props> {
           header: 'Outstanding Debt (DAI)', property: 'totalDebt', align: 'center',
           render: (p: PoolData) =>
             <Box style={{ maxWidth: '150px' }}>
-              <NumberDisplay suffix="" precision={2}
-              value={baseToDisplay(p.totalDebt, 18)} />
+              <NumberDisplay suffix="" precision={2} value={baseToDisplay(p.totalDebt, 18)} />
             </Box>
         },
         {
           header: 'Total Repaid Debt (DAI)', property: 'totalRepaid', align: 'center',
           render: (p: PoolData) =>
-            <NumberDisplay suffix="" precision={2}
-            value={baseToDisplay(p.totalRepaysAggregatedAmount, 18)} />
+            <NumberDisplay suffix="" precision={2} value={baseToDisplay(p.totalRepaysAggregatedAmount, 18)} />
         },
         {
           header: 'Avg Loan APR', property: 'avgInterest', align: 'center',
