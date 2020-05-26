@@ -35,7 +35,7 @@ class LoanList extends React.Component<Props> {
 
     return <Box margin={{ bottom: 'large' }}>
       <Box direction="row" align="center">
-      <Box basis={'full'} gap="medium" align="center" alignSelf="center" margin={{ bottom: 'medium' }} style={{ fontSize: '1.4em'}}>
+      <Box basis={'full'} gap="medium" align="center" alignSelf="center" margin={{ bottom: 'medium' }} style={{ fontSize: '1.4em' }}>
         <DashboardMetric label="Total funds available for borrowing" >
           <Box align="center">
             <ERC20Display value={availableFunds ? availableFunds.toString() : '0'} tokenMetas={DAI} precision={2} />

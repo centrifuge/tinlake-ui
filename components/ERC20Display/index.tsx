@@ -34,15 +34,12 @@ const ERC20Display: FunctionComponent<Props> = ({ value, precision, tokenMetas }
   return <Box direction="row" >
       <Amount>
 
-    
-   
-
-        <Text style={{ fontSize: '0.7em', overflow:'hidden',  whiteSpace: 'nowrap', 
+        <Text style={{ fontSize: '0.7em', overflow:'hidden',  whiteSpace: 'nowrap',
           display:'inline-block', maxWidth: '100%', textOverflow:'ellipsis', verticalAlign: 'middle'}}>
           {formatted}
         </Text>
         </Amount>
-       
+
       <LogoAndSymbol>
         <Logo src={logo} />
         <Text style={{ fontSize: '0.7em' }} >

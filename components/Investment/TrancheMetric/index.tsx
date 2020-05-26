@@ -20,8 +20,8 @@ class TrancheMetric extends React.Component<Props> {
     return <Box margin="none">
       <Box>
         <Heading level="4" margin={{ bottom: 'medium' }}>Investment overview</Heading>
-        <Box direction="row" style={{ fontSize: '1.3em'}}>
-        <Box basis={"1/3"}>
+        <Box direction="row" style={{ fontSize: '1.3em' }}>
+        <Box basis={'1/3'}>
             <DashboardMetric label="Investor token balance">
               <ERC20Display value={tokenBalance ? tokenBalance.toString() : '0'} tokenMetas={tokenData} precision={18} />
             </DashboardMetric>
@@ -33,12 +33,12 @@ class TrancheMetric extends React.Component<Props> {
         <Heading level="4" margin={{ bottom: 'medium' }}>Invest / Redeem allowance</Heading>
         <Box direction="row" style={{ fontSize: '1.3em' }} >
 
-          <Box basis={"1/3"}>
+          <Box basis={'1/3'}>
             <DashboardMetric label="Investment limit">
               <ERC20Display value={maxSupply ? maxSupply.toString() : '0'} tokenMetas={DAI} precision={18} />
             </DashboardMetric>
             </Box>
-            <Box basis={"1/3"}>
+            <Box basis={'1/3'}>
             <DashboardMetric label="Redeem limit">
               <ERC20Display value={maxRedeem ? maxRedeem.toString() : '0'} tokenMetas={tokenData} precision={18} />
             </DashboardMetric>
