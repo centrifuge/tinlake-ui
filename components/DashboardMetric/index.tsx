@@ -17,6 +17,6 @@ const DashboardMetric: FunctionComponent<Props> = ({ label, children }) => {
       {children}</Text>
     <Text textAlign="center">{label}</Text>
   </Box>;
-}
+};
 
 export default DashboardMetric;
