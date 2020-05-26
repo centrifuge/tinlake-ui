@@ -13,10 +13,10 @@ const DashboardMetric: FunctionComponent<Props> = ({ label, children }) => {
     gap="xsmall"
     margin="small"
   >
-    <Text textAlign="center" truncate={true} style={{ fontSize: '1.3em', lineHeight: '40px', textOverflow: 'clip', borderBottom: '1px solid #EEEEEE' }}>
+<Text textAlign="center" truncate={true} style={{ fontSize: '1.3em', lineHeight: '40px', textOverflow: 'clip', borderBottom: '1px solid #EEEEEE' }}>
       {children}</Text>
     <Text textAlign="center">{label}</Text>
   </Box>;
-};
+}
 
 export default DashboardMetric;
