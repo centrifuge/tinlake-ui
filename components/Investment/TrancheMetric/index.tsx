@@ -32,14 +32,14 @@ class TrancheMetric extends React.Component<Props> {
         <Box direction="row" >
 
             <DashboardMetric label={isAdmin ? 'Connected Address Token Balance' : 'Investor Address Token Balance'}>
-              <Erc20Widget value={tokenBalance ? baseToDisplay(tokenBalance, 18) : '0'} tokenData={tranche.tokenData} precision={18}  />
+              <ERC20Display value={tokenBalance ? baseToDisplay(tokenBalance, 18) : '0'} tokenMetas={tranche.tokenData} precision={18}  />
             </DashboardMetric>
 
           <DashboardMetric label={tranche.type === 'senior' ? 'Current DROP Price' : 'Current TIN Price'}>
-            <Erc20Widget value={tranche.tokenPrice ? baseToDisplay(tranche.tokenPrice, 27) : '0'} tokenData={DAI} precision={27} />
+            <ERC20Display value={tranche.tokenPrice ? baseToDisplay(tranche.tokenPrice, 27) : '0'} tokenMetas={DAI} precision={27} />
           </DashboardMetric>
           <DashboardMetric label={tranche.type === 'senior' ? 'DROP Investment Value' : 'TIN Investment Value'}>
-            <Erc20Widget value={tokenBalance && tranche.tokenPrice ? (Number(baseToDisplay(tranche.tokenPrice, 27)) * Number(baseToDisplay(tokenBalance, 18))).toString() : '0'} tokenData={DAI} precision={18} />
+            <ERC20Display value={tokenBalance && tranche.tokenPrice ? (Number(baseToDisplay(tranche.tokenPrice, 27)) * Number(baseToDisplay(tokenBalance, 18))).toString() : '0'} tokenMetas={DAI} precision={18} />
           </DashboardMetric>
 
         </Box>
@@ -50,15 +50,15 @@ class TrancheMetric extends React.Component<Props> {
         <Box direction="row" >
 
             <DashboardMetric label={isAdmin ? 'Admin set Investment Limit' : 'Investment Limit'}>
-              <Erc20Widget value={maxSupply ? baseToDisplay(maxSupply, 18) : '0'} tokenData={DAI} precision={18} />
+              <ERC20Display value={maxSupply ? baseToDisplay(maxSupply, 18) : '0'} tokenMetas={DAI} precision={18} />
             </DashboardMetric>
 
             <DashboardMetric label={isAdmin ? 'Admin set Redeem Limit' : 'Redeem Limit'}>
-             <Erc20Widget value={ isAdmin ? maxRedeem && baseToDisplay(maxRedeem, 18) : tokenBalance && maxRedeem && this.checkInvestorRedeemLimit(tokenBalance, maxRedeem)} tokenData={tranche.tokenData} precision={18} />
+             <ERC20Display value={ isAdmin ? maxRedeem && baseToDisplay(maxRedeem, 18) || '' : tokenBalance && maxRedeem && this.checkInvestorRedeemLimit(tokenBalance, maxRedeem) || ''} tokenMetas={tranche.tokenData} precision={18} />
             </DashboardMetric>
 
           { isAdmin && <DashboardMetric label={tranche.type === 'senior' ? 'DROP available to redeem in tranche' : 'TIN available to redeem in tranche'}>
-            <Erc20Widget value={ tranche.availableFunds ? tranche.availableFunds && baseToDisplay(tranche.availableFunds, 18) : '0'} tokenData={tranche.tokenData} precision={18} />
+            <ERC20Display value={ tranche.availableFunds ? tranche.availableFunds && baseToDisplay(tranche.availableFunds, 18) : '0'} tokenMetas={tranche.tokenData} precision={18} />
           </DashboardMetric>}
 
         </Box>

@@ -1,5 +1,6 @@
 import BN from 'bn.js';
 import { Loan, NFT, interestRateToFee } from 'tinlake';
+import { TokenMetas } from '../../components/ERC20Display';
 
 export type TrancheType = 'junior' | 'senior';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
@@ -9,20 +10,20 @@ export interface Tranche {
   availableFunds: BN;
   interestRate: BN;
   token: string;
-  tokenData: TokenData;
+  tokenData: TokenMetas;
   tokenPrice: BN;
   totalSupply: BN;
   type: TrancheType;
 }
 
-export interface TokenData {
-  [address: string]: {
-    decimals: number,
-    logo: string,
-    name: string,
-    symbol: string
-  };
-}
+// export interface  {
+//   [address: string]: TokenMetas{
+//     decimals: number,
+//     logo: string,
+//     name: string,
+//     symbol: string
+//   };
+// }
 
 export interface TinlakeResult {
   data?: any;
