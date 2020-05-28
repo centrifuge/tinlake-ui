@@ -16,15 +16,6 @@ export interface Tranche {
   type: TrancheType;
 }
 
-// export interface  {
-//   [address: string]: TokenMetas{
-//     decimals: number,
-//     logo: string,
-//     name: string,
-//     symbol: string
-//   };
-// }
-
 export interface TinlakeResult {
   data?: any;
   errorMsg?: string;
