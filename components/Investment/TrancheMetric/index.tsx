@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Box, Heading } from 'grommet';
 import { baseToDisplay, Investor } from 'tinlake';
 import DashboardMetric from '../../DashboardMetric';
-import { Erc20Widget } from '../../../components/erc20-widget';
 import DAI from '../../../static/dai.json';
 import BN from 'bn.js';
 import { Tranche } from '../../../services/tinlake/actions';
+import ERC20Display from '../../ERC20Display';
 
 interface Props {
   investor: Investor;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import BN from 'bn.js';
 import { connect } from 'react-redux';
 import { baseToDisplay, feeToInterestRate } from 'tinlake';
-import { Box, Heading, Table, TableCell, TableRow, TableBody, Text, Button, Anchor } from 'grommet';
+import { Box, Heading, Table, TableCell, TableRow, TableBody, Button, Anchor } from 'grommet';
 import SecondaryHeader from '../../components/SecondaryHeader';
 import { PoolState, loadPool } from '../../ducks/pool';
 import { LoansState, loadLoans } from '../../ducks/loans';
@@ -13,6 +13,7 @@ import Tinlake from 'tinlake/dist/Tinlake';
 import { Pool } from '../../config';
 import { PoolLink } from '../../components/PoolLink';
 import { toPrecision } from '../../utils/toPrecision';
+import { addThousandsSeparators } from '../../utils/addThousandsSeparators';
 
 interface Props {
   tinlake: any;
@@ -26,7 +27,7 @@ interface Props {
 
 class Overview extends React.Component<Props> {
 
-  componentDidMount() {
+  componentWillMount() {
     const { loadLoans, loadPool, tinlake } = this.props;
     loadLoans && loadLoans(tinlake);
     loadPool && loadPool(tinlake);
@@ -75,13 +76,14 @@ class Overview extends React.Component<Props> {
                   <TableCell scope="row">
                     Outstanding Debt
                   </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>DAI {toPrecision(baseToDisplay(outstandingDebt, 18), 2)}</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>DAI {addThousandsSeparators(toPrecision(baseToDisplay(
+                    outstandingDebt, 18),                                                         2))}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell scope="row">
                     DAI available to borrow
                   </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>DAI {toPrecision(baseToDisplay(availableFunds, 18), 2)}</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>DAI {addThousandsSeparators(toPrecision(baseToDisplay(availableFunds, 18),                                                         2))}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -93,13 +95,15 @@ class Overview extends React.Component<Props> {
                   <TableCell scope="row">
                     Current TIN ratio
                     </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>{toPrecision(baseToDisplay(currentJuniorRatio, 25), 2)} %</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>{addThousandsSeparators(toPrecision(baseToDisplay(
+                    currentJuniorRatio, 25),                                                  2))} %</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell scope="row">
                     Minimum TIN ratio
                   </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>{toPrecision(baseToDisplay(minJuniorRatio, 25), 2)} %</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>{addThousandsSeparators(toPrecision(baseToDisplay(
+                    minJuniorRatio, 25),                                                      2))} %</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell scope="row">
@@ -111,28 +115,24 @@ class Overview extends React.Component<Props> {
                   <TableCell scope="row">
                     DROP Supply
                   </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>{toPrecision(baseToDisplay(seniorTokenSupply, 18), 2)}</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>{addThousandsSeparators(toPrecision(baseToDisplay(
+                    seniorTokenSupply, 18),                                                   2))}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell scope="row">
                     TIN Supply
                   </TableCell>
-                  <TableCell style={{ textAlign: 'end' }}>{toPrecision(baseToDisplay(juniorTokenSupply, 18), 2)}</TableCell>
+                  <TableCell style={{ textAlign: 'end' }}>{addThousandsSeparators(toPrecision(baseToDisplay(
+                    juniorTokenSupply, 18),                                                   2))}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </Box>
         </Box>
         <Box basis={'1/2'} margin={{ left: 'large' }}>
-          <Box>
-            <Heading level="4" margin={{ top: 'small', bottom: 'small' }}>Asset Originator Details</Heading>
-
-            <Text margin={{ top: 'xsmall' }}> {name} </Text>
-            <Text margin={{ top: 'medium' }}> The following information is provided by the Asset Originator: </Text>
-
+          <div>
             <div dangerouslySetInnerHTML={{ __html: description }} />
-
-          </Box>
+          </div>
         </Box>
       </Box>
 

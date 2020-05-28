@@ -14,6 +14,7 @@ export type Pool = {
     'SENIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR'
   }
   name: string
+  shortName?: string
   description: string
   asset: string
 };
@@ -35,6 +36,7 @@ interface Config {
   isDemo: boolean;
   network: 'Mainnet' | 'Kovan';
   pools: Pool[];
+  portisApiKey: string;
 }
 
 const contractAddressesSchema = yup.object().shape({
@@ -59,6 +61,7 @@ const poolSchema = yup.object().shape({
   graph: yup.string().required('poolSchema.graph is required'),
   contractConfig: contractConfigSchema.required('poolSchema.contractConfig is required'),
   name: yup.string().required('poolSchema.name is required'),
+  shortName: yup.string(),
   description: yup.string().required('poolSchema.description is required'),
   asset: yup.string().required('poolSchema.asset is required')
 });
@@ -78,7 +81,8 @@ const config: Config = {
   isDemo: yup.string().required('NEXT_PUBLIC_ENV is required').validateSync(process.env.NEXT_PUBLIC_ENV) === 'demo',
   network: yup.mixed<'Mainnet' | 'Kovan'>().required('NEXT_PUBLIC_RPC_URL is required').oneOf(['Mainnet', 'Kovan'])
     .validateSync(networkUrlToName(process.env.NEXT_PUBLIC_RPC_URL || '')),
-  pools: poolsSchema.required('NEXT_PUBLIC_POOLS is required').validateSync(process.env.NEXT_PUBLIC_POOLS)
+  pools: poolsSchema.validateSync(process.env.NEXT_PUBLIC_POOLS),
+  portisApiKey: yup.string().required().validateSync(process.env.NEXT_PUBLIC_PORTIS_KEY)
 };
 
 export default config;
