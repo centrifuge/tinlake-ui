@@ -1,5 +1,6 @@
 import { networkUrlToName } from './utils/networkNameResolver';
 import * as yup from 'yup';
+import fetch from "node-fetch";
 
 export type Pool = {
   addresses: {
@@ -8,7 +9,7 @@ export type Pool = {
     'PROXY_REGISTRY': string,
     'COLLATERAL_NFT': string
   },
-  graph: string,
+  graph?: string,
   contractConfig: {
     'JUNIOR_OPERATOR': 'ALLOWANCE_OPERATOR',
     'SENIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR'
@@ -36,7 +37,7 @@ interface Config {
   tinlakeDataBackendUrl: string;
   isDemo: boolean;
   network: 'Mainnet' | 'Kovan';
-  pools: Pool[];
+  pools: () => Promise<Pool[]> ;
   portisApiKey: string;
 }
 
@@ -59,7 +60,7 @@ const contractConfigSchema = yup.object().shape({
 
 const poolSchema = yup.object().shape({
   addresses: contractAddressesSchema.required('poolSchema.addresses is required'),
-  graph: yup.string().required('poolSchema.graph is required'),
+  graph: yup.string(),
   contractConfig: contractConfigSchema.required('poolSchema.contractConfig is required'),
   name: yup.string().required('poolSchema.name is required'),
   shortName: yup.string(),
@@ -83,8 +84,19 @@ const config: Config = {
   isDemo: yup.string().required('NEXT_PUBLIC_ENV is required').validateSync(process.env.NEXT_PUBLIC_ENV) === 'demo',
   network: yup.mixed<'Mainnet' | 'Kovan'>().required('NEXT_PUBLIC_RPC_URL is required').oneOf(['Mainnet', 'Kovan'])
     .validateSync(networkUrlToName(process.env.NEXT_PUBLIC_RPC_URL || '')),
-  pools: poolsSchema.validateSync(process.env.NEXT_PUBLIC_POOLS),
+  pools: loadPoolConfig,
   portisApiKey: yup.string().required().validateSync(process.env.NEXT_PUBLIC_PORTIS_KEY)
 };
+
+let pools : Pool[] | undefined = undefined;
+export async function loadPoolConfig() {
+  if (!pools) {
+    const poolsConfigURL = yup.string().required('POOLS config is required').url().validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG_URL);
+    const poolsConfig = await fetch(poolsConfigURL);
+    pools = poolsSchema.validateSync(await poolsConfig.json());
+  }
+  console.log('config config', pools);
+  return pools;
+}
 
 export default config;
