@@ -1,6 +1,6 @@
 import { networkUrlToName } from './utils/networkNameResolver';
 import * as yup from 'yup';
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
 
 export type Pool = {
   addresses: {
@@ -95,7 +95,6 @@ export async function loadPoolConfig() {
     const poolsConfig = await fetch(poolsConfigURL);
     pools = poolsSchema.validateSync(await poolsConfig.json());
   }
-  console.log('config config', pools);
   return pools;
 }
 
