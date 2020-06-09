@@ -69,8 +69,6 @@ const poolSchema = yup.object().shape({
   asset: yup.string().required('poolSchema.asset is required')
 });
 
-
-
 const poolsSchema = yup.array().of(poolSchema);
 const selectedPoolConfig = yup.mixed<'kovanStaging' | 'mainnetStaging' | 'mainnetProduction'>().required('POOLS config is required').oneOf(['kovanStaging', 'mainnetStaging', 'mainnetProduction'])
   .validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG);

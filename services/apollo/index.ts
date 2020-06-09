@@ -94,7 +94,7 @@ class Apollo {
     } catch (err) {
       throw new Error(`error occured while fetching loans from apollo ${err}`);
     }
-    
+
     const pools = (!result.data || !result.data.pools) ? [] : this.injectPoolData(result.data.pools);
 
     return {
