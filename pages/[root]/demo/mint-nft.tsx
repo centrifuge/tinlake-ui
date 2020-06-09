@@ -43,8 +43,7 @@ class MintNFTPage extends React.Component<Props> {
 
 export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
-  const pools = config.pools;
-  const paths = pools.map(pool => ({ params: { root: pool.addresses.ROOT_CONTRACT } }));
+    const paths = config.pools.map(pool => ({ params: { root: pool.addresses.ROOT_CONTRACT } }));
 
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
