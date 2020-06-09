@@ -338,9 +338,9 @@ export const Erc20Widget: React.FunctionComponent<Props> = (
               <Text style={{ width: "212px" }}
                 truncate={true}
                 id="tokenValue">
-                {(precision) ? new bigNumber(value).toFormat(precision) +
+                {(precision) ? new bigNumber('100').toFormat(precision) +
                   (ellipsis == true ? '…' : '')
-                  : new bigNumber(value).toFormat()}
+                  : new bigNumber('100').toFormat()}
               </Text>
             </Box>}
           {showToolTip &&

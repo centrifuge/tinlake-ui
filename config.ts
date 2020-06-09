@@ -1,6 +1,6 @@
 import { networkUrlToName } from './utils/networkNameResolver';
+import poolConfigs from 'tinlake-pool-config';
 import * as yup from 'yup';
-import fetch from 'node-fetch';
 
 export type Pool = {
   addresses: {
@@ -37,7 +37,7 @@ interface Config {
   tinlakeDataBackendUrl: string;
   isDemo: boolean;
   network: 'Mainnet' | 'Kovan';
-  pools: () => Promise<Pool[]> ;
+  pools: Pool[];
   portisApiKey: string;
 }
 
@@ -69,8 +69,13 @@ const poolSchema = yup.object().shape({
   asset: yup.string().required('poolSchema.asset is required')
 });
 
-const poolsSchema = yup.array().of(poolSchema);
 
+
+const poolsSchema = yup.array().of(poolSchema);
+const selectedPoolConfig = yup.mixed<'kovanStaging' | 'mainnetStaging' | 'mainnetProduction'>().required('POOLS config is required').oneOf(['kovanStaging', 'mainnetStaging', 'mainnetProduction'])
+  .validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG);
+
+const pools = poolConfigs[`${selectedPoolConfig}`];
 const config: Config = {
   rpcUrl: yup.string().required('NEXT_PUBLIC_RPC_URL is required').url().validateSync(process.env.NEXT_PUBLIC_RPC_URL),
   etherscanUrl: yup.string().required('NEXT_PUBLIC_ETHERSCAN_URL is required').url()
@@ -84,18 +89,8 @@ const config: Config = {
   isDemo: yup.string().required('NEXT_PUBLIC_ENV is required').validateSync(process.env.NEXT_PUBLIC_ENV) === 'demo',
   network: yup.mixed<'Mainnet' | 'Kovan'>().required('NEXT_PUBLIC_RPC_URL is required').oneOf(['Mainnet', 'Kovan'])
     .validateSync(networkUrlToName(process.env.NEXT_PUBLIC_RPC_URL || '')),
-  pools: loadPoolConfig,
+  pools: poolsSchema.validateSync(pools),
   portisApiKey: yup.string().required().validateSync(process.env.NEXT_PUBLIC_PORTIS_KEY)
 };
-
-let pools : Pool[] | undefined = undefined;
-export async function loadPoolConfig() {
-  if (!pools) {
-    const poolsConfigURL = yup.string().required('POOLS config is required').url().validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG_URL);
-    const poolsConfig = await fetch(poolsConfigURL);
-    pools = poolsSchema.validateSync(await poolsConfig.json());
-  }
-  return pools;
-}
 
 export default config;

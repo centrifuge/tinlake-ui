@@ -42,7 +42,8 @@ class Apollo {
     });
   }
 
-  injectPoolData(pools: any[], configPools: any[]): PoolData[] {
+  injectPoolData(pools: any[]): PoolData[] {
+    const configPools = config.pools;
     const tinlakePools = configPools.map((configPool: any) => {
       const poolId = configPool.addresses.ROOT_CONTRACT;
       const pool = pools.find(p => p.id === poolId);
@@ -93,9 +94,8 @@ class Apollo {
     } catch (err) {
       throw new Error(`error occured while fetching loans from apollo ${err}`);
     }
-
-    const configPools = await config.pools();
-    const pools = (!result.data || !result.data.pools) ? [] : this.injectPoolData(result.data.pools, configPools);
+    
+    const pools = (!result.data || !result.data.pools) ? [] : this.injectPoolData(result.data.pools);
 
     return {
       pools,

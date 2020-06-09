@@ -38,7 +38,7 @@ class Pool extends React.Component <Props> {
 
 export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
-  const pools = await config.pools();
+  const pools = config.pools; 
   const paths = pools.map(pool => ({ params: { root: pool.addresses.ROOT_CONTRACT } }));
 
   // { fallback: false } means other routes should 404.
@@ -46,7 +46,7 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const pools = await config.pools();
+  const pools = config.pools;
   return { props: { root: params?.root, pool: pools.find(p => p.addresses.ROOT_CONTRACT === params?.root) } };
 };
 
