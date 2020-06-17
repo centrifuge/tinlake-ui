@@ -140,7 +140,7 @@ export async function issue(tinlake: any, tokenId: string, nftRegistryAddress: s
     if (result.status !== SUCCESS_STATUS) {
       return loggedError({}, 'Could not Issue loan.', tokenId);
     }
-    
+
     const loanId = await tinlake.nftLookup(nftRegistryAddress, tokenId);
     return {
       data: loanId
