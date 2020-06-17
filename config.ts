@@ -1,4 +1,5 @@
 import { networkUrlToName } from './utils/networkNameResolver';
+import poolConfigs from 'tinlake-pool-config';
 import * as yup from 'yup';
 
 export type Pool = {
@@ -8,7 +9,7 @@ export type Pool = {
     'PROXY_REGISTRY': string,
     'COLLATERAL_NFT': string
   },
-  graph: string,
+  graph?: string,
   contractConfig: {
     'JUNIOR_OPERATOR': 'ALLOWANCE_OPERATOR',
     'SENIOR_OPERATOR': 'ALLOWANCE_OPERATOR' | 'PROPORTIONAL_OPERATOR'
@@ -16,6 +17,7 @@ export type Pool = {
   name: string
   shortName?: string
   description: string
+  investHtml: string
   asset: string
 };
 
@@ -58,16 +60,20 @@ const contractConfigSchema = yup.object().shape({
 
 const poolSchema = yup.object().shape({
   addresses: contractAddressesSchema.required('poolSchema.addresses is required'),
-  graph: yup.string().required('poolSchema.graph is required'),
+  graph: yup.string(),
   contractConfig: contractConfigSchema.required('poolSchema.contractConfig is required'),
   name: yup.string().required('poolSchema.name is required'),
   shortName: yup.string(),
   description: yup.string().required('poolSchema.description is required'),
+  investHtml: yup.string().default('<p>You will need to get onboarded with the asset originator to start investing in this pool.</p><p>You can find their contact details in the pool overview page.</p>'),
   asset: yup.string().required('poolSchema.asset is required')
 });
 
 const poolsSchema = yup.array().of(poolSchema);
+const selectedPoolConfig = yup.mixed<'kovanStaging' | 'mainnetStaging' | 'mainnetProduction'>().required('POOLS config is required').oneOf(['kovanStaging', 'mainnetStaging', 'mainnetProduction'])
+  .validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG);
 
+const pools = poolConfigs[`${selectedPoolConfig}`];
 const config: Config = {
   rpcUrl: yup.string().required('NEXT_PUBLIC_RPC_URL is required').url().validateSync(process.env.NEXT_PUBLIC_RPC_URL),
   etherscanUrl: yup.string().required('NEXT_PUBLIC_ETHERSCAN_URL is required').url()
@@ -81,7 +87,7 @@ const config: Config = {
   isDemo: yup.string().required('NEXT_PUBLIC_ENV is required').validateSync(process.env.NEXT_PUBLIC_ENV) === 'demo',
   network: yup.mixed<'Mainnet' | 'Kovan'>().required('NEXT_PUBLIC_RPC_URL is required').oneOf(['Mainnet', 'Kovan'])
     .validateSync(networkUrlToName(process.env.NEXT_PUBLIC_RPC_URL || '')),
-  pools: poolsSchema.validateSync(process.env.NEXT_PUBLIC_POOLS),
+  pools: poolsSchema.validateSync(pools),
   portisApiKey: yup.string().required().validateSync(process.env.NEXT_PUBLIC_PORTIS_KEY)
 };
 
