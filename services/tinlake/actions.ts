@@ -48,7 +48,7 @@ export async function getNFT(registry: string, tinlake: any, tokenId: string) {
   };
 }
 
-async function getProxyAddress(tinlake: any, address: string) {
+async function getOrCreateProxy(tinlake: any, address: string) {
   let proxyAddress;
   // check if user already has a proxy address
   try {
@@ -67,11 +67,6 @@ async function getProxyAddress(tinlake: any, address: string) {
       throw(e);
     }
   }
-
-  if (!proxyAddress) {
-    throw(new Error('Could not create Proxy.'));
-  }
-
   return proxyAddress;
 }
 
@@ -91,7 +86,7 @@ export async function issue(tinlake: any, tokenId: string, nftRegistryAddress: s
     // get or create new proxy
     let proxyAddress;
     try {
-      proxyAddress = await getProxyAddress(tinlake, user);
+      proxyAddress = await getOrCreateProxy(tinlake, user);
     } catch (e) {
       return loggedError(e, 'Could not retrieve proxyAddress.', user);
     }
