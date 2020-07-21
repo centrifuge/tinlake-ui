@@ -10,15 +10,17 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "build-for-husky": "tsc",
     "start": "next start",
     "test": "jest",
     "export": "npm run build && next export",
     "lint": "tslint --project .",
-    "lint-fix": "tslint --fix --project ."
+    "lint-fix": "tslint --fix --project .",
+    "lint-fix-staged": "git diff --staged --name-only | grep -E '\\.tsx?$' | xargs npm run lint-fix && git diff --staged --name-only | grep -E '\\.tsx?$' | xargs git add"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint-fix && npm run export"
+      "pre-commit": "npm run lint-fix-staged && npm run build-for-husky"
     }
   },
   "repository": {
@@ -33,10 +35,12 @@
   "homepage": "https://github.com/centrifuge/tinlake-ui#readme",
   "dependencies": {
     "@centrifuge/axis-display-field": "^0.3.2-develop.51",
-    "@centrifuge/axis-nav-bar": "^0.3.2-develop.47",
+    "@centrifuge/axis-modal": "^0.1.1-develop.48",
+    "@centrifuge/axis-nav-bar": "^0.4.1-develop.65",
     "@centrifuge/axis-spinner": "^0.3.1",
     "@centrifuge/axis-theme": "^0.2.1-develop.38",
     "@centrifuge/axis-utils": "^0.3.2-develop.49",
+    "@centrifuge/axis-web3-wallet": "0.0.2-develop.75",
     "@types/node-fetch": "^2.5.7",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
@@ -59,8 +63,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "styled-components": "^5.1.0",
-    "tinlake": "github:centrifuge/tinlake.js#826d45e20853bb7dcde2a345be280b8678d28872",
-    "tinlake-pool-config": "github:centrifuge/tinlake-pool-config#e8c07e20fcd13f9e96fb7eb429c21c9708ca8791",
+    "tinlake": "github:centrifuge/tinlake.js#7393e568c64a47e05f77dc3c44436a79b7f27e37",
+    "tinlake-pool-config": "github:centrifuge/tinlake-pool-config#514744318db96694d4bd99e8afacab17b6683d80",
     "web3-utils": "^1.2.7",
     "yup": "^0.28.5"
   },

@@ -9,9 +9,10 @@ import { BackLink } from '../../../components/BackLink';
 import Auth from '../../../components/Auth';
 import { withRouter } from 'next/router';
 import { WithRouterProps } from 'next/dist/client/with-router';
-import ContainerWithFooter from '../../../components/ContainerWithFooter';
+import WithFooter from '../../../components/WithFooter';
 import { GetStaticProps } from 'next';
 import config, { Pool } from '../../../config';
+import Container from '../../../components/Container';
 
 interface Props extends WithRouterProps {
   root: string;
@@ -22,33 +23,32 @@ class LoanPage extends React.Component<Props> {
 
   render() {
     const { pool } = this.props;
-    const { loanId }: { loanId: string } = this.props.router.query as any;
+    const { assetId }: { assetId: string } = this.props.router.query as any;
 
-    return <ContainerWithFooter>
+    return <WithFooter>
       <Header
         poolTitle={pool.shortName || pool.name}
-        selectedRoute={'/loans/loan'}
+        selectedRoute={'/assets/asset'}
         menuItems={menuItems}
       />
-      <Box
-        justify="center"
-        direction="row"
-      >
-        <Box width="xlarge">
-          <SecondaryHeader>
-            <Box direction="row" gap="small" align="center">
-              <BackLink href={'/loans'} />
-              <Heading level="3">Loan Details</Heading>
-            </Box>
-          </SecondaryHeader>
-          <WithTinlake addresses={pool.addresses} contractConfig={pool.contractConfig} render={tinlake =>
-            <Auth tinlake={tinlake} render={auth =>
-              <Box>{loanId && <LoanView auth={auth} tinlake={tinlake} loanId={loanId} />}</Box>
+      <Container>
+        <Box justify="center" direction="row">
+          <Box width="xlarge">
+            <SecondaryHeader>
+              <Box direction="row" gap="small" align="center">
+                <BackLink href={'/assets'} />
+                <Heading level="3">Asset Details</Heading>
+              </Box>
+            </SecondaryHeader>
+            <WithTinlake addresses={pool.addresses} contractConfig={pool.contractConfig} render={tinlake =>
+              <Auth tinlake={tinlake} render={auth =>
+                <Box>{assetId && <LoanView auth={auth} tinlake={tinlake} loanId={assetId} />}</Box>
+              } />
             } />
-          } />
+          </Box>
         </Box>
-      </Box>
-    </ContainerWithFooter>;
+      </Container>
+    </WithFooter>;
   }
 }
 

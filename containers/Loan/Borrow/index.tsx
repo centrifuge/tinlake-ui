@@ -7,7 +7,7 @@ import { transactionSubmitted, responseReceived } from '../../../ducks/transacti
 import { PoolState, loadPool } from '../../../ducks/pool';
 import { loadLoan } from '../../../ducks/loans';
 import { connect } from 'react-redux';
-import { authTinlake } from '../../../services/tinlake';
+import { ensureAuthed } from '../../../ducks/auth';
 import BN from 'bn.js';
 import { addThousandsSeparators } from '../../../utils/addThousandsSeparators';
 
@@ -19,6 +19,7 @@ interface Props {
   transactionSubmitted?: (loadingMessage: string) => Promise<void>;
   responseReceived?: (successMessage: string | null, errorMessage: string | null) => Promise<void>;
   pool?: PoolState;
+  ensureAuthed?: () => Promise<void>;
 }
 
 interface State {
@@ -35,21 +36,22 @@ class LoanBorrow extends React.Component<Props, State> {
   }
 
   borrow = async () => {
-    this.props.transactionSubmitted && this.props.transactionSubmitted('Borrowing initiated. Please confirm the pending transactions in MetaMask. Processing may take a few seconds.');
+    this.props.transactionSubmitted && this.props.transactionSubmitted('Financing initiated. Please confirm the ' +
+      'pending transactions. Processing may take a few seconds.');
     try {
-      await authTinlake();
+      await this.props.ensureAuthed!();
       const { borrowAmount } = this.state;
       const { loan, tinlake } = this.props;
       const res = await borrow(tinlake, loan, borrowAmount);
       if (res && res.errorMsg) {
-        this.props.responseReceived && this.props.responseReceived(null, `Borrowing failed. ${res.errorMsg}`);
+        this.props.responseReceived && this.props.responseReceived(null, `Financing failed. ${res.errorMsg}`);
         return;
       }
-      this.props.responseReceived && this.props.responseReceived('Borrowing successful. Please check your wallet.', null);
+      this.props.responseReceived && this.props.responseReceived('Financing successful. Please check your wallet.', null);
       this.props.loadLoan && this.props.loadLoan(tinlake, loan.loanId);
     } catch (e) {
-      this.props.responseReceived && this.props.responseReceived(null, `Borrowing failed. ${e}`);
-      console.log(e);
+      this.props.responseReceived && this.props.responseReceived(null, `Financing failed. ${e}`);
+      console.error(e);
     }
   }
 
@@ -64,7 +66,7 @@ class LoanBorrow extends React.Component<Props, State> {
     const borrowEnabled = !ceilingOverflow && !availableFundsOverflow && ceilingSet;
     return <Box basis={'1/4'} gap="medium" margin={{ right: 'large' }}>
       <Box gap="medium">
-        <FormField label="Borrow amount">
+        <FormField label="Financing amount">
           <NumberInput value={baseToDisplay(borrowAmount, 18)} suffix=" DAI" precision={18}
             onValueChange={({ value }) =>
               this.setState({ borrowAmount: displayToBase(value, 18) })}
@@ -72,7 +74,7 @@ class LoanBorrow extends React.Component<Props, State> {
         </FormField>
       </Box>
       <Box align="start">
-        <Button onClick={this.borrow} primary label="Borrow" disabled={ !borrowEnabled } />
+        <Button onClick={this.borrow} primary label="Finance Asset" disabled={ !borrowEnabled } />
         {availableFundsOverflow &&
           <Box margin={{ top: 'small' }}>
             Available funds exceeded. <br />
@@ -84,8 +86,8 @@ class LoanBorrow extends React.Component<Props, State> {
         }
         {ceilingOverflow && !availableFundsOverflow  &&
           <Box margin={{ top: 'small' }}>
-            Max borrow amount exceeded.   <br />
-            Amount has to be lower then <br />
+            Max financing amount exceeded.   <br />
+            Amount has to be lower than <br />
             <Text weight="bold">
               {`${addThousandsSeparators(baseToDisplay(loan.principal, 18))}`}
             </Text>
@@ -96,4 +98,5 @@ class LoanBorrow extends React.Component<Props, State> {
   }
 }
 
-export default connect(state => state, { loadLoan, transactionSubmitted, responseReceived, loadPool })(LoanBorrow);
+export default connect(state => state, { loadLoan, transactionSubmitted, responseReceived, loadPool, ensureAuthed
+})(LoanBorrow);
