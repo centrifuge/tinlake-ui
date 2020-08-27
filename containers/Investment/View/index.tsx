@@ -31,6 +31,11 @@ class InvestmentsView extends React.Component<Props, State> {
     loadPool && loadPool(tinlake)
   }
 
+  async runSolver() {
+    const solution = await this.props.tinlake.solveEpoch()
+    console.log(solution)
+  }
+
   render() {
     const { pool, auth, tinlake } = this.props
     const canLoadInvestor = this.state.investorAddress !== '' && isValidAddress(this.state.investorAddress)
@@ -72,6 +77,13 @@ class InvestmentsView extends React.Component<Props, State> {
                   <Button primary label="Load investor details" disabled={!canLoadInvestor} />
                 </Anchor>
               </PoolLink>
+            </Box>
+          </Box>
+
+          <Box direction="row" gap="medium" margin={{ bottom: 'medium' }}>
+            <Box basis={'1/3'}>
+              <Heading level="4">Epoch coordinator</Heading>
+              <Button primary label="Run solver" onClick={() => this.runSolver()} />
             </Box>
           </Box>
         </Box>
