@@ -6,7 +6,6 @@ import Alert from '../../../components/Alert'
 import LoanData from '../../../components/Loan/Data'
 import LoanBorrow from '../Borrow'
 import LoanRepay from '../Repay'
-import NftData from '../../../components/NftData'
 import { AuthState, loadProxies } from '../../../ducks/auth'
 import { TransactionState } from '../../../ducks/transactions'
 import { Pool } from '../../../config'
@@ -49,8 +48,8 @@ class LoanView extends React.Component<Props> {
 
     return (
       <Box>
-        <LoanData loan={loan!} />
-        {loan && loan.status !== 'closed' && (
+        <LoanData loan={loan!} auth={this.props.auth} />
+        {/* {loan && loan.status !== 'closed' && (
           <Box>
             {hasBorrowerPermissions && (
               <Box margin={{ top: 'large', bottom: 'large' }}>
@@ -66,10 +65,7 @@ class LoanView extends React.Component<Props> {
               </Box>
             )}
           </Box>
-        )}
-        {loan && loan.nft && this.props.auth?.address && (
-          <NftData data={loan.nft} authedAddr={this.props.auth.address} />
-        )}
+        )} */}
       </Box>
     )
   }
