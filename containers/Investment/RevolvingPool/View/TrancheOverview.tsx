@@ -135,10 +135,8 @@ const TrancheOverview: React.FC<Props> = (props: Props) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell scope="row" border={{ color: 'transparent' }}>
-              Your {token} Value
-            </TableCell>
-            <TableCell style={{ textAlign: 'end' }} border={{ color: 'transparent' }}>
+            <TableCell scope="row">Your {token} Value</TableCell>
+            <TableCell style={{ textAlign: 'end' }}>
               <LoadingValue done={value !== undefined}>
                 {addThousandsSeparators(toPrecision(baseToDisplay(value || '0', 18), 4))} DAI
               </LoadingValue>

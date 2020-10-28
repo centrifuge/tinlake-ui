@@ -22,6 +22,14 @@ export const TokenLogo = styled.img`
   top: -2px;
 `
 
+export const TextWithTooltip = styled.span`
+  background-image: linear-gradient(to right, black 20%, rgba(255, 255, 255, 0) 0%);
+  background-position: bottom;
+  padding-bottom: 2px;
+  background-size: 3px 1px;
+  background-repeat: repeat-x;
+`
+
 export const OrderSteps = styled.img`
   display: block;
   width: 100%;
