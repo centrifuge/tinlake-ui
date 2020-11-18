@@ -45,44 +45,46 @@ const createEnvelope = async (): Promise<string> => {
         roleName: 'cc',
       },
     ],
-    compositeTemplates: [{
-      serverTemplates: [
-        {
-          sequence: 1,
-          templateId: DOCUSIGN_TEMPLATE_ID,
-        },
-      ],
-      inlineTemplates: [
-        {
-          sequence: 2,
-          recipients: {
-            signers: [
-              {
-                recipientId: 1,
-                email: 'jeroen+signer@centrifuge.io',
-                name: 'Investor',
-                roleName: 'signer',
-                clientUserId: '0',
-                tabs: {
-                  textTabs: [
-                    {
-                      tabLabel: 'name1',
-                      value: 'Some Prefilled Name',
-                    },
-                  ],
-                },
-              },
-              {
-                recipientId: 2,
-                email: 'jeroen+cc@centrifuge.io',
-                name: 'Centrifuge',
-                roleName: 'cc',
-              },
-            ],
+    compositeTemplates: [
+      {
+        serverTemplates: [
+          {
+            sequence: 1,
+            templateId: DOCUSIGN_TEMPLATE_ID,
           },
-        },
-      ],
-    }],
+        ],
+        inlineTemplates: [
+          {
+            sequence: 2,
+            recipients: {
+              signers: [
+                {
+                  recipientId: 1,
+                  email: 'jeroen+signer@centrifuge.io',
+                  name: 'Investor',
+                  roleName: 'signer',
+                  clientUserId: '0',
+                  tabs: {
+                    textTabs: [
+                      {
+                        tabLabel: 'name1',
+                        value: 'Some Prefilled Name',
+                      },
+                    ],
+                  },
+                },
+                {
+                  recipientId: 2,
+                  email: 'jeroen+cc@centrifuge.io',
+                  name: 'Centrifuge',
+                  roleName: 'cc',
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
     status: 'sent',
   }
 

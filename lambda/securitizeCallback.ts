@@ -10,4 +10,3 @@ exports.handler = async (event: APIGatewayEvent) => {
     body: 'Callback from Securitize received',
   }
 }
-
