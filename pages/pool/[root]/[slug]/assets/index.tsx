@@ -9,7 +9,7 @@ import Auth from '../../../../../components/Auth'
 import { PoolLink } from '../../../../../components/PoolLink'
 import WithFooter from '../../../../../components/WithFooter'
 import { WithRouterProps } from 'next/dist/client/with-router'
-import config, { Pool } from '../../../../../config'
+import { Pool, loadPoolsFromIPFS } from '../../../../../config'
 import { GetStaticProps } from 'next'
 import Container from '../../../../../components/Container'
 import Head from 'next/head'
@@ -69,7 +69,8 @@ class LoanListPage extends React.Component<Props> {
 
 export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
-  const paths = config.pools.map((pool) => ({
+  const pools = await loadPoolsFromIPFS()
+  const paths = pools.active.map((pool) => ({
     params: { root: pool.addresses.ROOT_CONTRACT, slug: pool.metadata.slug },
   }))
 
@@ -78,7 +79,8 @@ export async function getStaticPaths() {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  return { props: { root: params?.root, pool: config.pools.find((p) => p.addresses.ROOT_CONTRACT === params?.root) } }
+  const pools = await loadPoolsFromIPFS()
+  return { props: { root: params?.root, pool: pools.active.find((p) => p.addresses.ROOT_CONTRACT === params?.root) } }
 }
 
 export default LoanListPage

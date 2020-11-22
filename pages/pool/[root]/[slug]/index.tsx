@@ -5,7 +5,7 @@ import Header from '../../../../components/Header'
 import Overview from '../../../../containers/Overview'
 import WithTinlake from '../../../../components/WithTinlake'
 import { menuItems } from '../../../../menuItems'
-import config, { Pool as IPool } from '../../../../config'
+import { Pool as IPool, loadPoolsFromIPFS } from '../../../../config'
 import WithFooter from '../../../../components/WithFooter'
 import Auth from '../../../../components/Auth'
 import Container from '../../../../components/Container'
@@ -47,7 +47,8 @@ class Pool extends React.Component<Props> {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // We'll pre-render only these paths at build time.
-  const paths = config.pools.map((pool) => ({
+  const pools = await loadPoolsFromIPFS()
+  const paths = pools.active.map((pool) => ({
     params: { root: pool.addresses.ROOT_CONTRACT, slug: pool.metadata.slug },
   }))
 
@@ -60,7 +61,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     throw new Error(`Params are not passed`)
   }
 
-  const pool = config.pools.find((p) => p.addresses.ROOT_CONTRACT === params!.root)
+  const pools = await loadPoolsFromIPFS()
+  const pool = pools.active.find((p) => p.addresses.ROOT_CONTRACT === params!.root)
 
   if (!pool) {
     throw new Error(`Pool ${params.root} cannot be loaded`)

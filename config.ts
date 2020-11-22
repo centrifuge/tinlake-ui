@@ -202,9 +202,42 @@ const selectedPoolConfig = yup
   .oneOf(['kovanStaging', 'mainnetStaging', 'mainnetProduction'])
   .validateSync(process.env.NEXT_PUBLIC_POOLS_CONFIG)
 
+let pools:
+  | {
+      active: Pool[]
+      archived: ArchivedPool[]
+      upcoming: UpcomingPool[]
+    }
+  | undefined = undefined
+
+export const loadPoolsFromIPFS = async () => {
+  if (pools) return pools
+
+  const url = `${process.env.NEXT_PUBLIC_IPFS_GATEWAY}${process.env.NEXT_PUBLIC_POOLS_IPFS_HASH}`
+
+  const response = await fetch(url)
+  const body = await response.json()
+  const networkConfigs: any[] = Object.values(body)
+
+  const active = poolsSchema
+    .validateSync(networkConfigs.filter((p: Pool) => p.addresses && p.addresses.ROOT_CONTRACT))
+    .map((p) => ({ ...p, isUpcoming: false } as Pool))
+  const archived = archivedPoolsSchema
+    .validateSync(networkConfigs.filter((p: Pool) => 'archivedValues' in p))
+    .map((p) => ({ ...p, isArchived: true } as ArchivedPool))
+  const upcoming = upcomingPoolsSchema
+    .validateSync(networkConfigs.filter((p: Pool) => !('archivedValues' in p) && !p.addresses))
+    .map((p) => ({ ...p, isUpcoming: true } as UpcomingPool))
+
+  console.log({ active, archived, upcoming })
+
+  pools = { active, archived, upcoming }
+  return pools
+}
+
 const networkConfigs = selectedPoolConfig === 'mainnetProduction' ? mainnetPools : kovanPools
 
-const pools = poolsSchema
+const activePools = poolsSchema
   .validateSync(networkConfigs.filter((p: Pool) => p.addresses && p.addresses.ROOT_CONTRACT))
   .map((p) => ({ ...p, isUpcoming: false } as Pool))
 const archivedPools = archivedPoolsSchema
@@ -215,9 +248,9 @@ const upcomingPools = upcomingPoolsSchema
   .map((p) => ({ ...p, isUpcoming: true } as UpcomingPool))
 
 const config: Config = {
-  pools,
   upcomingPools,
   archivedPools,
+  pools: activePools,
   rpcUrl: yup
     .string()
     .required('NEXT_PUBLIC_RPC_URL is required')
