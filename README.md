@@ -1,5 +1,7 @@
 # tinlake-ui
 
+**Note: this project has been moved to the new repo at https://github.com/centrifuge/apps.**
+
 ## Development
 
 1. Make sure you are on a stable node version, v12.16.3 on the time of writing this (the `sha3` dependency did not work with newer versions in some cases): `nvm use`
