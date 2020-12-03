@@ -483,9 +483,12 @@ export async function getPoolV2(tinlake: ITinlake): Promise<PoolData | null> {
   const juniorReserve = await tinlake.getJuniorReserve()
   const juniorTokenPrice = await tinlake.getTokenPriceJunior()
   const seniorReserve = await tinlake.getSeniorReserve()
-  const seniorTokenPrice = tinlake.signer
-    ? await tinlake.getTokenPriceSenior(await tinlake.signer.getAddress())
-    : new BN(0)
+  let seniorTokenPrice = new BN(0)
+  try {
+    seniorTokenPrice = tinlake.signer ? await tinlake.getTokenPriceSenior(await tinlake.signer.getAddress()) : new BN(0)
+  } catch (e) {
+    console.error('Failed to retrieve seniorTokenPrice')
+  }
   const seniorInterestRate = await tinlake.getSeniorInterestRate()
   const seniorTokenSupply = await tinlake.getSeniorTotalSupply()
   const minJuniorRatio = await tinlake.getMinJuniorRatio()
